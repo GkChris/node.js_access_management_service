@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const uuid4 = require('uuid4');
 
+const ValidationFailureExpection = require('../expections/ValidationExpection');
+const TypeErrorExpection = require('../expections/TypeErrorExpection');
+
 const config = require('../../config');
 const JSONdata = require('../data');
 
-const statusCodes = JSONdata.StatusCodes;
-const customCodes = JSONdata.CustomCodes;
 const validations = config.Validations;
 
 
@@ -16,7 +17,7 @@ function mongoose_ObjectId_validation(id){
     else if ( !mongoose.Types.ObjectId.isValid(id) ) errorMessage = 'Invalid id'
 
     if ( !errorMessage ) return true;
-    throw new Error(`${statusCodes.unprocessable_content.msg} | mongoose_ObjectId_validation | ${errorMessage}`) 
+    throw new ValidationFailureExpection(`mongoose_ObjectId_validation | ${errorMessage}`) 
 }
 
 function uuid4_validation(id){
@@ -26,7 +27,7 @@ function uuid4_validation(id){
     else if ( !uuid4.valid(id) ) errorMessage = 'Invalid id'
 
     if ( !errorMessage ) return true;
-    throw new Error(`${statusCodes.unprocessable_content.msg} | uuid4_validation | ${errorMessage}`) 
+    throw new ValidationFailureExpection(`uuid4_validation | ${errorMessage}`)
 }
 
 function six_digit_code_validation(code){
@@ -37,7 +38,7 @@ function six_digit_code_validation(code){
     else if ( code.toString().length != 6 ) errorMessage = 'Invalid code. Expecting a six digits code'
     
     if ( !errorMessage ) return true;
-    throw new Error(`${statusCodes.unprocessable_content.msg} | six_digit_code_validation | ${errorMessage}`) 
+    throw new ValidationFailureExpection(`six_digit_code_validation | ${errorMessage}`)
 }
 
 
@@ -56,7 +57,7 @@ function is_content_valid(args){
     }
     
     if ( invalid_content.length == 0 ) return true;
-    throw new Error(`${statusCodes.unprocessable_content.msg} | Invalid content -> ${invalid_content}`)
+    throw new ValidationFailureExpection(`Invalid content -> ${invalid_content}`)
 }
 
 
@@ -64,7 +65,7 @@ function is_content_missing(args, value_of_missing_content){
     let missing_content = [];
     
     if ( Object.prototype.toString.call(args) !== '[object Object]' ) {
-        throw new Error(`is_content_missing typeError. Expecting an object as first argument`)
+        throw new TypeErrorExpection(`During "is_content_missing" validation. Expecting an object as first argument`)
     }
     
     if ( !value_of_missing_content ) {
@@ -78,13 +79,13 @@ function is_content_missing(args, value_of_missing_content){
         let value = arg[1];
 
         if ( value === value_of_missing_content ) {
-            missing_content.push(`| argument: ${key}`)
+            missing_content.push(`${key} `)
         }
 
     }
     
     if ( missing_content.length == 0 ) return true;
-    throw new Error(`${statusCodes.unprocessable_content.msg} | Missing content -> ${missing_content}`)
+    throw new ValidationFailureExpection(`Missing content -> Argument(s): ${missing_content}`)
 }
 
 

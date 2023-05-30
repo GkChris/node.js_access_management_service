@@ -8,8 +8,8 @@ const validations = require('../validations');
 
 const statusCodes = JSONdata.StatusCodes;
 
-const commonSerivces = services.CommonSerivces;
-const commonValidations = validations.CommonValidations;
+const CommonSerivces = services.CommonSerivces;
+const CommonValidations = validations.CommonValidations;
 
 const UserService = services.UserService;
 
@@ -32,19 +32,24 @@ router.route(routes.createUser)
         const clientId = payload?.clientId ? payload.clientId : false;
 
         try {
-            commonValidations.is_content_valid(payload);
-            commonValidations.is_content_missing({
+            CommonValidations.is_content_valid(payload);
+            CommonValidations.mongoose_ObjectId_validation(roleId);
+            CommonValidations.mongoose_ObjectId_validation(realmId);
+            CommonValidations.mongoose_ObjectId_validation(clientId);
+            CommonValidations.is_content_missing({
                 password,
                 roleId,
                 realmId,
-                clientId,
+                clientId
             });
+
+            await UserService.find_user_references_or_reject(roleId, realmId, clientId)
 
             await UserService.createUser({
                 password,
                 roleId,
                 realmId,
-                clientId,
+                clientId
             });
 
         } catch ( error ) {
@@ -62,8 +67,8 @@ router.route(routes.updateUser)
         const randomArgument = req.query?.randomArgument ? req.query.randomArgument : false;
 
         try {
-            commonValidations.is_content_valid(req.query);
-            commonValidations.is_content_missing({randomArgument});
+            CommonValidations.is_content_valid(req.query);
+            CommonValidations.is_content_missing({randomArgument});
 
             await UserService.get_success();
         } catch ( error ) {
@@ -81,8 +86,8 @@ router.route(routes.deleteUser)
         const randomArgument = req.query?.randomArgument ? req.query.randomArgument : false;
 
         try {
-            commonValidations.is_content_valid(req.query);
-            commonValidations.is_content_missing({randomArgument});
+            CommonValidations.is_content_valid(req.query);
+            CommonValidations.is_content_missing({randomArgument});
 
             await UserService.get_error()
         } catch ( error ) {

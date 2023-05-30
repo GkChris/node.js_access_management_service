@@ -15,6 +15,7 @@ const Keys = require('./Keys');
 const ExternalUrls = require('./ExternalUrls');
 const Validations = require('./Validations');
 const Loggers = require('./Loggers');
+const ErrorHandlerConfigurations = require('./ErrorHandlerConfigurations')
 
 
 module.exports = {
@@ -26,6 +27,7 @@ module.exports = {
     ExternalUrls,
     Validations,
     Loggers,
+    ErrorHandlerConfigurations
 };
 
 
