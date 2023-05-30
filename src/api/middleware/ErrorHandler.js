@@ -13,7 +13,6 @@ module.exports = (err, req, res, next) => {
     res.locals.statusCode = err.statusCode;
     res.locals.statusMessage = err.statusMessage;
 
-    console.log(attachErrorToResposne);
     switch (true) {
         case err.statusCode === statusCodes.bad_request.code: {
             return res.status(statusCodes.bad_request.code).json({ 
