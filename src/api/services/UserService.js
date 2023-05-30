@@ -11,8 +11,19 @@ const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
 
+function createUser(user){
+    return new Promise(async(resolve, reject) => {
+        try {
+            let newUser = await models.User.create(user);
+            return resolve(newUser);
+        } catch ( error ) {
+            return reject(new Error(`${statusCodes.internal_server_error.msg} | ${error}`))
+        }
+    })
+}
 
 
 module.exports = {
-
+    createUser,
 }
+
