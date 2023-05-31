@@ -22,7 +22,7 @@ const customCodes = JSONdata.CustomCodes;
 function hashPassword(password){
     return new Promise((resolve, reject) => {
         try {
-            const saltRounds = 12; // Number of salt rounds to apply (higher value = more secure but slower)
+            const saltRounds = 16; // Number of salt rounds to apply (higher value = more secure but slower)
             bcrypt.hash(password, saltRounds, function(err, hashedPassword) {
                 if (err) {
                     return reject(FunctionalityError('Something went wrong while hashing password'))
