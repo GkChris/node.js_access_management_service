@@ -5,11 +5,14 @@ const config = require('../../config');
 const JSONdata= require('../data');
 const services = require('../services');
 const validations = require('../validations');
+const utils = require('../utils');
 
 const statusCodes = JSONdata.StatusCodes;
 
+const CodeGenerators = utils.CodeGenerators;
 const CommonSerivces = services.CommonSerivces;
 const CommonValidations = validations.CommonValidations;
+
 
 const UserService = services.UserService;
 
@@ -26,29 +29,31 @@ router.route(routes.createUser)
 
         const payload = req.body?.data ? req.body.data : {};
 
-        const userId = payload?.userId ? payload.userId : false;
+        const backendId = payload?.backendId ? payload.backendId : false;
         const roleId = payload?.roleId ? payload.roleId : false;
         const realmId = payload?.realmId ? payload.realmId : false;
         const clientId = payload?.clientId ? payload.clientId : false;
         let password = payload?.password ? payload.password : false;
 
         try {
-            CommonValidations.mongoose_ObjectId_validation(roleId);
-            CommonValidations.mongoose_ObjectId_validation(realmId);
-            CommonValidations.mongoose_ObjectId_validation(clientId);
-            CommonValidations.uuid4_validation(userId);
             CommonValidations.is_content_missing({
-                userId,
+                backendId,
                 roleId,
                 realmId,
                 clientId
             });
+            CommonValidations.mongoose_ObjectId_validation(backendId);
+            CommonValidations.mongoose_ObjectId_validation(roleId);
+            CommonValidations.mongoose_ObjectId_validation(realmId);
+            CommonValidations.mongoose_ObjectId_validation(clientId);
 
             await UserService.find_user_references_or_reject(roleId, realmId, clientId)
 
             if ( password ) password = await UserService.hashPassword(password);
-            
+            const userId = CodeGenerators.uuid4_id();
+
             await UserService.createUser(
+                backendId,
                 userId,
                 password,
                 roleId,

@@ -27,8 +27,8 @@ router.route(routes.createRole)
         const permissions = req.body?.data?.permissions ? req.body.data.permissions : false;
 
         try {
-            CommonValidations.mongoose_ObjectId_validation(realmId);
             CommonValidations.is_content_missing({name, realmId});
+            CommonValidations.mongoose_ObjectId_validation(realmId);
 
             await RoleService.find_role_references_or_reject(realmId)
 

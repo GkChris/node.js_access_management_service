@@ -26,8 +26,8 @@ router.route(routes.createClient)
         const realmId = req.body?.data?.realmId ? req.body.data.realmId : false;
 
         try {
-            CommonValidations.mongoose_ObjectId_validation(realmId);
             CommonValidations.is_content_missing({name, realmId});
+            CommonValidations.mongoose_ObjectId_validation(realmId);
 
             await ClientService.find_client_references_or_reject(realmId)
 

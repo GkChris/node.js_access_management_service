@@ -7,6 +7,10 @@ const UserSchema = new Schema({
         auto: true,
         required: true,
     },
+    backendId: {
+        type: Schema.Types.ObjectId,
+        required: true,
+    },
     userId: {
         type: String,
         required: true,
@@ -32,6 +36,6 @@ const UserSchema = new Schema({
 }, { strict: true, timestamps: true });
 
 
-UserSchema.index({ userId: 1, realmId: 1, clientId: 1 }, { unique: true });
+UserSchema.index({ backendId: 1, realmId: 1, clientId: 1 }, { unique: true });
 
 module.exports = UserSchema;

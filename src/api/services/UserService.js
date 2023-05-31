@@ -63,6 +63,7 @@ function find_user_references_or_reject(roleId, realmId, clientId){
 }
 
 function createUser( 
+    backendId,
     userId,
     password,
     roleId,
@@ -74,6 +75,7 @@ function createUser(
         try {
 
             let user = {};
+            if ( backendId ) user.backendId = backendId;
             if ( userId ) user.userId = userId;
             if ( password ) user.password = password;
             if ( roleId ) user.roleId = roleId;
