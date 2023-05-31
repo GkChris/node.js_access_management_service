@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const uuid4 = require('uuid4');
 
-const ValidationFailureExpection = require('../expections/ValidationExpection');
-const TypeErrorExpection = require('../expections/TypeErrorExpection');
+const ValidationFailureError = require('../errors/ValidationError');
+const TypeErrorCustom = require('../errors/TypeErrorCustom');
 
 const config = require('../../config');
 const JSONdata = require('../data');
@@ -17,7 +17,7 @@ function mongoose_ObjectId_validation(id){
     else if ( !mongoose.Types.ObjectId.isValid(id) ) errorMessage = 'Invalid id'
 
     if ( !errorMessage ) return true;
-    throw new ValidationFailureExpection(`mongoose_ObjectId_validation | ${errorMessage}`) 
+    throw new ValidationFailureError(`mongoose_ObjectId_validation | ${errorMessage}`) 
 }
 
 function uuid4_validation(id){
@@ -27,7 +27,7 @@ function uuid4_validation(id){
     else if ( !uuid4.valid(id) ) errorMessage = 'Invalid id'
 
     if ( !errorMessage ) return true;
-    throw new ValidationFailureExpection(`uuid4_validation | ${errorMessage}`)
+    throw new ValidationFailureError(`uuid4_validation | ${errorMessage}`)
 }
 
 function six_digit_code_validation(code){
@@ -38,7 +38,7 @@ function six_digit_code_validation(code){
     else if ( code.toString().length != 6 ) errorMessage = 'Invalid code. Expecting a six digits code'
     
     if ( !errorMessage ) return true;
-    throw new ValidationFailureExpection(`six_digit_code_validation | ${errorMessage}`)
+    throw new ValidationFailureError(`six_digit_code_validation | ${errorMessage}`)
 }
 
 
@@ -57,7 +57,7 @@ function is_content_valid(args){
     }
     
     if ( invalid_content.length == 0 ) return true;
-    throw new ValidationFailureExpection(`Invalid content -> ${invalid_content}`)
+    throw new ValidationFailureError(`Invalid content -> ${invalid_content}`)
 }
 
 
@@ -65,7 +65,7 @@ function is_content_missing(args, value_of_missing_content){
     let missing_content = [];
     
     if ( Object.prototype.toString.call(args) !== '[object Object]' ) {
-        throw new TypeErrorExpection(`During "is_content_missing" validation. Expecting an object as first argument`)
+        throw new TypeErrorCustom(`During "is_content_missing" validation. Expecting an object as first argument`)
     }
     
     if ( !value_of_missing_content ) {
@@ -85,7 +85,7 @@ function is_content_missing(args, value_of_missing_content){
     }
     
     if ( missing_content.length == 0 ) return true;
-    throw new ValidationFailureExpection(`Missing content -> Argument(s): ${missing_content}`)
+    throw new ValidationFailureError(`Missing content -> Argument(s): ${missing_content}`)
 }
 
 

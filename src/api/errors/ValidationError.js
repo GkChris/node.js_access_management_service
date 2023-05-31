@@ -1,13 +1,13 @@
 const statusCodes = require('../data').StatusCodes;
 
-class ValidationFailureExpection extends Error {
+class ValidationFailureError extends Error {
     constructor(message) {
         super(message);
-        this.code = 'ERR_VALIDATION_FAILURE_EXCEPTION';
+        this.code = 'ERR_VALIDATION_FAILURE';
         this.statusCode = statusCodes.unprocessable_content.code,
         this.statusMessage = statusCodes.unprocessable_content.msg;
         this.message = message
     }
 }
   
-module.exports = ValidationFailureExpection;
+module.exports = ValidationFailureError;

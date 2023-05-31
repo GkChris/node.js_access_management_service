@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const ModifyDocumentExpection = require('../expections/ModifyDocumentExpection');
-const ValidationFailureExpection = require('../expections/ValidationExpection');
-const FetchDocumentExpection = require('../expections/FetchDocumentExpection');
-const ReferenceDocumentException = require('../expections/ReferenceDocumentExpection');
+const ModifyDocumentError = require('../errors/ModifyDocumentError');
+const ValidationFailureError = require('../errors/ValidationError');
+const FetchDocumentError = require('../errors/FetchDocumentError');
+const ReferenceDocumentError = require('../errors/ReferenceDocumentError');
 
 const config = require('../../config');
 const JSONdata = require('../data');
@@ -31,12 +31,12 @@ function find_user_references_or_reject(roleId, realmId, clientId){
             if ( !realm ) missing.push('Realm');
             if ( !client ) missing.push('Client')
 
-            if ( missing.length > 0 ) return reject(new ReferenceDocumentException(`Failed to find user references > ${missing}`))
+            if ( missing.length > 0 ) return reject(new ReferenceDocumentError(`Failed to find user references > ${missing}`))
 
             return resolve(true);
 
         } catch ( error ) {
-            return reject(new FetchDocumentExpection(`${error}`))
+            return reject(new FetchDocumentError(`${error}`))
         }
 
     })
@@ -52,7 +52,7 @@ function createUser(user){
             return resolve(newUser);
 
         } catch ( error ) {
-            return reject(new ModifyDocumentExpection(`${error}`))
+            return reject(new ModifyDocumentError(`${error}`))
         }
     })
 }
