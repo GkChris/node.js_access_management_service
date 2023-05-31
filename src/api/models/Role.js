@@ -19,7 +19,6 @@ const RoleSchema = new Schema({
     permissions: [{
         type: Schema.Types.ObjectId,
         ref: 'Permission',
-        required: true,
     }],
 }, { strict: true, timestamps: true });
 

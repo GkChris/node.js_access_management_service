@@ -12,6 +12,11 @@ const PermissionSchema = new Schema({
         required: true,
         unique: true,
     },
+    code: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     description: {
         type: String,
     },

@@ -25,18 +25,20 @@ router.route(routes.createUser)
     .post(async(req, res, next) => {
 
         const payload = req.body?.data ? req.body.data : {};
-        
-        const password = payload?.password ? payload.password : false;
+
+        const userId = payload?.userId ? payload.userId : false;
         const roleId = payload?.roleId ? payload.roleId : false;
         const realmId = payload?.realmId ? payload.realmId : false;
         const clientId = payload?.clientId ? payload.clientId : false;
+        let password = payload?.password ? payload.password : false;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(roleId);
             CommonValidations.mongoose_ObjectId_validation(realmId);
             CommonValidations.mongoose_ObjectId_validation(clientId);
+            CommonValidations.uuid4_validation(userId);
             CommonValidations.is_content_missing({
-                password,
+                userId,
                 roleId,
                 realmId,
                 clientId
@@ -44,12 +46,15 @@ router.route(routes.createUser)
 
             await UserService.find_user_references_or_reject(roleId, realmId, clientId)
 
-            await UserService.createUser({
+            if ( password ) password = await UserService.hashPassword(password);
+            
+            await UserService.createUser(
+                userId,
                 password,
                 roleId,
                 realmId,
                 clientId
-            });
+            );
 
         } catch ( error ) {
             return next(error);

@@ -44,9 +44,9 @@ function createClient(name, realmId){
 
         try {
 
-            let newRealm = await models.Client.create({name, realmId});
+            let newClient = await models.Client.create({name, realmId});
        
-            return resolve(newRealm);
+            return resolve(newClient);
 
         } catch ( error ) {
             return reject(new ModifyDocumentError(`${error}`))
