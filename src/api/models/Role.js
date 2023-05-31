@@ -23,4 +23,6 @@ const RoleSchema = new Schema({
     }],
 }, { strict: true, timestamps: true });
 
+RoleSchema.index({ name: 1, realmId: 1 }, { unique: true });
+
 module.exports = RoleSchema;

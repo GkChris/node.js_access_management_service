@@ -7,6 +7,10 @@ const UserSchema = new Schema({
         auto: true,
         required: true,
     },
+    userId: {
+        type: String,
+        required: true,
+    },
     password: {
         type: String,
         required: true,
@@ -27,5 +31,8 @@ const UserSchema = new Schema({
         required: true,
     },
 }, { strict: true, timestamps: true });
+
+
+UserSchema.index({ userId: 1, realmId: 1, clientId: 1 }, { unique: true });
 
 module.exports = UserSchema;

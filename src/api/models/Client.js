@@ -18,4 +18,7 @@ const ClientSchema = new Schema({
     },
 }, { strict: true, timestamps: true });
 
+
+ClientSchema.index({ name: 1, realmId: 1 }, { unique: true });
+  
 module.exports = ClientSchema;

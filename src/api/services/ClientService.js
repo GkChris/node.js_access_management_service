@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+const FetchDocumentError = require('../errors/FetchDocumentError');
+const ModifyDocumentError = require('../errors/ModifyDocumentError');
+const ReferenceDocumentError = require('../errors/ReferenceDocumentError');
+
+
 const config = require('../../config');
 const JSONdata = require('../data');
 const helpers = require('../helpers');
@@ -11,24 +16,48 @@ const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
 
-function get_success(){
-    return new Promise((resolve, reject) => {
-        resolve(true)
-        return
+function find_client_references_or_reject(realmId){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+
+            let missing = [];
+
+            let realm = await models.Realm.findOne({_id: realmId});
+
+            if ( !realm ) missing.push('Realm');
+
+            if ( missing.length > 0 ) return reject(new ReferenceDocumentError(`Failed to find user references: ${missing}`))
+
+            return resolve(true);
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+
     })
 }
 
 
-function get_error(){
-    return new Promise((resolve, reject) => {
-        reject(new Error(`${statusCodes.internal_server_error.msg} | ${'This is a temp promise that is meant to fail'}`))
-        return
+function createClient(name, realmId){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+
+            let newRealm = await models.Client.create({name, realmId});
+       
+            return resolve(newRealm);
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
     })
 }
+
 
 
 module.exports = {
-    get_success,
-    get_error
+    find_client_references_or_reject,
+    createClient,
 }
 

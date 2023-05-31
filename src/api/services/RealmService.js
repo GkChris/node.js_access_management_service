@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const ModifyDocumentError = require('../errors/ModifyDocumentError');
+
 const config = require('../../config');
 const JSONdata = require('../data');
 const helpers = require('../helpers');
@@ -11,24 +13,23 @@ const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
 
-function get_success(){
-    return new Promise((resolve, reject) => {
-        resolve(true)
-        return
-    })
-}
+function createRealm(name){
+    return new Promise(async(resolve, reject) => {
 
+        try {
 
-function get_error(){
-    return new Promise((resolve, reject) => {
-        reject(new Error(`${statusCodes.internal_server_error.msg} | ${'This is a temp promise that is meant to fail'}`))
-        return
+            let newRealm = await models.Realm.create({name});
+       
+            return resolve(newRealm);
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
     })
 }
 
 
 module.exports = {
-    get_success,
-    get_error
+    createRealm,
 }
 

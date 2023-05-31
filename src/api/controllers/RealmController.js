@@ -8,53 +8,33 @@ const validations = require('../validations');
 
 const statusCodes = JSONdata.StatusCodes;
 
-const commonSerivces = services.CommonSerivces;
-const commonValidations = validations.CommonValidations;
+const CommonSerivces = services.CommonSerivces;
+const CommonValidations = validations.CommonValidations;
 
-const tempService = services.TempService;
+const RealmService = services.RealmService;
 
 
 // Module routes
 const routes = {
-    getSuccess: '/getSuccess$',
-    getError: '/getError$'
+    createRealm: '/createRealm$',
 }
 
-router.route(routes.getSuccess)
-    .get(async(req, res, next) => {
+router.route(routes.createRealm)
+    .post(async(req, res, next) => {
 
-        const randomArgument = req.query?.randomArgument ? req.query.randomArgument : true;
+        const name = req.body?.data?.name ? req.body.data.name : false;
 
         try {
-            commonValidations.is_content_valid(req.query);
-            commonValidations.is_content_missing({randomArgument});
+            CommonValidations.is_content_missing({name});
 
-            await tempService.get_success();
+            await RealmService.createRealm(name);
+
         } catch ( error ) {
             return next(error);
         }
 
-        res.locals.message = statusCodes.ok.msg;
-        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
-});
-
-
-router.route(routes.getError)
-    .get(async(req, res, next) => {
-
-        const randomArgument = req.query?.randomArgument ? req.query.randomArgument : false;
-
-        try {
-            commonValidations.is_content_valid(req.query);
-            commonValidations.is_content_missing({randomArgument});
-
-            await tempService.get_error()
-        } catch ( error ) {
-            return next(error)
-        }   
-
-        res.locals.message = statusCodes.ok.msg;
-        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg})
+        res.locals.message = statusCodes.created.msg;
+        return res.status(statusCodes.created.code).json({code: statusCodes.created.code, message: statusCodes.created.msg});
 });
 
 

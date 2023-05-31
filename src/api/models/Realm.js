@@ -10,6 +10,7 @@ const RealmSchema = new Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
 }, { strict: true, timestamps: true });
 

@@ -17,8 +17,8 @@ const UserService = services.UserService;
 // Module routes
 const routes = {
     createUser: '/createUser$',
-    updateUser: '/updateUser$',
-    deleteUser: '/deleteUser$',
+    // updateUser: '/updateUser$',
+    // deleteUser: '/deleteUser$',
 }
 
 router.route(routes.createUser)
@@ -55,47 +55,47 @@ router.route(routes.createUser)
             return next(error);
         }
 
-        res.locals.message = statusCodes.ok.msg;
-        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
+        res.locals.message = statusCodes.created.msg;
+        return res.status(statusCodes.created.code).json({code: statusCodes.created.code, message: statusCodes.created.msg});
 });
 
 
-router.route(routes.updateUser)
-    .post(async(req, res, next) => {
+// router.route(routes.updateUser)
+//     .post(async(req, res, next) => {
 
-        const randomArgument = req.query?.randomArgument ? req.query.randomArgument : false;
+//         const randomArgument = req.query?.randomArgument ? req.query.randomArgument : false;
 
-        try {
-            CommonValidations.is_content_valid(req.query);
-            CommonValidations.is_content_missing({randomArgument});
+//         try {
+//             CommonValidations.is_content_valid(req.query);
+//             CommonValidations.is_content_missing({randomArgument});
 
-            await UserService.get_success();
-        } catch ( error ) {
-            return next(error);
-        }
+//             await UserService.get_success();
+//         } catch ( error ) {
+//             return next(error);
+//         }
 
-        res.locals.message = statusCodes.ok.msg;
-        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
-});
+//         res.locals.message = statusCodes.ok.msg;
+//         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
+// });
 
 
-router.route(routes.deleteUser)
-    .get(async(req, res, next) => {
+// router.route(routes.deleteUser)
+//     .get(async(req, res, next) => {
 
-        const randomArgument = req.query?.randomArgument ? req.query.randomArgument : false;
+//         const randomArgument = req.query?.randomArgument ? req.query.randomArgument : false;
 
-        try {
-            CommonValidations.is_content_valid(req.query);
-            CommonValidations.is_content_missing({randomArgument});
+//         try {
+//             CommonValidations.is_content_valid(req.query);
+//             CommonValidations.is_content_missing({randomArgument});
 
-            await UserService.get_error()
-        } catch ( error ) {
-            return next(error)
-        }   
+//             await UserService.get_error()
+//         } catch ( error ) {
+//             return next(error)
+//         }   
 
-        res.locals.message = statusCodes.ok.msg;
-        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg})
-});
+//         res.locals.message = statusCodes.ok.msg;
+//         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg})
+// });
 
 
 module.exports = router;
