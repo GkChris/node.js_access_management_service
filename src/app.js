@@ -25,6 +25,7 @@ app.use(helmet());
 app.use(morgan(loggers));
 app.use(bodyParser.json())
 if (process.env.USE_LOCAL_CACHE) app.use(require('./api/middleware/Cache'));
+app.use(require('./api/middleware/ValidateContent'));
 app.use(require('./api/routes'));
 app.use(require('./api/middleware/ErrorHandler'));
 

@@ -31,7 +31,7 @@ function find_user_references_or_reject(roleId, realmId, clientId){
             if ( !realm ) missing.push('Realm');
             if ( !client ) missing.push('Client')
 
-            if ( missing.length > 0 ) return reject(new ReferenceDocumentError(`Failed to find user references > ${missing}`))
+            if ( missing.length > 0 ) return reject(new ReferenceDocumentError(`Failed to find user references: ${missing}`))
 
             return resolve(true);
 

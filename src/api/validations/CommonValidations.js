@@ -85,7 +85,7 @@ function is_content_missing(args, value_of_missing_content){
     }
     
     if ( missing_content.length == 0 ) return true;
-    throw new ValidationFailureError(`Missing content -> Argument(s): ${missing_content}`)
+    throw new ValidationFailureError(`Missing content: Argument(s): ${missing_content}`)
 }
 
 

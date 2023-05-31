@@ -25,14 +25,13 @@ router.route(routes.createUser)
     .post(async(req, res, next) => {
 
         const payload = req.body?.data ? req.body.data : {};
-
+        
         const password = payload?.password ? payload.password : false;
         const roleId = payload?.roleId ? payload.roleId : false;
         const realmId = payload?.realmId ? payload.realmId : false;
         const clientId = payload?.clientId ? payload.clientId : false;
 
         try {
-            CommonValidations.is_content_valid(payload);
             CommonValidations.mongoose_ObjectId_validation(roleId);
             CommonValidations.mongoose_ObjectId_validation(realmId);
             CommonValidations.mongoose_ObjectId_validation(clientId);
