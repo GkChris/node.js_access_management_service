@@ -8,7 +8,7 @@ const validations = require('../validations');
 
 const statusCodes = JSONdata.StatusCodes;
 
-const commonSerivces = services.CommonSerivces;
+const CommonServices = services.CommonServices;
 const commonValidations = validations.CommonValidations;
 
 const tempService = services.TempService;

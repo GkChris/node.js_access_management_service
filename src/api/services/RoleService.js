@@ -16,27 +16,6 @@ const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
-function find_role_references_or_reject(realmId){
-    return new Promise(async(resolve, reject) => {
-
-        try {
-
-            let missing = [];
-
-            let realm = await models.Realm.findOne({_id: realmId});
-
-            if ( !realm ) missing.push('Realm');
-
-            if ( missing.length > 0 ) return reject(new ReferenceDocumentError(`Failed to find user references: ${missing}`))
-
-            return resolve(true);
-
-        } catch ( error ) {
-            return reject(new FetchDocumentError(`${error}`))
-        }
-
-    })
-}
 
 function createRole(name, realmId, permissions){
     return new Promise(async(resolve, reject) => {
@@ -60,7 +39,6 @@ function createRole(name, realmId, permissions){
 
 
 module.exports = {
-    find_role_references_or_reject,
     createRole,
 }
 

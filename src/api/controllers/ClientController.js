@@ -8,7 +8,7 @@ const validations = require('../validations');
 
 const statusCodes = JSONdata.StatusCodes;
 
-const CommonSerivces = services.CommonSerivces;
+const CommonServices = services.CommonServices;
 const CommonValidations = validations.CommonValidations;
 
 const ClientService = services.ClientService;
@@ -29,7 +29,9 @@ router.route(routes.createClient)
             CommonValidations.is_content_missing({name, realmId});
             CommonValidations.mongoose_ObjectId_validation(realmId);
 
-            await ClientService.find_client_references_or_reject(realmId)
+            await CommonServices.find_required_references_byId_or_reject([  // {Model: _id}
+                {'Realm': realmId}
+            ])
 
             await ClientService.createClient(name, realmId);
 

@@ -16,29 +16,6 @@ const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
 
-function find_client_references_or_reject(realmId){
-    return new Promise(async(resolve, reject) => {
-
-        try {
-
-            let missing = [];
-
-            let realm = await models.Realm.findOne({_id: realmId});
-
-            if ( !realm ) missing.push('Realm');
-
-            if ( missing.length > 0 ) return reject(new ReferenceDocumentError(`Failed to find user references: ${missing}`))
-
-            return resolve(true);
-
-        } catch ( error ) {
-            return reject(new FetchDocumentError(`${error}`))
-        }
-
-    })
-}
-
-
 function createClient(name, realmId){
     return new Promise(async(resolve, reject) => {
 
@@ -57,7 +34,6 @@ function createClient(name, realmId){
 
 
 module.exports = {
-    find_client_references_or_reject,
     createClient,
 }
 

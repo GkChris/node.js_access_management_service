@@ -36,31 +36,6 @@ function hashPassword(password){
     })      
 }
 
-function find_user_references_or_reject(roleId, realmId, clientId){
-    return new Promise(async(resolve, reject) => {
-
-        try {
-
-            let missing = [];
-
-            let role = await models.Role.findOne({_id: roleId});
-            let realm = await models.Realm.findOne({_id: realmId});
-            let client = await models.Client.findOne({_id: clientId});
-
-            if ( !role ) missing.push('Role');
-            if ( !realm ) missing.push('Realm');
-            if ( !client ) missing.push('Client')
-
-            if ( missing.length > 0 ) return reject(new ReferenceDocumentError(`Failed to find user references: ${missing}`))
-
-            return resolve(true);
-
-        } catch ( error ) {
-            return reject(new FetchDocumentError(`${error}`))
-        }
-
-    })
-}
 
 function createUser( 
     backendId,
@@ -95,7 +70,6 @@ function createUser(
 
 module.exports = {
     hashPassword,
-    find_user_references_or_reject,
     createUser,
 }
 

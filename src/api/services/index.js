@@ -1,4 +1,4 @@
-const CommonSerivces = require('./CommonlServices');
+const CommonServices = require('./CommonlServices');
 const UserService = require('./UserService');
 const SessionService = require('./SessionService');
 const RoleService = require('./RoleService');
@@ -7,7 +7,7 @@ const ClientService = require('./ClientService');
 const PermissionService = require('./PermissionService');
 
 module.exports = {
-    CommonSerivces,
+    CommonServices,
     UserService,
     SessionService,
     RoleService,

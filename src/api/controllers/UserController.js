@@ -10,7 +10,7 @@ const utils = require('../utils');
 const statusCodes = JSONdata.StatusCodes;
 
 const CodeGenerators = utils.CodeGenerators;
-const CommonSerivces = services.CommonSerivces;
+const CommonServices = services.CommonServices;
 const CommonValidations = validations.CommonValidations;
 
 
@@ -46,8 +46,12 @@ router.route(routes.createUser)
             CommonValidations.mongoose_ObjectId_validation(roleId);
             CommonValidations.mongoose_ObjectId_validation(realmId);
             CommonValidations.mongoose_ObjectId_validation(clientId);
-
-            await UserService.find_user_references_or_reject(roleId, realmId, clientId)
+           
+            await CommonServices.find_required_references_byId_or_reject([  // {Model: _id}
+                {'Role': roleId},
+                {'Realm': realmId},
+                {'Client': clientId}
+            ])
 
             if ( password ) password = await UserService.hashPassword(password);
             const userId = CodeGenerators.uuid4_id();
