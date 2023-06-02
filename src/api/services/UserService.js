@@ -22,7 +22,7 @@ const customCodes = JSONdata.CustomCodes;
 function hashPassword(password){
     return new Promise((resolve, reject) => {
         try {
-            const saltRounds = 16; // Number of salt rounds to apply (higher value = more secure but slower)
+            const saltRounds = 14; // Number of salt rounds to apply (higher value = more secure but slower)
             bcrypt.hash(password, saltRounds, function(err, hashedPassword) {
                 if (err) {
                     return reject(FunctionalityError('Something went wrong while hashing password'))
@@ -41,6 +41,11 @@ function createUser(
     backendId,
     userId,
     password,
+    username,
+    firstname,
+    lastname,
+    email,
+    phone,
     roleId,
     realmId,
     clientId
@@ -53,6 +58,11 @@ function createUser(
             if ( backendId ) user.backendId = backendId;
             if ( userId ) user.userId = userId;
             if ( password ) user.password = password;
+            if ( username ) user.username = username;
+            if ( firstname ) user.firstname = firstname;
+            if ( lastname ) user.lastname = lastname;
+            if ( email ) user.email = email;
+            if ( phone ) user.phone = phone;
             if ( roleId ) user.roleId = roleId;
             if ( realmId ) user.realmId = realmId;
             if ( clientId ) user.clientId = clientId;

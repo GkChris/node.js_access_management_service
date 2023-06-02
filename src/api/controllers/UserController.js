@@ -30,6 +30,11 @@ router.route(routes.createUser)
         const payload = req.body?.data ? req.body.data : {};
 
         const backendId = payload?.backendId ? payload.backendId : false;
+        const username = payload?.username ? payload.username : false;
+        const firstname = payload?.firstname ? payload.firstname : false;
+        const lastname = payload?.lastname ? payload.lastname : false;
+        const email = payload?.email ? payload.email : false;
+        const phone = payload?.phone ? payload.phone : false;
         const roleId = payload?.roleId ? payload.roleId : false;
         const realmId = payload?.realmId ? payload.realmId : false;
         const clientId = payload?.clientId ? payload.clientId : false;
@@ -60,6 +65,11 @@ router.route(routes.createUser)
                 backendId,
                 userId,
                 password,
+                username,
+                firstname,
+                lastname,
+                email, 
+                phone,
                 roleId,
                 realmId,
                 clientId

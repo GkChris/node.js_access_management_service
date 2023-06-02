@@ -14,6 +14,33 @@ const UserSchema = new Schema({
     userId: {
         type: String,
         required: true,
+        unique: true,
+    },
+    username: {
+        type: String,
+        unique,
+    },
+    firstname: {
+        type: String,
+    },
+    lastname: {
+        type: String,
+    },
+    email: {
+        type: String,
+        unique: true,
+    },
+    email_verification: {
+        type: Boolean,
+        default: false,
+    },
+    phone: {
+        type: String,
+        unique: true,
+    },
+    phone_verification: {
+        type: Boolean,
+        default: false
     },
     password: {
         type: String,
