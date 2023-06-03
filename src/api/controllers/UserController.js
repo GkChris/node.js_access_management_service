@@ -57,10 +57,10 @@ router.route(routes.createUser)
             ])
 
             if ( password ) password = await UserService.hashPassword(password);
-            const uuid4 = CodeGenerators.uuid4_id();
+            const sub = CodeGenerators.uuid4_id();
 
             await UserService.createUser({
-                uuid4,
+                sub,
                 password,
                 username,
                 firstname,

@@ -7,7 +7,7 @@ const UserSchema = new Schema({
         auto: true,
         required: true,
     },
-    uuid4: {
+    sub: {
         type: String,
         required: true,
         unique: true,

@@ -43,7 +43,7 @@ function createUser(args){
         try {
 
             let user = {};
-            if ( args?.uuid4 ) user.uuid4 = args.uuid4;
+            if ( args?.sub ) user.sub = args.sub;
             if ( args?.password ) user.password = args.password;
             if ( args?.username ) user.username = args.username;
             if ( args?.firstname ) user.firstname = args.firstname;
