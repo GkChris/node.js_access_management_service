@@ -29,12 +29,12 @@ router.route(routes.createUser)
 
         const payload = req.body?.data ? req.body.data : {};
 
-        const backendId = payload?.backendId ? payload.backendId : false;
         const username = payload?.username ? payload.username : false;
         const firstname = payload?.firstname ? payload.firstname : false;
         const lastname = payload?.lastname ? payload.lastname : false;
         const email = payload?.email ? payload.email : false;
         const phone = payload?.phone ? payload.phone : false;
+        const phone_code = payload?.phone_code ? payload.phone_code : false;
         const roleId = payload?.roleId ? payload.roleId : false;
         const realmId = payload?.realmId ? payload.realmId : false;
         const clientId = payload?.clientId ? payload.clientId : false;
@@ -42,12 +42,10 @@ router.route(routes.createUser)
 
         try {
             CommonValidations.is_content_missing({
-                backendId,
                 roleId,
                 realmId,
                 clientId
             });
-            CommonValidations.mongoose_ObjectId_validation(backendId);
             CommonValidations.mongoose_ObjectId_validation(roleId);
             CommonValidations.mongoose_ObjectId_validation(realmId);
             CommonValidations.mongoose_ObjectId_validation(clientId);
@@ -59,21 +57,21 @@ router.route(routes.createUser)
             ])
 
             if ( password ) password = await UserService.hashPassword(password);
-            const userId = CodeGenerators.uuid4_id();
+            const uuid4 = CodeGenerators.uuid4_id();
 
-            await UserService.createUser(
-                backendId,
-                userId,
+            await UserService.createUser({
+                uuid4,
                 password,
                 username,
                 firstname,
                 lastname,
                 email, 
                 phone,
+                phone_code,
                 roleId,
                 realmId,
                 clientId
-            );
+            });
 
         } catch ( error ) {
             return next(error);

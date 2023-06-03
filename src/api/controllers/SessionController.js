@@ -28,10 +28,12 @@ router.route(routes.createSession)
 
         try {
             CommonValidations.is_content_missing({userId, realmId, clientId});
+            CommonValidations.mongoose_ObjectId_validation(userId);
             CommonValidations.mongoose_ObjectId_validation(realmId);
             CommonValidations.mongoose_ObjectId_validation(clientId);
 
             await CommonServices.find_required_references_byId_or_reject([  // {Model: _id}
+                {'User': userId},
                 {'Realm': realmId},
                 {'Client': clientId}
             ])

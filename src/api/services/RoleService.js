@@ -26,6 +26,7 @@ function createRole(args){
             if ( args?.name ) role.name = args.name;
             if ( args?.description ) role.description = args.description;
             if ( args?.realmId ) role.realmId = args.realmId;
+            if ( args?.clientId ) role.clientId = args.clientId;
             if ( args?.permissions && args.permissions?.length > 0 ) role.permissions = args.permissions; 
 
             let newRole = await models.Role.create(role);

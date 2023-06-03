@@ -20,12 +20,17 @@ const RoleSchema = new Schema({
         ref: 'Realm',
         required: true,
     },
+    clientId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Client',
+        required: true,
+    },
     permissions: [{
         type: Schema.Types.ObjectId,
         ref: 'Permission',
     }],
 }, { strict: true, timestamps: true });
 
-RoleSchema.index({ name: 1, realmId: 1 }, { unique: true });
+RoleSchema.index({ name: 1, clientId: 1, realmId: 1 }, { unique: true });
 
 module.exports = RoleSchema;

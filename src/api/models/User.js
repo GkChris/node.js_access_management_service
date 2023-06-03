@@ -7,11 +7,7 @@ const UserSchema = new Schema({
         auto: true,
         required: true,
     },
-    backendId: {
-        type: Schema.Types.ObjectId,
-        required: true,
-    },
-    userId: {
+    uuid4: {
         type: String,
         required: true,
         unique: true,
@@ -41,6 +37,9 @@ const UserSchema = new Schema({
         type: String,
         unique: true,
     },
+    phone_code: {
+        type: String,
+    },
     phone_verification: {
         type: Boolean,
         default: false
@@ -67,6 +66,6 @@ const UserSchema = new Schema({
 }, { strict: true, timestamps: true });
 
 
-UserSchema.index({ backendId: 1, realmId: 1, clientId: 1 }, { unique: true });
+UserSchema.index({ username: 1, realmId: 1, clientId: 1 }, { unique: true });
 
 module.exports = UserSchema;

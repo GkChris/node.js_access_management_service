@@ -37,35 +37,25 @@ function hashPassword(password){
 }
 
 
-function createUser( 
-    backendId,
-    userId,
-    password,
-    username,
-    firstname,
-    lastname,
-    email,
-    phone,
-    roleId,
-    realmId,
-    clientId
-){
+function createUser(args){
     return new Promise(async(resolve, reject) => {
 
         try {
 
             let user = {};
-            if ( backendId ) user.backendId = backendId;
-            if ( userId ) user.userId = userId;
-            if ( password ) user.password = password;
-            if ( username ) user.username = username;
-            if ( firstname ) user.firstname = firstname;
-            if ( lastname ) user.lastname = lastname;
-            if ( email ) user.email = email;
-            if ( phone ) user.phone = phone;
-            if ( roleId ) user.roleId = roleId;
-            if ( realmId ) user.realmId = realmId;
-            if ( clientId ) user.clientId = clientId;
+            if ( args?.uuid4 ) user.uuid4 = args.uuid4;
+            if ( args?.password ) user.password = args.password;
+            if ( args?.username ) user.username = args.username;
+            if ( args?.firstname ) user.firstname = args.firstname;
+            if ( args?.lastname ) user.lastname = args.lastname;
+            if ( args?.email ) user.email = args.email;
+            if ( args?.phone && args?.phone_code ) {
+                user.phone = args.phone;
+                user.phone_code = args.phone_code;
+            }
+            if ( args?.roleId ) user.roleId = args.roleId;
+            if ( args?.realmId ) user.realmId = args.realmId;
+            if ( args?.clientId ) user.clientId = args.clientId;
 
             let newUser = await models.User.create(user);
        

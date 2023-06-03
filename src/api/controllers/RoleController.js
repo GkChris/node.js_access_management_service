@@ -25,17 +25,19 @@ router.route(routes.createRole)
         const name = req.body?.data?.name ? req.body.data.name : false;
         const description = req.body?.data?.description ? req.body.data.description : false;
         const realmId = req.body?.data?.realmId ? req.body.data.realmId : false;
+        const clientId = req.body?.data?.clientId ? req.body.data.clientId : false;
         const permissions = req.body?.data?.permissions ? req.body.data.permissions : false;
 
         try {
-            CommonValidations.is_content_missing({name, realmId});
+            CommonValidations.is_content_missing({name, realmId, clientId});
             CommonValidations.mongoose_ObjectId_validation(realmId);
 
             await CommonServices.find_required_references_byId_or_reject([  // {Model: _id}
-                {'Realm': realmId}
+                {'Realm': realmId},
+                {'Client': clientId}
             ])
 
-            await RoleService.createRole({name, description, realmId, permissions});
+            await RoleService.createRole({name, description, realmId, clientId, permissions});
 
         } catch ( error ) {
             return next(error);
