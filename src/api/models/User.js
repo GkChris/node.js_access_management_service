@@ -18,13 +18,16 @@ const UserSchema = new Schema({
     },
     username: {
         type: String,
-        unique,
+        required: true,
+        unique: true,
     },
     firstname: {
         type: String,
+        default: "",
     },
     lastname: {
         type: String,
+        default: "",
     },
     email: {
         type: String,
@@ -44,6 +47,7 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
+        default: "",
     },
     roleId: {
         type: Schema.Types.ObjectId,

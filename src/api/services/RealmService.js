@@ -13,12 +13,16 @@ const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
 
-function createRealm(name){
+function createRealm(args){
     return new Promise(async(resolve, reject) => {
 
         try {
 
-            let newRealm = await models.Realm.create({name});
+            let realm = {};
+            if ( args?.name ) realm.name = args.name;
+            if ( args?.description ) realm.description = args.description;
+
+            let newRealm = await models.Realm.create(realm);
        
             return resolve(newRealm);
 

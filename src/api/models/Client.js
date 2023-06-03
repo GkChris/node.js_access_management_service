@@ -11,6 +11,10 @@ const ClientSchema = new Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        default: ""
+    },
     realmId: {
         type: Schema.Types.ObjectId,
         ref: 'Realm',

@@ -23,6 +23,7 @@ router.route(routes.createClient)
     .post(async(req, res, next) => {
 
         const name = req.body?.data?.name ? req.body.data.name : false;
+        const description = req.body?.data?.description ? req.body.data.description : false;
         const realmId = req.body?.data?.realmId ? req.body.data.realmId : false;
 
         try {
@@ -33,7 +34,7 @@ router.route(routes.createClient)
                 {'Realm': realmId}
             ])
 
-            await ClientService.createClient(name, realmId);
+            await ClientService.createClient({name, description, realmId});
 
         } catch ( error ) {
             return next(error);

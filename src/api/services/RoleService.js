@@ -17,15 +17,16 @@ const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
 
-function createRole(name, realmId, permissions){
+function createRole(args){
     return new Promise(async(resolve, reject) => {
 
         try {
 
             let role = {};
-            if ( name ) role.name = name;
-            if ( realmId ) role.realmId = realmId;
-            if ( permissions && permissions?.length > 0 ) role.permissions = permissions; 
+            if ( args?.name ) role.name = args.name;
+            if ( args?.description ) role.description = args.description;
+            if ( args?.realmId ) role.realmId = args.realmId;
+            if ( args?.permissions && args.permissions?.length > 0 ) role.permissions = args.permissions; 
 
             let newRole = await models.Role.create(role);
        

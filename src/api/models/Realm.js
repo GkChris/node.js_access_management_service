@@ -12,6 +12,10 @@ const RealmSchema = new Schema({
         required: true,
         unique: true,
     },
+    description: {
+        type: String,
+        default: ""
+    },
 }, { strict: true, timestamps: true });
 
 module.exports = RealmSchema;

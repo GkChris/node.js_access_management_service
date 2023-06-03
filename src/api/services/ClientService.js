@@ -16,12 +16,17 @@ const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
 
-function createClient(name, realmId){
+function createClient(args){
     return new Promise(async(resolve, reject) => {
 
         try {
 
-            let newClient = await models.Client.create({name, realmId});
+            let client = {};
+            if ( args?.name ) client.name = args.name; 
+            if ( args?.description ) client.description = args.description; 
+            if ( args?.realmId ) client.realmId = args.realmId; 
+
+            let newClient = await models.Client.create(client);
        
             return resolve(newClient);
 

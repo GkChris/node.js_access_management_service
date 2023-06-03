@@ -23,6 +23,7 @@ router.route(routes.createRole)
     .post(async(req, res, next) => {
 
         const name = req.body?.data?.name ? req.body.data.name : false;
+        const description = req.body?.data?.description ? req.body.data.description : false;
         const realmId = req.body?.data?.realmId ? req.body.data.realmId : false;
         const permissions = req.body?.data?.permissions ? req.body.data.permissions : false;
 
@@ -34,7 +35,7 @@ router.route(routes.createRole)
                 {'Realm': realmId}
             ])
 
-            await RoleService.createRole(name, realmId, permissions);
+            await RoleService.createRole({name, description, realmId, permissions});
 
         } catch ( error ) {
             return next(error);
