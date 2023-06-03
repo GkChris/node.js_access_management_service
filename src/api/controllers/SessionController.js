@@ -9,52 +9,47 @@ const validations = require('../validations');
 const statusCodes = JSONdata.StatusCodes;
 
 const CommonServices = services.CommonServices;
-const commonValidations = validations.CommonValidations;
+const CommonValidations = validations.CommonValidations;
 
-const tempService = services.TempService;
+const SessionService = services.SessionService;
 
 
 // Module routes
 const routes = {
-    getSuccess: '/getSuccess$',
-    getError: '/getError$'
+    createSession: '/createSession$',
 }
 
-router.route(routes.getSuccess)
-    .get(async(req, res, next) => {
+router.route(routes.createSession)
+    .post(async(req, res, next) => {
 
-        const randomArgument = req.query?.randomArgument ? req.query.randomArgument : true;
+        const userId = req.body?.data?.userId ? req.body.data.userId : false;
+        const realmId = req.body?.data?.realmId ? req.body.data.realmId : false;
+        const clientId = req.body?.data?.clientId ? req.body.data.clientId : false;
 
         try {
-            commonValidations.is_content_valid(req.query);
-            commonValidations.is_content_missing({randomArgument});
+            CommonValidations.is_content_missing({userId, realmId, clientId});
+            CommonValidations.mongoose_ObjectId_validation(realmId);
+            CommonValidations.mongoose_ObjectId_validation(clientId);
 
-            await tempService.get_success();
+            await CommonServices.find_required_references_byId_or_reject([  // {Model: _id}
+                {'Realm': realmId},
+                {'Client': clientId}
+            ])
+
+            // const token = SessionService.generateToken();
+
+            const session = await SessionService.createSession({userId, realmId, clientId, token});
+
         } catch ( error ) {
             return next(error);
         }
 
-        res.locals.message = statusCodes.ok.msg;
-        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
-});
-
-
-router.route(routes.getError)
-    .get(async(req, res, next) => {
-
-        const randomArgument = req.query?.randomArgument ? req.query.randomArgument : false;
-
-        try {
-            commonValidations.is_content_valid(req.query);
-            commonValidations.is_content_missing({randomArgument});
-
-            await tempService.get_error()
-        } catch ( error ) {
-            return next(error)
-        }   
-
-        res.locals.message = statusCodes.ok.msg;
-        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg})
+        res.locals.message = statusCodes.created.msg;
+        return res.status(statusCodes.created.code).json({
+            code: statusCodes.created.code, 
+            message: statusCodes.created.msg,
+            data: {token: session.token}
+        });
 });
 
 

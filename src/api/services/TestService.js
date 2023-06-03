@@ -17,20 +17,19 @@ const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
 
-function createSession(args){
+function dropDatabase(){
     return new Promise(async(resolve, reject) => {
 
         try {
 
-            let session = {};
-            if ( args?.userId ) session.userId = args.userId;
-            if ( args?.realmId ) session.realmId = args.realmId;
-            if ( args?.clientId ) session.clientId = args.clientId;
-            if ( args?.token ) session.token = args.token; 
-
-            let newSession = await models.Session.create(session);
-       
-            return resolve(newSession);
+            await models.User.deleteMany({});
+            await models.Client.deleteMany({});
+            await models.Permission.deleteMany({});
+            await models.Realm.deleteMany({});
+            await models.Role.deleteMany({});
+            await models.Session.deleteMany({});
+                 
+            return resolve();
 
         } catch ( error ) {
             return reject(new ModifyDocumentError(`${error}`))
@@ -40,6 +39,6 @@ function createSession(args){
 
 
 module.exports = {
-    createSession,
+    dropDatabase,
 }
 
