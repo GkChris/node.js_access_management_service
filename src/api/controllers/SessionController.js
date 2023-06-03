@@ -12,7 +12,7 @@ const CommonServices = services.CommonServices;
 const CommonValidations = validations.CommonValidations;
 
 const SessionService = services.SessionService;
-
+const UserService = services.UserService;
 
 // Module routes
 const routes = {
@@ -38,9 +38,10 @@ router.route(routes.createSession)
                 {'Client': clientId}
             ])
 
-            // const token = SessionService.generateToken();
+            const user = await UserService.getUserById(userId);     // Does not include user's password
+            const token = SessionService.generateJwtToken(user);
 
-            const session = await SessionService.createSession({userId, realmId, clientId, token});
+            var session = await SessionService.createSession({userId, realmId, clientId, token});
 
         } catch ( error ) {
             return next(error);

@@ -68,8 +68,22 @@ function createUser(args){
 }
 
 
+// All user informations except user's password
+function getUserById(userId){
+    return new Promise((async(resolve, reject) => {
+        try{
+            const user = await models.User.findOne({_id: userId}, {password: 0});
+            return resolve(user);
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`));
+        }
+    }))
+}
+
+
 module.exports = {
     hashPassword,
     createUser,
+    getUserById,
 }
 

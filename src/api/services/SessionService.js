@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 const ModifyDocumentError = require('../errors/ModifyDocumentError');
 const ValidationFailureError = require('../errors/ValidationError');
 const FetchDocumentError = require('../errors/FetchDocumentError');
 const ReferenceDocumentError = require('../errors/ReferenceDocumentError');
+const FunctionalityError = require('../errors/FunctionalityError');
 
 const config = require('../../config');
 const JSONdata = require('../data');
@@ -16,6 +18,23 @@ const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
+const jwt_secret_key = config.Keys.jwt_secret_key;
+
+
+function generateJwtToken(user){
+    try {
+
+        const payload = JSON.stringify(user);
+        const secretKey = jwt_secret_key;
+        const options = {};
+
+        const token = jwt.sign(payload, secretKey, options);
+
+        return token
+    } catch ( error ) {
+        throw new FunctionalityError(`${error}`);
+    }
+}
 
 function createSession(args){
     return new Promise(async(resolve, reject) => {
@@ -41,5 +60,6 @@ function createSession(args){
 
 module.exports = {
     createSession,
+    generateJwtToken,
 }
 
