@@ -27,6 +27,11 @@ const SessionSchema = new Schema({
         required: true,
         unique: true,
     },
+    active: {
+        type: Boolean,
+        required: true,
+        default: true,
+    }
 }, { strict: true, timestamps: true });
 
 module.exports = SessionSchema;
