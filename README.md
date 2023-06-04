@@ -1,3 +1,5 @@
+# Still in development
+
 # Description
 
 Simple jwt authentication service build with node.js. It also handles authorization & session management. 
