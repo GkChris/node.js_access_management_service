@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const FetchDocumentError = require('../errors/FetchDocumentError');
 const ModifyDocumentError = require('../errors/ModifyDocumentError');
 const ReferenceDocumentError = require('../errors/ReferenceDocumentError');
-
+const MatchDocumentError = require('../errors/MatchDocumentError');
 
 const config = require('../../config');
 const JSONdata = require('../data');
@@ -40,7 +40,71 @@ function createClient(args){
 
 
 
+
+function updateClient(id, updatePayload){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            let update = {};
+            if ( updatePayload?.name ) update.name = updatePayload.name;
+            if ( updatePayload?.description ) update.description = updatePayload.description;
+            if ( updatePayload?.realmId ) update.realmId = updatePayload.realmId;
+        
+            let updateAction = await Client.updateOne({_id: id}, update);
+       
+            if ( !updateAction?.matchedCount || updateAction.matchedCount === 0 ) return reject(new MatchDocumentError(`Failed to match client ${id} `));
+
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`));
+        }
+    })
+}
+
+
+function deleteClient(id){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            let deleteAction = await Client.deleteOne({_id: id});
+
+            if ( !deleteAction?.deletedCount || deleteAction.deletedCount === 0 ) return reject(new MatchDocumentError(`Failed to match client ${id} `));
+         
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
+
+function deleteClients(ids){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            let deleteAction = await Client.deleteMany({_id: { $in: ids}});
+
+            if ( !deleteAction?.deletedCount || deleteAction.deletedCount === 0 ) return reject(new MatchDocumentError(`Failed to match any clients`));
+   
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
 module.exports = {
     createClient,
+    updateClient,
+    deleteClient,
+    deleteClients,
 }
 
