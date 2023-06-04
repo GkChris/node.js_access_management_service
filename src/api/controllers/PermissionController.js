@@ -25,9 +25,9 @@ const routes = {
 router.route(routes.createPermission)
     .post(async(req, res, next) => {
 
-        const name = req.body?.data?.name ? req.body.data.name : false;
-        const code = req.body?.data?.code ? req.body.data.code : false;
-        const description = req.body?.data?.description ? req.body.data.description : false;
+        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : false;
+        const code = req.body?.data?.hasOwnProperty('code') ? req.body.data.code : false;
+        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : false;
 
         try {
             CommonValidations.is_content_missing({name, code});
@@ -46,8 +46,8 @@ router.route(routes.createPermission)
 router.route(routes.updatePermission)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.id ? req.body.data.id : false;
-        const payload = req.body?.data?.payload ? req.body.data.payload : false;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : false;
+        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : false;
 
         try {
             CommonValidations.is_content_missing({id, payload});
@@ -67,7 +67,7 @@ router.route(routes.updatePermission)
 router.route(routes.deletePermission)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.id ? req.body.data.id : false;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : false;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -87,7 +87,7 @@ router.route(routes.deletePermission)
 router.route(routes.deletePermissions)
     .post(async(req, res, next) => {
 
-        const ids = req.body?.data?.ids ? req.body.data.ids : false;
+        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : false;
 
         try {
             CommonValidations.is_content_missing({ids});

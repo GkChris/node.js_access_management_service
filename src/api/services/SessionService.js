@@ -18,6 +18,7 @@ const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
+const Session = models.Session;
 const jwt_secret_key = config.Keys.jwt_secret_key;
 
 
@@ -42,12 +43,12 @@ function createSession(args){
         try {
 
             let session = {};
-            if ( args?.userId ) session.userId = args.userId;
-            if ( args?.realmId ) session.realmId = args.realmId;
-            if ( args?.clientId ) session.clientId = args.clientId;
-            if ( args?.token ) session.token = args.token; 
+            if ( args?.hasOwnProperty('userId') ) session.userId = args.userId;
+            if ( args?.hasOwnProperty('realmId') ) session.realmId = args.realmId;
+            if ( args?.hasOwnProperty('clientId') ) session.clientId = args.clientId;
+            if ( args?.hasOwnProperty('token') ) session.token = args.token; 
 
-            let newSession = await models.Session.create(session);
+            let newSession = await Session.create(session);
        
             return resolve(newSession);
 

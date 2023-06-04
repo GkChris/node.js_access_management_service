@@ -22,9 +22,9 @@ const routes = {
 router.route(routes.createClient)
     .post(async(req, res, next) => {
 
-        const name = req.body?.data?.name ? req.body.data.name : false;
-        const description = req.body?.data?.description ? req.body.data.description : false;
-        const realmId = req.body?.data?.realmId ? req.body.data.realmId : false;
+        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : false;
+        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : false;
+        const realmId = req.body?.data?.hasOwnProperty('realmId') ? req.body.data.realmId : false;
 
         try {
             CommonValidations.is_content_missing({name, realmId});

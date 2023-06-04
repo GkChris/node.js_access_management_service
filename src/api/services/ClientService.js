@@ -15,6 +15,8 @@ const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
+const Client = models.Client;
+
 
 function createClient(args){
     return new Promise(async(resolve, reject) => {
@@ -22,11 +24,11 @@ function createClient(args){
         try {
 
             let client = {};
-            if ( args?.name ) client.name = args.name; 
-            if ( args?.description ) client.description = args.description; 
-            if ( args?.realmId ) client.realmId = args.realmId; 
+            if ( args?.hasOwnProperty('name') ) client.name = args.name; 
+            if ( args?.hasOwnProperty('description') ) client.description = args.description; 
+            if ( args?.hasOwnProperty('realmId') ) client.realmId = args.realmId; 
 
-            let newClient = await models.Client.create(client);
+            let newClient = await Client.create(client);
        
             return resolve(newClient);
 

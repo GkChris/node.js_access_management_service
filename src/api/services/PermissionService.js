@@ -12,6 +12,8 @@ const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
+const Permission = models.Permission;
+
 
 function createPermission(name, code, description){
     return new Promise(async(resolve, reject) => {
@@ -23,7 +25,7 @@ function createPermission(name, code, description){
             if ( code ) permission.code = code;
             if ( description ) permission.description = description;
         
-            let newPermission = await models.Permission.create(permission);
+            let newPermission = await Permission.create(permission);
        
             return resolve(newPermission);
 
@@ -44,7 +46,7 @@ function updatePermission(id, updatePayload){
             if ( updatePayload?.code ) update.code = updatePayload.code;
             if ( updatePayload?.description ) update.description = updatePayload.description;
 
-            let updatedPermission = await models.Permission.updateOne({_id: id}, update, {returnOriginal: false});
+            let updatedPermission = await Permission.updateOne({_id: id}, update, {returnOriginal: false});
        
             return resolve(updatedPermission);
 
@@ -60,7 +62,7 @@ function deletePermission(id){
 
         try {
         
-            await models.Permission.deleteOne({_id: id});
+            await Permission.deleteOne({_id: id});
        
             return resolve();
 
@@ -77,7 +79,7 @@ function deletePermissions(ids){
 
         try {
         
-            await models.Permission.deleteMany({_id: { $in: ids}});
+            await Permission.deleteMany({_id: { $in: ids}});
        
             return resolve();
 

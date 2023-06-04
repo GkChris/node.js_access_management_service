@@ -16,6 +16,8 @@ const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
+const Role = models.Role;
+
 
 function createRole(args){
     return new Promise(async(resolve, reject) => {
@@ -23,13 +25,13 @@ function createRole(args){
         try {
 
             let role = {};
-            if ( args?.name ) role.name = args.name;
-            if ( args?.description ) role.description = args.description;
-            if ( args?.realmId ) role.realmId = args.realmId;
-            if ( args?.clientId ) role.clientId = args.clientId;
-            if ( args?.permissions && args.permissions?.length > 0 ) role.permissions = args.permissions; 
+            if ( args?.hasOwnProperty('name') ) role.name = args.name;
+            if ( args?.hasOwnProperty('description') ) role.description = args.description;
+            if ( args?.hasOwnProperty('realmId') ) role.realmId = args.realmId;
+            if ( args?.hasOwnProperty('clientId') ) role.clientId = args.clientId;
+            if ( args?.hasOwnProperty('permissions') && args.permissions?.length > 0 ) role.permissions = args.permissions; 
 
-            let newRole = await models.Role.create(role);
+            let newRole = await Role.create(role);
        
             return resolve(newRole);
 

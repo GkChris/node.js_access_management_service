@@ -22,11 +22,11 @@ const routes = {
 router.route(routes.createRole)
     .post(async(req, res, next) => {
 
-        const name = req.body?.data?.name ? req.body.data.name : false;
-        const description = req.body?.data?.description ? req.body.data.description : false;
-        const realmId = req.body?.data?.realmId ? req.body.data.realmId : false;
-        const clientId = req.body?.data?.clientId ? req.body.data.clientId : false;
-        const permissions = req.body?.data?.permissions ? req.body.data.permissions : false;
+        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : false;
+        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : false;
+        const realmId = req.body?.data?.hasOwnProperty('realmId') ? req.body.data.realmId : false;
+        const clientId = req.body?.data?.hasOwnProperty('clientId') ? req.body.data.clientId : false;
+        const permissions = req.body?.data?.hasOwnProperty('permissions') ? req.body.data.permissions : false;
 
         try {
             CommonValidations.is_content_missing({name, realmId, clientId});

@@ -20,8 +20,9 @@ const UserService = services.UserService;
 // Module routes
 const routes = {
     createUser: '/createUser$',
-    // updateUser: '/updateUser$',
-    // deleteUser: '/deleteUser$',
+    updateUser: '/updateUser$',
+    deleteUser: '/deleteUser$',
+    deleteUsers: '/deleteUsers$',
 }
 
 router.route(routes.createUser)
@@ -29,16 +30,16 @@ router.route(routes.createUser)
 
         const payload = req.body?.data ? req.body.data : {};
 
-        const username = payload?.username ? payload.username : false;
-        const firstname = payload?.firstname ? payload.firstname : false;
-        const lastname = payload?.lastname ? payload.lastname : false;
-        const email = payload?.email ? payload.email : false;
-        const phone = payload?.phone ? payload.phone : false;
-        const phone_code = payload?.phone_code ? payload.phone_code : false;
-        const roleId = payload?.roleId ? payload.roleId : false;
-        const realmId = payload?.realmId ? payload.realmId : false;
-        const clientId = payload?.clientId ? payload.clientId : false;
-        let password = payload?.password ? payload.password : false;
+        const username = payload?.hasOwnProperty('username') ? payload.username : false;
+        const firstname = payload?.hasOwnProperty('firstname') ? payload.firstname : false;
+        const lastname = payload?.hasOwnProperty('lastname') ? payload.lastname : false;
+        const email = payload?.hasOwnProperty('email') ? payload.email : false;
+        const phone = payload?.hasOwnProperty('phone') ? payload.phone : false;
+        const phone_code = payload?.hasOwnProperty('phone_code') ? payload.phone_code : false;
+        const roleId = payload?.hasOwnProperty('roleId') ? payload.roleId : false;
+        const realmId = payload?.hasOwnProperty('realmId') ? payload.realmId : false;
+        const clientId = payload?.hasOwnProperty('clientId') ? payload.clientId : false;
+        let password = payload?.hasOwnProperty('password') ? payload.password : false;
 
         try {
             CommonValidations.is_content_missing({
@@ -82,42 +83,71 @@ router.route(routes.createUser)
 });
 
 
-// router.route(routes.updateUser)
-//     .post(async(req, res, next) => {
-
-//         const randomArgument = req.query?.randomArgument ? req.query.randomArgument : false;
-
-//         try {
-//             CommonValidations.is_content_valid(req.query);
-//             CommonValidations.is_content_missing({randomArgument});
-
-//             await UserService.get_success();
-//         } catch ( error ) {
-//             return next(error);
-//         }
-
-//         res.locals.message = statusCodes.ok.msg;
-//         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
-// });
 
 
-// router.route(routes.deleteUser)
-//     .get(async(req, res, next) => {
+router.route(routes.updateUser)
+    .post(async(req, res, next) => {
 
-//         const randomArgument = req.query?.randomArgument ? req.query.randomArgument : false;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : false;
+        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : false;
 
-//         try {
-//             CommonValidations.is_content_valid(req.query);
-//             CommonValidations.is_content_missing({randomArgument});
+        try {
+            CommonValidations.is_content_missing({id, payload});
+            CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
 
-//             await UserService.get_error()
-//         } catch ( error ) {
-//             return next(error)
-//         }   
+            if ( payload.hasOwnProperty('password') ) payload.password = await UserService.hashPassword(password);
+            await UserService.updateUser(id, payload);
 
-//         res.locals.message = statusCodes.ok.msg;
-//         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg})
-// });
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
+});
+
+
+router.route(routes.deleteUser)
+    .post(async(req, res, next) => {
+
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : false;
+
+        try {
+            CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
+
+            await UserService.deleteUser(id);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
+});
+
+
+
+router.route(routes.deleteUsers)
+    .post(async(req, res, next) => {
+
+        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : false;
+
+        try {
+            CommonValidations.is_content_missing({ids});
+            ids.forEach(id => {
+                CommonValidations.mongoose_ObjectId_validation(id) 
+            });
+
+            await UserService.deleteUsers(ids);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
+});
+
 
 
 module.exports = router;
