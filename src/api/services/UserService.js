@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-
 
 const ModifyDocumentError = require('../errors/ModifyDocumentError');
 const ValidationFailureError = require('../errors/ValidationError');
@@ -22,27 +20,6 @@ const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
 const User = models.User;
-
-
-function hashPassword(password){
-    return new Promise((resolve, reject) => {
-        try {
-
-            const saltRounds = 14; // Number of salt rounds to apply (higher value = more secure but slower)
-
-            bcrypt.hash(password, saltRounds, function(err, hashedPassword) {
-                if (err) {
-                    return reject(FunctionalityError('Something went wrong while hashing password'))
-                } else {
-                    return resolve(hashedPassword);
-                }
-            });
-
-        } catch (error) {
-            return reject(FunctionalityError('Something went wrong while hashing password'))
-        }
-    })      
-}
 
 
 function createUser(args){
@@ -170,7 +147,6 @@ function deleteUsers(ids){
 
 
 module.exports = {
-    hashPassword,
     createUser,
     getUserById,
     updateUser,

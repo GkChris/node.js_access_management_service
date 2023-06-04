@@ -57,7 +57,7 @@ router.route(routes.createUser)
                 {'Client': clientId}
             ])
 
-            if ( password ) password = await UserService.hashPassword(password);
+            if ( password ) password = await utils.hashPassword(password);
             const sub = CodeGenerators.uuid4_id();
 
             await UserService.createUser({
@@ -102,9 +102,9 @@ router.route(routes.updateUser)
             if ( payload.realmId ) requiredReferences.push({'Role': payload.realmId});
             if ( payload.clientId ) requiredReferences.push({'Role': payload.clientId});
             if ( requiredReferences.length > 0 ) await CommonServices.find_required_references_byId_or_reject(requiredReferences);
-            
 
-            if ( payload.password ) payload.password = await UserService.hashPassword(password);
+
+            if ( payload.password ) payload.password = await utils.hashPassword(password);
             await UserService.updateUser(id, payload);
 
         } catch ( error ) {

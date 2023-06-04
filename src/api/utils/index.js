@@ -1,7 +1,11 @@
 const CodeGenerators = require('./CodeGenerators');
-const Sleep = require('./Sleep');
+const sleep = require('./Sleep');
+const hashPassword = require('./HashPassword');
+const generateJwtToken = require('./GenerateJwtToken');
 
 module.exports = {
     CodeGenerators,
-    Sleep,
+    sleep,
+    hashPassword,
+    generateJwtToken,
 }

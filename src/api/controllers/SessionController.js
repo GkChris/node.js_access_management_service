@@ -4,6 +4,7 @@ var router = express.Router();
 const config = require('../../config');
 const JSONdata= require('../data');
 const services = require('../services');
+const utils = require('../utils');
 const validations = require('../validations');
 
 const statusCodes = JSONdata.StatusCodes;
@@ -42,7 +43,7 @@ router.route(routes.createSession)
             ])
 
             const user = await UserService.getUserById(userId);     // Does not include user's password
-            const token = SessionService.generateJwtToken(user);
+            const token = utils.generateJwtToken(user, {}); // payload, options
 
             var session = await SessionService.createSession({userId, realmId, clientId, token});
 

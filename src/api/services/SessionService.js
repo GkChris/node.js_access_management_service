@@ -21,23 +21,7 @@ const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
 
 const Session = models.Session;
-const jwt_secret_key = config.Keys.jwt_secret_key;
 
-
-function generateJwtToken(user){
-    try {
-
-        const payload = JSON.stringify(user);
-        const secretKey = jwt_secret_key;
-        const options = {};
-
-        const token = jwt.sign(payload, secretKey, options);
-
-        return token
-    } catch ( error ) {
-        throw new FunctionalityError(`${error}`);
-    }
-}
 
 function createSession(args){
     return new Promise(async(resolve, reject) => {
@@ -126,7 +110,6 @@ function deleteSessions(ids){
 
 
 module.exports = {
-    generateJwtToken,
     createSession,
     updateSession,
     deleteSession,
