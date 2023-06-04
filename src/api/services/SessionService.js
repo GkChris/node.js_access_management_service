@@ -6,6 +6,8 @@ const ValidationFailureError = require('../errors/ValidationError');
 const FetchDocumentError = require('../errors/FetchDocumentError');
 const ReferenceDocumentError = require('../errors/ReferenceDocumentError');
 const FunctionalityError = require('../errors/FunctionalityError');
+const MatchDocumentError = require('../errors/MatchDocumentError');
+
 
 const config = require('../../config');
 const JSONdata = require('../data');
@@ -59,8 +61,75 @@ function createSession(args){
 }
 
 
+
+function updateSession(id, updatePayload){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            let update = {};
+            if ( updatePayload?.name ) update.name = updatePayload.name;
+            if ( updatePayload?.userId ) update.userId = updatePayload.userId;
+            if ( updatePayload?.realmId ) update.realmId = updatePayload.realmId;
+            if ( updatePayload?.clientId ) update.clientId = updatePayload.clientId;
+            if ( updatePayload?.token ) update.token = updatePayload.token;
+            if ( updatePayload?.hasOwnProperty('active') ) update.active = updatePayload.active;
+        
+            let updateAction = await Session.updateOne({_id: id}, update);
+       
+            if ( !updateAction?.matchedCount || updateAction.matchedCount === 0 ) return reject(new MatchDocumentError(`Failed to match session ${id} `));
+
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`));
+        }
+    })
+}
+
+
+function deleteSession(id){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            let deleteAction = await Session.deleteOne({_id: id});
+
+            if ( !deleteAction?.deletedCount || deleteAction.deletedCount === 0 ) return reject(new MatchDocumentError(`Failed to match session ${id} `));
+         
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
+
+function deleteSessions(ids){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            let deleteAction = await Session.deleteMany({_id: { $in: ids}});
+
+            if ( !deleteAction?.deletedCount || deleteAction.deletedCount === 0 ) return reject(new MatchDocumentError(`Failed to match any sessions`));
+   
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
 module.exports = {
-    createSession,
     generateJwtToken,
+    createSession,
+    updateSession,
+    deleteSession,
+    deleteSessions,
 }
 
