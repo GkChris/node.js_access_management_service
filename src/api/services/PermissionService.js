@@ -46,9 +46,11 @@ function updatePermission(id, updatePayload){
             if ( updatePayload?.code ) update.code = updatePayload.code;
             if ( updatePayload?.description ) update.description = updatePayload.description;
 
-            let updatedPermission = await Permission.updateOne({_id: id}, update, {returnOriginal: false});
+            let updateAction = await Permission.updateOne({_id: id}, update);
+
+            if ( !updateAction?.matchedCount || updateAction.matchedCount === 0 ) return reject(new MatchDocumentError(`Failed to match permission ${id} `));
        
-            return resolve(updatedPermission);
+            return resolve(updateAction);
 
         } catch ( error ) {
             return reject(new ModifyDocumentError(`${error}`));
@@ -62,7 +64,9 @@ function deletePermission(id){
 
         try {
         
-            await Permission.deleteOne({_id: id});
+            let deleteAction = await Permission.deleteOne({_id: id});
+
+            if ( !deleteAction?.deletedCount || deleteAction.deletedCount === 0 ) return reject(new MatchDocumentError(`Failed to match permission ${id} `));
        
             return resolve();
 
@@ -79,7 +83,9 @@ function deletePermissions(ids){
 
         try {
         
-            await Permission.deleteMany({_id: { $in: ids}});
+            let deleteAction = await Permission.deleteMany({_id: { $in: ids}});
+
+            if ( !deleteAction?.deletedCount || deleteAction.deletedCount === 0 ) return reject(new MatchDocumentError(`Failed to match any permissions`));
        
             return resolve();
 

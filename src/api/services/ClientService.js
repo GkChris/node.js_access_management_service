@@ -24,9 +24,9 @@ function createClient(args){
         try {
 
             let client = {};
-            if ( args?.hasOwnProperty('name') ) client.name = args.name; 
-            if ( args?.hasOwnProperty('description') ) client.description = args.description; 
-            if ( args?.hasOwnProperty('realmId') ) client.realmId = args.realmId; 
+            if ( args?.name ) client.name = args.name; 
+            if ( args?.description ) client.description = args.description; 
+            if ( args?.realmId ) client.realmId = args.realmId; 
 
             let newClient = await Client.create(client);
        

@@ -95,7 +95,16 @@ router.route(routes.updateUser)
             CommonValidations.is_content_missing({id, payload});
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
 
-            if ( payload.hasOwnProperty('password') ) payload.password = await UserService.hashPassword(password);
+
+            // Find if payload contain data that should be checked for existing references
+            let requiredReferences = [];
+            if ( payload.roleId ) requiredReferences.push({'Role': payload.roleId});
+            if ( payload.realmId ) requiredReferences.push({'Role': payload.realmId});
+            if ( payload.clientId ) requiredReferences.push({'Role': payload.clientId});
+            if ( requiredReferences.length > 0 ) await CommonServices.find_required_references_byId_or_reject(requiredReferences);
+            
+
+            if ( payload.password ) payload.password = await UserService.hashPassword(password);
             await UserService.updateUser(id, payload);
 
         } catch ( error ) {

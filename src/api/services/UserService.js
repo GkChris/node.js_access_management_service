@@ -7,6 +7,8 @@ const ValidationFailureError = require('../errors/ValidationError');
 const FetchDocumentError = require('../errors/FetchDocumentError');
 const ReferenceDocumentError = require('../errors/ReferenceDocumentError');
 const FunctionalityError = require('../errors/FunctionalityError');
+const MatchDocumentError = require('../errors/MatchDocumentError');
+
 
 const config = require('../../config');
 const JSONdata = require('../data');
@@ -35,7 +37,7 @@ function hashPassword(password){
                     return resolve(hashedPassword);
                 }
             });
-            
+
         } catch (error) {
             return reject(FunctionalityError('Something went wrong while hashing password'))
         }
@@ -49,19 +51,19 @@ function createUser(args){
         try {
 
             let user = {};
-            if ( args?.hasOwnProperty('sub') ) user.sub = args.sub;
-            if ( args?.hasOwnProperty('password') ) user.password = args.password;
-            if ( args?.hasOwnProperty('username') ) user.username = args.username;
-            if ( args?.hasOwnProperty('firstname') ) user.firstname = args.firstname;
-            if ( args?.hasOwnProperty('lastname') ) user.lastname = args.lastname;
-            if ( args?.hasOwnProperty('email') ) user.email = args.email;
-            if ( args?.hasOwnProperty('phone') && args?.hasOwnProperty('phone_code') ) {
+            if ( args?.sub ) user.sub = args.sub;
+            if ( args?.password ) user.password = args.password;
+            if ( args?.username ) user.username = args.username;
+            if ( args?.firstname ) user.firstname = args.firstname;
+            if ( args?.lastname ) user.lastname = args.lastname;
+            if ( args?.email ) user.email = args.email;
+            if ( args?.phone && args?.phone_code ) {
                 user.phone = args.phone;
                 user.phone_code = args.phone_code;
             }
-            if ( args?.hasOwnProperty('roleId') ) user.roleId = args.roleId;
-            if ( args?.hasOwnProperty('realmId') ) user.realmId = args.realmId;
-            if ( args?.hasOwnProperty('clientId') ) user.clientId = args.clientId;
+            if ( args?.roleId ) user.roleId = args.roleId;
+            if ( args?.realmId ) user.realmId = args.realmId;
+            if ( args?.clientId ) user.clientId = args.clientId;
 
             let newUser = await User.create(user);
        
@@ -77,9 +79,15 @@ function createUser(args){
 // All user informations except user's password
 function getUserById(userId){
     return new Promise((async(resolve, reject) => {
+        
         try{
+
             const user = await User.findOne({_id: userId}, {password: 0});
+
+            if ( !user ) return reject(new MatchDocumentError(`Failed to match user ${userId} `));
+            
             return resolve(user);
+        
         } catch ( error ) {
             return reject(new FetchDocumentError(`${error}`));
         }
@@ -94,25 +102,27 @@ function updateUser(id, updatePayload){
         try {
         
             let update = {};
-            if ( updatePayload?.hasOwnProperty('sub') ) update.sub = updatePayload.sub;
-            if ( updatePayload?.hasOwnProperty('password') ) update.password = updatePayload.password;
-            if ( updatePayload?.hasOwnProperty('username') ) update.username = updatePayload.username;
-            if ( updatePayload?.hasOwnProperty('firstname') ) update.firstname = updatePayload.firstname;
-            if ( updatePayload?.hasOwnProperty('lastname') ) update.lastname = updatePayload.lastname;
-            if ( updatePayload?.hasOwnProperty('email') ) update.email = updatePayload.email;
-            if ( updatePayload?.hasOwnProperty('phone') && updatePayload?.hasOwnProperty('phone_code') ) {
+            if ( updatePayload?.sub ) update.sub = updatePayload.sub;
+            if ( updatePayload?.password ) update.password = updatePayload.password;
+            if ( updatePayload?.username ) update.username = updatePayload.username;
+            if ( updatePayload?.firstname ) update.firstname = updatePayload.firstname;
+            if ( updatePayload?.lastname ) update.lastname = updatePayload.lastname;
+            if ( updatePayload?.email ) update.email = updatePayload.email;
+            if ( updatePayload?.phone && updatePayload?.phone_code ) {
                 update.phone = updatePayload.phone;
                 update.phone_code = updatePayload.phone_code;
             }
             if ( updatePayload?.hasOwnProperty('email_verification') ) update.email_verification = updatePayload.email_verification;
             if ( updatePayload?.hasOwnProperty('phone_verification') ) update.phone_verification = updatePayload.phone_verification;
-            if ( updatePayload?.hasOwnProperty('roleId') ) update.roleId = updatePayload.roleId;
-            if ( updatePayload?.hasOwnProperty('realmId') ) update.realmId = updatePayload.realmId;
-            if ( updatePayload?.hasOwnProperty('clientId') ) update.clientId = updatePayload.clientId;
-            console.log('UPDATW',updatePayload);
-            let updatedUser = await User.updateOne({_id: id}, update, {returnOriginal: false});
+            if ( updatePayload?.roleId ) update.roleId = updatePayload.roleId;
+            if ( updatePayload?.realmId ) update.realmId = updatePayload.realmId;
+            if ( updatePayload?.clientId ) update.clientId = updatePayload.clientId;
+            
+            let updateAction = await User.updateOne({_id: id}, update);
+
+            if ( !updateAction?.matchedCount || updateAction.matchedCount === 0 ) return reject(new MatchDocumentError(`Failed to match user ${id} `));
        
-            return resolve(updatedUser);
+            return resolve();
 
         } catch ( error ) {
             return reject(new ModifyDocumentError(`${error}`));
@@ -126,8 +136,10 @@ function deleteUser(id){
 
         try {
         
-            await User.deleteOne({_id: id});
+            let deleteAction = await User.deleteOne({_id: id});
        
+            if ( !deleteAction?.deletedCount || deleteAction.deletedCount === 0 ) return reject(new MatchDocumentError(`Failed to match user ${id} `));
+
             return resolve();
 
         } catch ( error ) {
@@ -143,7 +155,9 @@ function deleteUsers(ids){
 
         try {
         
-            await User.deleteMany({_id: { $in: ids}});
+            let deleteAction = await User.deleteMany({_id: { $in: ids}});
+
+            if ( !deleteAction?.deletedCount || deleteAction.deletedCount === 0 ) return reject(new MatchDocumentError(`Failed to match any users`));
        
             return resolve();
 

@@ -1,8 +1,8 @@
 const express = require('express');
 var router = express.Router();
 
-/* Testing */
-router.use('/tests', require('../controllers/TestController'));      
+/*** Special route that contain endpoints to initialize and drop the database ***/
+router.use('/database', require('../controllers/DatabaseController'));      
 
 /* Routes */
 router.use('/users', require('../controllers/UserController'));      

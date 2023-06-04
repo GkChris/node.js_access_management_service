@@ -4,6 +4,7 @@ const ModifyDocumentError = require('../errors/ModifyDocumentError');
 const ValidationFailureError = require('../errors/ValidationError');
 const FetchDocumentError = require('../errors/FetchDocumentError');
 const ReferenceDocumentError = require('../errors/ReferenceDocumentError');
+const MatchDocumentError = require('../errors/MatchDocumentError');
 
 const config = require('../../config');
 const JSONdata = require('../data');
@@ -25,14 +26,14 @@ function createRole(args){
         try {
 
             let role = {};
-            if ( args?.hasOwnProperty('name') ) role.name = args.name;
-            if ( args?.hasOwnProperty('description') ) role.description = args.description;
-            if ( args?.hasOwnProperty('realmId') ) role.realmId = args.realmId;
-            if ( args?.hasOwnProperty('clientId') ) role.clientId = args.clientId;
-            if ( args?.hasOwnProperty('permissions') && args.permissions?.length > 0 ) role.permissions = args.permissions; 
+            if ( args?.name ) role.name = args.name;
+            if ( args?.description ) role.description = args.description;
+            if ( args?.realmId ) role.realmId = args.realmId;
+            if ( args?.clientId ) role.clientId = args.clientId;
+            if ( args?.permissions && args.permissions?.length > 0 ) role.permissions = args.permissions; 
 
             let newRole = await Role.create(role);
-       
+            
             return resolve(newRole);
 
         } catch ( error ) {
@@ -42,7 +43,75 @@ function createRole(args){
 }
 
 
+
+
+function updateRole(id, updatePayload){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            let update = {};
+            if ( updatePayload?.name ) update.name = updatePayload.name;
+            if ( updatePayload?.description ) update.description = updatePayload.description;
+            if ( updatePayload?.realmId ) update.realmId = updatePayload.realmId;
+            if ( updatePayload?.clientId ) update.clientId = updatePayload.clientId;
+            if ( updatePayload?.permissions ) update.permissions = updatePayload.permissions;
+        
+            let updateAction = await Role.updateOne({_id: id}, update);
+       
+            if ( !updateAction?.matchedCount || updateAction.matchedCount === 0 ) return reject(new MatchDocumentError(`Failed to match role ${id} `));
+
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`));
+        }
+    })
+}
+
+
+function deleteRole(id){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            let deleteAction = await Role.deleteOne({_id: id});
+
+            if ( !deleteAction?.deletedCount || deleteAction.deletedCount === 0 ) return reject(new MatchDocumentError(`Failed to match role ${id} `));
+         
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
+
+function deleteRoles(ids){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            let deleteAction = await Role.deleteMany({_id: { $in: ids}});
+
+            if ( !deleteAction?.deletedCount || deleteAction.deletedCount === 0 ) return reject(new MatchDocumentError(`Failed to match any roles`));
+   
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
+
 module.exports = {
     createRole,
+    updateRole,
+    deleteRole,
+    deleteRoles,
 }
 

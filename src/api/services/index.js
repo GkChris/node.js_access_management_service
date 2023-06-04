@@ -6,8 +6,8 @@ const RealmService = require('./RealmService');
 const ClientService = require('./ClientService');
 const PermissionService = require('./PermissionService');
 
-/* Test */
-const TestService = require('./TestService');
+/* Special Service */
+const DatabaseService = require('./DatabaseService');
 
 module.exports = {
     CommonServices,
@@ -17,5 +17,5 @@ module.exports = {
     RealmService,
     ClientService,
     PermissionService,
-    TestService,
+    DatabaseService,
 }

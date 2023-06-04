@@ -43,10 +43,10 @@ function createSession(args){
         try {
 
             let session = {};
-            if ( args?.hasOwnProperty('userId') ) session.userId = args.userId;
-            if ( args?.hasOwnProperty('realmId') ) session.realmId = args.realmId;
-            if ( args?.hasOwnProperty('clientId') ) session.clientId = args.clientId;
-            if ( args?.hasOwnProperty('token') ) session.token = args.token; 
+            if ( args?.userId ) session.userId = args.userId;
+            if ( args?.realmId ) session.realmId = args.realmId;
+            if ( args?.clientId ) session.clientId = args.clientId;
+            if ( args?.token ) session.token = args.token; 
 
             let newSession = await Session.create(session);
        

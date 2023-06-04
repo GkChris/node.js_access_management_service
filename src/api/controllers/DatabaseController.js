@@ -11,7 +11,7 @@ const statusCodes = JSONdata.StatusCodes;
 const CommonServices = services.CommonServices;
 const CommonValidations = validations.CommonValidations;
 
-const TestService = services.TestService;
+const DatabaseService = services.DatabaseService;
 
 
 // Module routes
@@ -25,7 +25,7 @@ router.route(routes.dropDatabase)
 
         try {
 
-            await TestService.dropDatabase();
+            await DatabaseService.dropDatabase();
 
         } catch ( error ) {
             return next(error);

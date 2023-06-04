@@ -17,6 +17,9 @@ const RealmService = services.RealmService;
 // Module routes
 const routes = {
     createRealm: '/createRealm$',
+    updateRealm: '/updateRealm$',
+    deleteRealm: '/deleteRealm$',
+    deleteRealms: '/deleteRealms$',
 }
 
 router.route(routes.createRealm)
@@ -36,6 +39,70 @@ router.route(routes.createRealm)
 
         res.locals.message = statusCodes.created.msg;
         return res.status(statusCodes.created.code).json({code: statusCodes.created.code, message: statusCodes.created.msg});
+});
+
+
+
+router.route(routes.updateRealm)
+    .post(async(req, res, next) => {
+
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : false;
+        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : false;
+
+        try {
+            CommonValidations.is_content_missing({id, payload});
+            CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
+
+            await RealmService.updateRealm(id, payload);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
+});
+
+
+router.route(routes.deleteRealm)
+    .post(async(req, res, next) => {
+
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : false;
+
+        try {
+            CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
+
+            await RealmService.deleteRealm(id);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
+});
+
+
+
+router.route(routes.deleteRealms)
+    .post(async(req, res, next) => {
+
+        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : false;
+
+        try {
+            CommonValidations.is_content_missing({ids});
+            ids.forEach(id => {
+                CommonValidations.mongoose_ObjectId_validation(id) 
+            });
+
+            await RealmService.deleteRealms(ids);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
 });
 
 
