@@ -25,9 +25,9 @@ const routes = {
 router.route(routes.createClient)
     .post(async(req, res, next) => {
 
-        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : null;
-        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : null;
-        const realmId = req.body?.data?.hasOwnProperty('realmId') ? req.body.data.realmId : null;
+        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : undefined;
+        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : undefined;
+        const realmId = req.body?.data?.hasOwnProperty('realmId') ? req.body.data.realmId : undefined;
 
         try {
             CommonValidations.is_content_missing({name, realmId});
@@ -52,8 +52,8 @@ router.route(routes.createClient)
 router.route(routes.updateClient)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : null;
-        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : null;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
+        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : undefined;
 
         try {
             CommonValidations.is_content_missing({id, payload});
@@ -78,7 +78,7 @@ router.route(routes.updateClient)
 router.route(routes.deleteClient)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : null;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -98,7 +98,7 @@ router.route(routes.deleteClient)
 router.route(routes.deleteClients)
     .post(async(req, res, next) => {
 
-        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : null;
+        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;
 
         try {
             CommonValidations.is_content_missing({ids});

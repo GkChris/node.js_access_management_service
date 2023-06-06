@@ -25,11 +25,11 @@ const routes = {
 router.route(routes.createRole)
     .post(async(req, res, next) => {
 
-        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : null;
-        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : null;
-        const realmId = req.body?.data?.hasOwnProperty('realmId') ? req.body.data.realmId : null;
-        const clientId = req.body?.data?.hasOwnProperty('clientId') ? req.body.data.clientId : null;
-        const permissions = req.body?.data?.hasOwnProperty('permissions') ? req.body.data.permissions : null;
+        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : undefined;
+        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : undefined;
+        const realmId = req.body?.data?.hasOwnProperty('realmId') ? req.body.data.realmId : undefined;
+        const clientId = req.body?.data?.hasOwnProperty('clientId') ? req.body.data.clientId : undefined;
+        const permissions = req.body?.data?.hasOwnProperty('permissions') ? req.body.data.permissions : undefined;
 
         try {
             CommonValidations.is_content_missing({name, realmId, clientId});
@@ -55,8 +55,8 @@ router.route(routes.createRole)
 router.route(routes.updateRole)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : null;
-        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : null;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
+        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : undefined;
 
         try {
             CommonValidations.is_content_missing({id, payload});
@@ -82,7 +82,7 @@ router.route(routes.updateRole)
 router.route(routes.deleteRole)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : null;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -102,7 +102,7 @@ router.route(routes.deleteRole)
 router.route(routes.deleteRoles)
     .post(async(req, res, next) => {
 
-        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : null;
+        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;
 
         try {
             CommonValidations.is_content_missing({ids});
