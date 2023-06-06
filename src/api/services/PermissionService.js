@@ -96,10 +96,45 @@ function deletePermissions(ids){
 }
 
 
+function fetchPermissionById(id){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+
+            let permission = await Permission.findOne({_id: id});
+
+            return resolve(permission)
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
+
+function fetchPermissions(){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+
+            let permissions = await Permission.find({});
+
+            return resolve(permissions)
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
+
+
 module.exports = {
     createPermission,
     updatePermission,
     deletePermission,
     deletePermissions,
+    fetchPermissionById,
+    fetchPermissions,
 }
 

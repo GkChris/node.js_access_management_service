@@ -20,6 +20,7 @@ const routes = {
     update: '/update',
     delete: '/delete/:id',
     deleteMultiple: '/deleteMultiple',
+    fetch: '/fetch/:id?'
 }
 
 router.route(routes.create)
@@ -104,6 +105,32 @@ router.route(routes.deleteMultiple)
         res.locals.message = statusCodes.ok.msg;
         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
 });
+
+
+
+router.route(routes.fetch)
+    .get(async(req, res, next) => {
+
+        const id = req.params?.id;
+        let data;
+
+        try {
+
+            if ( id ) data = await PermissionService.fetchPermissionById(id)
+            else data = await PermissionService.fetchPermissions();
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({
+            code: statusCodes.ok.code, 
+            message: statusCodes.ok.msg,
+            data: data
+        });
+});
+
 
 
 module.exports = router;
