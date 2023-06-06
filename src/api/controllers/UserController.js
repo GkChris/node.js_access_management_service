@@ -30,16 +30,16 @@ router.route(routes.createUser)
 
         const payload = req.body?.data ? req.body.data : {};
 
-        const username = payload?.hasOwnProperty('username') ? payload.username : false;
-        const firstname = payload?.hasOwnProperty('firstname') ? payload.firstname : false;
-        const lastname = payload?.hasOwnProperty('lastname') ? payload.lastname : false;
-        const email = payload?.hasOwnProperty('email') ? payload.email : false;
-        const phone = payload?.hasOwnProperty('phone') ? payload.phone : false;
-        const phone_code = payload?.hasOwnProperty('phone_code') ? payload.phone_code : false;
-        const roleId = payload?.hasOwnProperty('roleId') ? payload.roleId : false;
-        const realmId = payload?.hasOwnProperty('realmId') ? payload.realmId : false;
-        const clientId = payload?.hasOwnProperty('clientId') ? payload.clientId : false;
-        let password = payload?.hasOwnProperty('password') ? payload.password : false;
+        const username = payload?.hasOwnProperty('username') ? payload.username : null;
+        const firstname = payload?.hasOwnProperty('firstname') ? payload.firstname : null;
+        const lastname = payload?.hasOwnProperty('lastname') ? payload.lastname : null;
+        const email = payload?.hasOwnProperty('email') ? payload.email : null;
+        const phone = payload?.hasOwnProperty('phone') ? payload.phone : null;
+        const phone_code = payload?.hasOwnProperty('phone_code') ? payload.phone_code : null;
+        const roleId = payload?.hasOwnProperty('roleId') ? payload.roleId : null;
+        const realmId = payload?.hasOwnProperty('realmId') ? payload.realmId : null;
+        const clientId = payload?.hasOwnProperty('clientId') ? payload.clientId : null;
+        let password = payload?.hasOwnProperty('password') ? payload.password : null;
 
         try {
             CommonValidations.is_content_missing({
@@ -88,8 +88,8 @@ router.route(routes.createUser)
 router.route(routes.updateUser)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : false;
-        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : false;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : null;
+        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : null;
 
         try {
             CommonValidations.is_content_missing({id, payload});
@@ -119,7 +119,7 @@ router.route(routes.updateUser)
 router.route(routes.deleteUser)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : false;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : null;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -139,7 +139,7 @@ router.route(routes.deleteUser)
 router.route(routes.deleteUsers)
     .post(async(req, res, next) => {
 
-        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : false;
+        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : null;
 
         try {
             CommonValidations.is_content_missing({ids});

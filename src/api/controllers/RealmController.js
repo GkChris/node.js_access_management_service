@@ -25,8 +25,8 @@ const routes = {
 router.route(routes.createRealm)
     .post(async(req, res, next) => {
 
-        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : false;
-        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : false;
+        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : null;
+        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : null;
 
         try {
             CommonValidations.is_content_missing({name});
@@ -46,8 +46,8 @@ router.route(routes.createRealm)
 router.route(routes.updateRealm)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : false;
-        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : false;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : null;
+        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : null;
 
         try {
             CommonValidations.is_content_missing({id, payload});
@@ -67,7 +67,7 @@ router.route(routes.updateRealm)
 router.route(routes.deleteRealm)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : false;
+        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : null;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -87,7 +87,7 @@ router.route(routes.deleteRealm)
 router.route(routes.deleteRealms)
     .post(async(req, res, next) => {
 
-        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : false;
+        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : null;
 
         try {
             CommonValidations.is_content_missing({ids});
