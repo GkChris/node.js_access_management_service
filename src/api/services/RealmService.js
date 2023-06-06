@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const ModifyDocumentError = require('../errors/ModifyDocumentError');
 const MatchDocumentError = require('../errors/MatchDocumentError');
+const FetchDocumentError = require('../errors/FetchDocumentError');
 
 const config = require('../../config');
 const JSONdata = require('../data');
@@ -96,10 +97,45 @@ function deleteRealms(ids){
 }
 
 
+
+function fetchRealmById(id){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+
+            let realm = await Realm.findOne({_id: id});
+
+            return resolve(realm)
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
+
+function fetchRealms(){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+
+            let realms = await Realm.find({});
+
+            return resolve(realms)
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
+
 module.exports = {
     createRealm,
     updateRealm,
     deleteRealm,
     deleteRealms,
+    fetchRealmById,
+    fetchRealms,
 }
 

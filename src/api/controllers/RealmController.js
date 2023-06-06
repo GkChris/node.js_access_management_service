@@ -16,13 +16,14 @@ const RealmService = services.RealmService;
 
 // Module routes
 const routes = {
-    createRealm: '/createRealm$',
-    updateRealm: '/updateRealm$',
-    deleteRealm: '/deleteRealm$',
-    deleteRealms: '/deleteRealms$',
+    create: '/create',
+    update: '/update',
+    delete: '/delete/:id',
+    deleteMultiple: '/deleteMultiple',
+    fetch: '/fetch/:id?',
 }
 
-router.route(routes.createRealm)
+router.route(routes.create)
     .post(async(req, res, next) => {
 
         const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : undefined;
@@ -43,7 +44,7 @@ router.route(routes.createRealm)
 
 
 
-router.route(routes.updateRealm)
+router.route(routes.update)
     .post(async(req, res, next) => {
 
         const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
@@ -64,10 +65,10 @@ router.route(routes.updateRealm)
 });
 
 
-router.route(routes.deleteRealm)
+router.route(routes.delete)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
+        const id = req.params?.id;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -84,7 +85,7 @@ router.route(routes.deleteRealm)
 
 
 
-router.route(routes.deleteRealms)
+router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
         const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;
@@ -103,6 +104,30 @@ router.route(routes.deleteRealms)
 
         res.locals.message = statusCodes.ok.msg;
         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
+});
+
+
+router.route(routes.fetch)
+    .get(async(req, res, next) => {
+
+        const id = req.params?.id;
+        let data;
+
+        try {
+            
+            if ( id ) data = await RealmService.fetchRealmById(id);
+            else data = await RealmService.fetchRealms();
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({
+            code: statusCodes.ok.code, 
+            message: statusCodes.ok.msg,
+            data: data
+        });
 });
 
 

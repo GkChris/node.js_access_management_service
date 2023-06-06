@@ -1,10 +1,10 @@
 {
-  "name": "jwt-authentication",
+  "name": "auth-server",
   "version": "1.0.0",
-  "description": "Simple jwt authentication service build with node.js",
+  "description": "Simple auth server build with node.js",
   "main": "src/app.js",
   "scripts": {
-    "start": "NODE_ENV=production pm2 start app.js -i 1 --max-memory-restart 200M --name JWT Authentication -- --color",
+    "start": "NODE_ENV=production pm2 start app.js -i 1 --max-memory-restart 200M --name Auth Server -- --color",
     "dev": "NODE_ENV=development nodemon app.js --trace-warnings",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
