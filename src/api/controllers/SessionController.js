@@ -17,13 +17,13 @@ const UserService = services.UserService;
 
 // Module routes
 const routes = {
-    createSession: '/createSession$',
-    updateSession: '/updateSession$',
-    deleteSession: '/deleteSession$',
-    deleteSessions: '/deleteSessions$',
+    create: '/create',
+    update: '/update',
+    delete: '/delete/:id',
+    deleteMultiple: '/deleteMultiple',
 }
 
-router.route(routes.createSession)
+router.route(routes.create)
     .post(async(req, res, next) => {
 
         const userId = req.body?.data?.hasOwnProperty('userId') ? req.body.data.userId : null;
@@ -60,7 +60,7 @@ router.route(routes.createSession)
 });
 
 
-router.route(routes.updateSession)
+router.route(routes.update)
     .post(async(req, res, next) => {
 
         const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
@@ -87,10 +87,10 @@ router.route(routes.updateSession)
 });
 
 
-router.route(routes.deleteSession)
+router.route(routes.delete)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
+        const id = req.params?.id;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -107,7 +107,7 @@ router.route(routes.deleteSession)
 
 
 
-router.route(routes.deleteSessions)
+router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
         const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;

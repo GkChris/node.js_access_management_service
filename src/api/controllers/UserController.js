@@ -19,13 +19,13 @@ const UserService = services.UserService;
 
 // Module routes
 const routes = {
-    createUser: '/createUser$',
-    updateUser: '/updateUser$',
-    deleteUser: '/deleteUser$',
-    deleteUsers: '/deleteUsers$',
+    create: '/create',
+    update: '/update',
+    delete: '/delete/:id',
+    deleteMultiple: '/deleteMultiple',
 }
 
-router.route(routes.createUser)
+router.route(routes.create)
     .post(async(req, res, next) => {
 
         const payload = req.body?.data ? req.body.data : {};
@@ -85,7 +85,7 @@ router.route(routes.createUser)
 
 
 
-router.route(routes.updateUser)
+router.route(routes.update)
     .post(async(req, res, next) => {
 
         const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
@@ -116,10 +116,10 @@ router.route(routes.updateUser)
 });
 
 
-router.route(routes.deleteUser)
+router.route(routes.delete)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
+        const id = req.params?.id;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -136,7 +136,7 @@ router.route(routes.deleteUser)
 
 
 
-router.route(routes.deleteUsers)
+router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
         const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;

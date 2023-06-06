@@ -16,13 +16,13 @@ const RoleService = services.RoleService;
 
 // Module routes
 const routes = {
-    createRole: '/createRole$',
-    updateRole: '/updateRole$',
-    deleteRole: '/deleteRole$',
-    deleteRoles: '/deleteRoles$',
+    create: '/creates',
+    update: '/update',
+    delete: '/delete/:id',
+    deleteMutiple: '/deleteMutiple',
 }
 
-router.route(routes.createRole)
+router.route(routes.create)
     .post(async(req, res, next) => {
 
         const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : undefined;
@@ -52,7 +52,7 @@ router.route(routes.createRole)
 
 
 
-router.route(routes.updateRole)
+router.route(routes.update)
     .post(async(req, res, next) => {
 
         const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
@@ -79,10 +79,10 @@ router.route(routes.updateRole)
 });
 
 
-router.route(routes.deleteRole)
+router.route(routes.delete)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
+        const id = req.params?.id
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -99,7 +99,7 @@ router.route(routes.deleteRole)
 
 
 
-router.route(routes.deleteRoles)
+router.route(routes.deleteMutiple)
     .post(async(req, res, next) => {
 
         const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;

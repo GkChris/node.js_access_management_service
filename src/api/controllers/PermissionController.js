@@ -16,13 +16,13 @@ const PermissionService = services.PermissionService;
 
 // Module routes
 const routes = {
-    createPermission: '/createPermission$',
-    updatePermission: '/updatePermission$',
-    deletePermission: '/deletePermission$',
-    deletePermissions: '/deletePermissions$',
+    create: '/create',
+    update: '/update',
+    delete: '/delete/:id',
+    deleteMultiple: '/deleteMultiple',
 }
 
-router.route(routes.createPermission)
+router.route(routes.create)
     .post(async(req, res, next) => {
 
         const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : undefined;
@@ -43,7 +43,7 @@ router.route(routes.createPermission)
 });
 
 
-router.route(routes.updatePermission)
+router.route(routes.update)
     .post(async(req, res, next) => {
 
         const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
@@ -64,10 +64,10 @@ router.route(routes.updatePermission)
 });
 
 
-router.route(routes.deletePermission)
+router.route(routes.delete)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
+        const id = req.params?.id;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -84,7 +84,7 @@ router.route(routes.deletePermission)
 
 
 
-router.route(routes.deletePermissions)
+router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
         const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;
