@@ -5,6 +5,7 @@ const config = require('../../config');
 const JSONdata= require('../data');
 const services = require('../services');
 const validations = require('../validations');
+const utils = require('../utils');
 
 const statusCodes = JSONdata.StatusCodes;
 
@@ -16,13 +17,14 @@ const ClientService = services.ClientService;
 
 // Module routes
 const routes = {
-    createClient: '/createClient$',
-    updateClient: '/updateClient$',
-    deleteClient: '/deleteClient$',
-    deleteClients: '/deleteClients$',
+    create: '/create',
+    update: '/update',
+    delete: '/delete/:id',
+    deleteMultiple: '/deleteMultiple',
+    fetch: '/fetch/:realmId?/:id?'
 }
 
-router.route(routes.createClient)
+router.route(routes.create)
     .post(async(req, res, next) => {
 
         const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : undefined;
@@ -49,7 +51,7 @@ router.route(routes.createClient)
 
 
 
-router.route(routes.updateClient)
+router.route(routes.update)
     .post(async(req, res, next) => {
 
         const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
@@ -75,10 +77,10 @@ router.route(routes.updateClient)
 });
 
 
-router.route(routes.deleteClient)
+router.route(routes.delete)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
+        const id = req.params?.id;
 
         try {
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
@@ -95,7 +97,7 @@ router.route(routes.deleteClient)
 
 
 
-router.route(routes.deleteClients)
+router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
         const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;
@@ -114,6 +116,38 @@ router.route(routes.deleteClients)
 
         res.locals.message = statusCodes.ok.msg;
         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
+});
+
+
+
+router.route(routes.fetch)
+    .get(async(req, res, next) => {
+
+        const realmId = req.params?.realmId;
+        const id = req.params?.id;
+        let populate = req.query.hasOwnProperty('populate') ? utils.stringToBoolean(req.query.populate) : undefined;
+        let data;
+
+        try {
+            
+            let options = {
+                populate
+            }
+
+            if ( realmId && !id ) data = await ClientService.fetchClientsByRealm(realmId, options) 
+            else if ( realmId && id ) data = await ClientService.fetchClientByRealmAndId(realmId, id, options)
+            else data = await ClientService.fetchAllClients(options);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({
+            code: statusCodes.ok.code, 
+            message: statusCodes.ok.msg,
+            data: data
+        });
 });
 
 

@@ -17,7 +17,6 @@ const customCodes = JSONdata.CustomCodes;
 
 const Client = models.Client;
 
-
 function createClient(args){
     return new Promise(async(resolve, reject) => {
 
@@ -101,10 +100,70 @@ function deleteClients(ids){
 }
 
 
+function fetchClientsByRealm(realmId, options){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            let clients = [];
+           
+            if ( options?.populate ) clients = await Client.find({realmId}).populate('realmId');
+            else clients = Client.find({realmId});
+
+            return resolve(clients)
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
+function fetchClientByRealmAndId(realmId, id, options){
+    return new Promise(async(resolve, reject) => {
+
+        try {        
+            
+            let clients = [];
+           
+            if ( options?.populate ) clients = await Client.find({realmId, id}).populate('realmId');
+            else clients = Client.find({realmId, id});
+
+            return resolve(clients)
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
+function fetchAllClients(options){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+            
+            let clients = [];
+           
+            if ( options?.populate ) clients = await Client.find({}).populate('realmId');
+            else clients = Client.find({});
+
+            return resolve(clients)
+
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
+
 module.exports = {
     createClient,
     updateClient,
     deleteClient,
     deleteClients,
+    fetchClientsByRealm,
+    fetchClientByRealmAndId,
+    fetchAllClients,
 }
-

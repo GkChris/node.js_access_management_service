@@ -1,5 +1,6 @@
 'use strict';
 const Schema = require('mongoose').Schema;
+const Realm = require('./Realm'); // Import the Realm schema
 
 const ClientSchema = new Schema({
     _id: {
