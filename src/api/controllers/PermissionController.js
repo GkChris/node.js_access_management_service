@@ -20,7 +20,7 @@ const routes = {
     update: '/update/:id',
     delete: '/delete/:id',
     deleteMultiple: '/deleteMultiple',
-    fetch: '/fetch/:id?'
+    fetch: '/fetch/:id?',
 }
 
 router.route(routes.create)

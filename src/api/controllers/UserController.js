@@ -20,7 +20,7 @@ const UserService = services.UserService;
 // Module routes
 const routes = {
     create: '/create',
-    update: '/update',
+    update: '/update/:id',
     delete: '/delete/:id',
     deleteMultiple: '/deleteMultiple',
 }
@@ -88,7 +88,7 @@ router.route(routes.create)
 router.route(routes.update)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
+        const id = req.params?.id;
         const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : undefined;
 
         try {
