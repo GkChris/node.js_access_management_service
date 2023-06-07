@@ -98,28 +98,14 @@ function deleteRealms(ids){
 
 
 
-function fetchRealmById(id){
+function fetchRealms(query){
     return new Promise(async(resolve, reject) => {
 
         try {
+        
+            query = Realm.find(query);
 
-            let realm = await Realm.findOne({_id: id});
-
-            return resolve(realm)
-
-        } catch ( error ) {
-            return reject(new FetchDocumentError(`${error}`))
-        }
-    })
-}
-
-
-function fetchRealms(){
-    return new Promise(async(resolve, reject) => {
-
-        try {
-
-            let realms = await Realm.find({});
+            const realms = await query.exec();
 
             return resolve(realms)
 
@@ -130,12 +116,12 @@ function fetchRealms(){
 }
 
 
+
 module.exports = {
     createRealm,
     updateRealm,
     deleteRealm,
     deleteRealms,
-    fetchRealmById,
     fetchRealms,
 }
 

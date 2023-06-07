@@ -99,54 +99,20 @@ function deleteClients(ids){
     })
 }
 
-
-function fetchClientsByRealm(realmId, options){
-    return new Promise(async(resolve, reject) => {
-
-        try {
-        
-            let clients = [];
-           
-            if ( options?.populate ) clients = await Client.find({realmId}).populate('realmId');
-            else clients = Client.find({realmId});
-
-            return resolve(clients)
-
-        } catch ( error ) {
-            return reject(new FetchDocumentError(`${error}`))
-        }
-    })
-}
-
-
-function fetchClientByRealmAndId(realmId, id, options){
-    return new Promise(async(resolve, reject) => {
-
-        try {        
-            
-            let clients = [];
-           
-            if ( options?.populate ) clients = await Client.find({realmId, id}).populate('realmId');
-            else clients = Client.find({realmId, id});
-
-            return resolve(clients)
-
-        } catch ( error ) {
-            return reject(new FetchDocumentError(`${error}`))
-        }
-    })
-}
-
-
-function fetchAllClients(options){
+function fetchClients(query, options){
     return new Promise(async(resolve, reject) => {
 
         try {
             
-            let clients = [];
-           
-            if ( options?.populate ) clients = await Client.find({}).populate('realmId');
-            else clients = Client.find({});
+            const populateOptions = options.populate;
+
+            query = Client.find(query);
+
+            if ( populateOptions ) populateOptions.forEach((field) => {
+                query = query.populate(field);
+            });
+
+            const clients = await query.exec();
 
             return resolve(clients)
 
@@ -163,7 +129,5 @@ module.exports = {
     updateClient,
     deleteClient,
     deleteClients,
-    fetchClientsByRealm,
-    fetchClientByRealmAndId,
-    fetchAllClients,
+    fetchClients,
 }

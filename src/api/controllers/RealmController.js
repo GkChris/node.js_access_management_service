@@ -112,11 +112,14 @@ router.route(routes.fetch)
 
         const id = req.params?.id;
         let data;
+        let query;
 
         try {
             
-            if ( id ) data = await RealmService.fetchRealmById(id);
-            else data = await RealmService.fetchRealms();
+            if ( id ) data = query = { _id: id };
+            else data = query = {};
+            
+            data = await RealmService.fetchRealms(query);
 
         } catch ( error ) {
             return next(error);

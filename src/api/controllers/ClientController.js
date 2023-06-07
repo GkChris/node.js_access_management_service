@@ -125,18 +125,21 @@ router.route(routes.fetch)
 
         const realmId = req.params?.realmId;
         const id = req.params?.id;
-        let populate = req.query.hasOwnProperty('populate') ? utils.stringToBoolean(req.query.populate) : undefined;
+        let populate = req.query.hasOwnProperty('populate') ? req.query.populate.split(',') : undefined;
         let data;
+        let query;
 
         try {
-            
+  
             let options = {
                 populate
             }
 
-            if ( realmId && !id ) data = await ClientService.fetchClientsByRealm(realmId, options) 
-            else if ( realmId && id ) data = await ClientService.fetchClientByRealmAndId(realmId, id, options)
-            else data = await ClientService.fetchAllClients(options);
+            if ( realmId && !id ) query = { realmId }
+            else if ( realmId && id ) query = { _id: id, realmId }
+            else query = {}
+            
+            data = await ClientService.fetchClients(query, options);
 
         } catch ( error ) {
             return next(error);
