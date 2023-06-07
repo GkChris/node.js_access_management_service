@@ -98,12 +98,14 @@ function deleteRealms(ids){
 
 
 
-function fetchRealms(query){
+function fetchRealms(query, options){
     return new Promise(async(resolve, reject) => {
 
         try {
         
             query = Realm.find(query);
+
+            if ( options?.limit && options?.offset ) query = query.skip(options.offset).limit(options.limit)
 
             const realms = await query.exec();
 

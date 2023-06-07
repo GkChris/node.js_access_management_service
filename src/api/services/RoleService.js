@@ -122,6 +122,8 @@ function fetchRoles(query, options){
                 query = query.populate(field);
             });
 
+            if ( options?.limit && options?.offset ) query = query.skip(options.offset).limit(options.limit)
+
             const roles = await query.exec();
 
             return resolve(roles)

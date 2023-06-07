@@ -111,15 +111,24 @@ router.route(routes.fetch)
     .get(async(req, res, next) => {
 
         const id = req.params?.id;
+        
+        let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
+        let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
+
         let data;
         let query;
 
         try {
+
+            let options = {
+                limit, 
+                offset,
+            }
             
             if ( id ) data = query = { _id: id };
             else data = query = {};
             
-            data = await RealmService.fetchRealms(query);
+            data = await RealmService.fetchRealms(query, offset);
 
         } catch ( error ) {
             return next(error);

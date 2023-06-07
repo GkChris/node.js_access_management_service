@@ -169,13 +169,20 @@ router.route(routes.fetch)
         const id = req.params?.id;
 
         let populate = req.query.hasOwnProperty('populate') ? req.query.populate.split(',') : undefined;
+        let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
+        let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
+        // let search = req.query.hasOwnProperty('search') ? req.query.search : undefined;
+        
         let data;
         let query;
 
         try {
             
             let options = {
-                populate
+                populate,
+                limit,
+                offset,
+                search
             }        
 
             if ( realmId && clientId && id ) query = { _id: id, realmId, clientId }

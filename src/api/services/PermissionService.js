@@ -99,12 +99,14 @@ function deletePermissions(ids){
 
 
 
-function fetchPermissions(query){
+function fetchPermissions(query, options){
     return new Promise(async(resolve, reject) => {
 
         try {
         
             query = Permission.find(query);
+
+            if ( options?.limit && options?.offset ) query = query.skip(options.offset).limit(options.limit)
 
             const permissions = await query.exec();
 

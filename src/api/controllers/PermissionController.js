@@ -112,15 +112,26 @@ router.route(routes.fetch)
     .get(async(req, res, next) => {
 
         const id = req.params?.id;
+        
+        let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
+        let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
+        // let search = req.query.hasOwnProperty('search') ? req.query.search : undefined;
+
         let data;
         let query;
 
         try {
 
+            let options = {
+                limit,
+                offset,
+                search,
+            }     
+
             if ( id ) data = query = { _id: id };
             else data = query = {};
             
-            data = await PermissionService.fetchPermissions(query);
+            data = await PermissionService.fetchPermissions(query, options);
 
         } catch ( error ) {
             return next(error);
