@@ -109,11 +109,22 @@ function deleteRoles(ids){
 
 
 
-function fetchRolesByAllReferences(){
+function fetchRoles(query, options){
     return new Promise(async(resolve, reject) => {
 
         try {
-        
+            
+            const populateOptions = options.populate;
+
+            query = Role.find(query);
+
+            if ( populateOptions ) populateOptions.forEach((field) => {
+                query = query.populate(field);
+            });
+
+            const roles = await query.exec();
+
+            return resolve(roles)
 
         } catch ( error ) {
             return reject(new FetchDocumentError(`${error}`))
@@ -121,47 +132,6 @@ function fetchRolesByAllReferences(){
     })
 }
 
-
-
-function fetchRolesByRealmAndClient(){
-    return new Promise(async(resolve, reject) => {
-
-        try {
-        
-
-        } catch ( error ) {
-            return reject(new FetchDocumentError(`${error}`))
-        }
-    })
-}
-
-
-
-function fetchRolesByRealm(){
-    return new Promise(async(resolve, reject) => {
-
-        try {
-        
-
-        } catch ( error ) {
-            return reject(new FetchDocumentError(`${error}`))
-        }
-    })
-}
-
-
-
-function fetchAllRoles(){
-    return new Promise(async(resolve, reject) => {
-
-        try {
-        
-
-        } catch ( error ) {
-            return reject(new FetchDocumentError(`${error}`))
-        }
-    })
-}
 
 
 module.exports = {
@@ -169,8 +139,5 @@ module.exports = {
     updateRole,
     deleteRole,
     deleteRoles,
-    fetchRolesByAllReferences,
-    fetchRolesByRealmAndClient,
-    fetchRolesByRealm,
-    fetchAllRoles,
+    fetchRoles,
 }

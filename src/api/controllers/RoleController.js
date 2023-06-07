@@ -129,22 +129,22 @@ router.route(routes.fetch)
         const clientId = req.params?.clientId;
         const id = req.params?.id;
 
-        let permission = req.query.hasOwnProperty('permission') ? utils.stringToBoolean(req.query.permission) : undefined;
         let populate = req.query.hasOwnProperty('populate') ? utils.stringToBoolean(req.query.populate) : undefined;
         let data;
+        let query;
 
         try {
             
             let options = {
-                populate,
-                permission
-            }
+                populate
+            }        
 
-            // Not ready
-            if ( realmId && clientId && id ) data = await RoleService.fetchRolesByAllReferences(realmId, clientId, id, options) 
-            else if ( realmId && clientId && !id ) data = await RoleService.fetchRolesByRealmAndClient(realmId, clientId, options)
-            else if ( realmId && !clientId ) data = await RoleService.fetchRolesByRealm(realmId, options);
-            else data = await RoleService.fetchAllRoles(options);
+            if ( realmId && clientId && id ) query = { _id: id, realmId, clientId }
+            else if ( realmId && clientId && !id ) query = { realmId, clientId }
+            else if ( realmId && !clientId ) query = {realmId}
+            else query = {};
+
+            data = await RoleService.fetchRoles(query, options);
 
         } catch ( error ) {
             return next(error);

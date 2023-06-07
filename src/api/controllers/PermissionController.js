@@ -113,11 +113,14 @@ router.route(routes.fetch)
 
         const id = req.params?.id;
         let data;
+        let query;
 
         try {
 
-            if ( id ) data = await PermissionService.fetchPermissionById(id)
-            else data = await PermissionService.fetchPermissions();
+            if ( id ) data = query = { _id: id };
+            else data = query = {};
+            
+            data = await PermissionService.fetchPermissions(query);
 
         } catch ( error ) {
             return next(error);
