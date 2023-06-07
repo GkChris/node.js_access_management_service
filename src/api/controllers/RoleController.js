@@ -17,9 +17,10 @@ const RoleService = services.RoleService;
 // Module routes
 const routes = {
     create: '/creates',
-    update: '/update',
+    update: '/update/:id',
     delete: '/delete/:id',
     deleteMutiple: '/deleteMutiple',
+    fetch: '/fetch/:realmId?/:clientId?/:id?'
 }
 
 router.route(routes.create)
@@ -55,7 +56,7 @@ router.route(routes.create)
 router.route(routes.update)
     .post(async(req, res, next) => {
 
-        const id = req.body?.data?.hasOwnProperty('id') ? req.body.data.id : undefined;
+        const id = req.params?.id;
         const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : undefined;
 
         try {
@@ -120,5 +121,41 @@ router.route(routes.deleteMutiple)
         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
 });
 
+
+router.route(routes.fetch)
+    .get(async(req, res, next) => {
+
+        const realmId = req.params?.realmId;
+        const clientId = req.params?.clientId;
+        const id = req.params?.id;
+
+        let permission = req.query.hasOwnProperty('permission') ? utils.stringToBoolean(req.query.permission) : undefined;
+        let populate = req.query.hasOwnProperty('populate') ? utils.stringToBoolean(req.query.populate) : undefined;
+        let data;
+
+        try {
+            
+            let options = {
+                populate,
+                permission
+            }
+
+            // Not ready
+            if ( realmId && clientId && id ) data = await RoleService.fetchRolesByAllReferences(realmId, clientId, id, options) 
+            else if ( realmId && clientId && !id ) data = await RoleService.fetchRolesByRealmAndClient(realmId, clientId, options)
+            else if ( realmId && !clientId ) data = await RoleService.fetchRolesByRealm(realmId, options);
+            else data = await RoleService.fetchAllRoles(options);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({
+            code: statusCodes.ok.code, 
+            message: statusCodes.ok.msg,
+            data: data
+        });
+});
 
 module.exports = router;

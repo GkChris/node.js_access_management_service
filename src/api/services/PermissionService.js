@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const ModifyDocumentError = require('../errors/ModifyDocumentError');
+const FetchDocumentError = require('../errors/FetchDocumentError');
 
 const config = require('../../config');
 const JSONdata = require('../data');

@@ -113,7 +113,7 @@ function fetchClientsByRealm(realmId, options){
             return resolve(clients)
 
         } catch ( error ) {
-            return reject(new ModifyDocumentError(`${error}`))
+            return reject(new FetchDocumentError(`${error}`))
         }
     })
 }
@@ -132,7 +132,7 @@ function fetchClientByRealmAndId(realmId, id, options){
             return resolve(clients)
 
         } catch ( error ) {
-            return reject(new ModifyDocumentError(`${error}`))
+            return reject(new FetchDocumentError(`${error}`))
         }
     })
 }
@@ -151,7 +151,7 @@ function fetchAllClients(options){
             return resolve(clients)
 
         } catch ( error ) {
-            return reject(new ModifyDocumentError(`${error}`))
+            return reject(new FetchDocumentError(`${error}`))
         }
     })
 }
