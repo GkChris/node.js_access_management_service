@@ -145,6 +145,29 @@ function deleteUsers(ids){
 }
 
 
+function fetchUsers(query, options){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+            
+            const populateOptions = options.populate;
+
+            query = User.find(query);
+
+            if ( populateOptions ) populateOptions.forEach((field) => {
+                query = query.populate(field);
+            });
+
+            const users = await query.exec();
+
+            return resolve(users)
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
 
 module.exports = {
     createUser,
@@ -152,5 +175,6 @@ module.exports = {
     updateUser,
     deleteUser,
     deleteUsers,
+    fetchUsers,
 }
 

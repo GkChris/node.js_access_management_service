@@ -129,7 +129,7 @@ router.route(routes.fetch)
         const clientId = req.params?.clientId;
         const id = req.params?.id;
 
-        let populate = req.query.hasOwnProperty('populate') ? utils.stringToBoolean(req.query.populate) : undefined;
+        let populate = req.query.hasOwnProperty('populate') ? req.query.populate.split(',') : undefined;
         let data;
         let query;
 

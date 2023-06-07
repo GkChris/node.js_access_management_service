@@ -23,6 +23,7 @@ const routes = {
     update: '/update/:id',
     delete: '/delete/:id',
     deleteMultiple: '/deleteMultiple',
+    fetch: '/fetch/:realmId?/:clientId?/:id?',
 }
 
 router.route(routes.create)
@@ -157,6 +158,44 @@ router.route(routes.deleteMultiple)
         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
 });
 
+
+
+
+router.route(routes.fetch)
+    .get(async(req, res, next) => {
+
+        const realmId = req.params?.realmId;
+        const clientId = req.params?.clientId;
+        const id = req.params?.id;
+
+        let populate = req.query.hasOwnProperty('populate') ? req.query.populate.split(',') : undefined;
+        let data;
+        let query;
+
+        try {
+            
+            let options = {
+                populate
+            }        
+
+            if ( realmId && clientId && id ) query = { _id: id, realmId, clientId }
+            else if ( realmId && clientId && !id ) query = { realmId, clientId }
+            else if ( realmId && !clientId ) query = {realmId}
+            else query = {};
+
+            data = await UserService.fetchUsers(query, options);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({
+            code: statusCodes.ok.code, 
+            message: statusCodes.ok.msg,
+            data: data
+        });
+});
 
 
 module.exports = router;
