@@ -21,6 +21,7 @@ const routes = {
     update: '/update/:id',
     delete: '/delete/:id',
     deleteMultiple: '/deleteMultiple',
+    fetch: '/fetch/:realmId?/:clientId?/:userId?/:id?'
 }
 
 router.route(routes.create)
@@ -127,6 +128,54 @@ router.route(routes.deleteMultiple)
         res.locals.message = statusCodes.ok.msg;
         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
 });
+
+
+
+router.route(routes.fetch)
+    .get(async(req, res, next) => {
+
+        const realmId = req.params?.realmId;
+        const clientId = req.params?.clientId;
+        const userId = req.params?.userId;
+        const id = req.params?.id;
+
+        let populate = req.query.hasOwnProperty('populate') ? req.query.populate.split(',') : undefined;
+        let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
+        let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
+        // let search = req.query.hasOwnProperty('search') ? req.query.search : undefined;
+        
+        let data;
+        let query;
+
+        try {
+            
+            let options = {
+                populate,
+                limit,
+                offset,
+                // search
+            }        
+
+            if ( realmId && clientId && userId && id ) query = { _id: id, realmId, clientId, userId };
+            else if ( realmId && clientId && userId ) query = { realmId, clientId, userId };
+            else if ( realmId && clientId ) query = { realmId, clientId };
+            else if ( realmId ) query = { realmId };
+            else query = {};
+
+            data = await SessionService.fetchSessions(query, options);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({
+            code: statusCodes.ok.code, 
+            message: statusCodes.ok.msg,
+            data: data
+        });
+});
+
 
 
 module.exports = router;

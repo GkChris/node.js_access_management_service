@@ -109,10 +109,38 @@ function deleteSessions(ids){
 }
 
 
+function fetchSessions(query, options){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+            
+            const populateOptions = options.populate;
+
+            query = Session.find(query);
+
+            if ( populateOptions ) populateOptions.forEach((field) => {
+                query = query.populate(field);
+            });
+
+            if ( options?.limit && options?.offset ) query = query.skip(options.offset).limit(options.limit)
+
+            const sessions = await query.exec();
+
+            return resolve(sessions)
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
+
+
 module.exports = {
     createSession,
     updateSession,
     deleteSession,
     deleteSessions,
+    fetchSessions,
 }
 

@@ -125,7 +125,7 @@ router.route(routes.fetch)
             let options = {
                 limit,
                 offset,
-                search,
+                // search,
             }     
 
             if ( id ) data = query = { _id: id };

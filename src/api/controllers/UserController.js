@@ -182,7 +182,7 @@ router.route(routes.fetch)
                 populate,
                 limit,
                 offset,
-                search
+                // search
             }        
 
             if ( realmId && clientId && id ) query = { _id: id, realmId, clientId }
