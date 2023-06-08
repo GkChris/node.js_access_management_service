@@ -69,8 +69,8 @@ function is_content_missing(args, value_of_missing_content){
     }
     
     if ( !value_of_missing_content ) {
-        value_of_missing_content = null; // Default missing value
-        console.log(`Missing value_of_missing_content. Default is null`);
+        value_of_missing_content = undefined; // Default missing value
+        console.log(`Missing value_of_missing_content. Default is undefined`);
     }
 
     for ( let arg of Object.entries(args) ) {
