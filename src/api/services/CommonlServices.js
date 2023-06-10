@@ -45,9 +45,36 @@ function find_required_references_byId_or_reject(args){
 
     })
 }
+// db.collection.find({ field: { $regex: /apple/i } });
+
+
+
+// { field: value }, { name: Chris }
+function appendFiltersToQuery(query, filters){
+        
+    try {
+
+        for ( let filter of Object.entries(filters) ){
+      
+            const field = filter[0];
+            const value = filter[1];
+            const regex = new RegExp(value, 'i');
+
+            query[field] = { $regex: regex };
+                
+        }
+        
+        return query;
+
+    } catch ( error ) {
+        throw new FetchDocumentError(`${error}`)
+    }
+
+}
 
 
 module.exports = {
     find_required_references_byId_or_reject,
+    appendFiltersToQuery,
 }
 
