@@ -114,6 +114,7 @@ router.route(routes.fetch)
 
         const id = req.params?.id;
         
+        let fields = req.query.hasOwnProperty('fields') ? req.query.fields.split(',') : undefined;
         let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
         let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
         let filters = req.query.hasOwnProperty('filters') ? req.query.filters : undefined; // {name: "read"}
@@ -126,6 +127,7 @@ router.route(routes.fetch)
         try {
 
             let options = {
+                fields,
                 limit,
                 offset,
             }     

@@ -160,8 +160,12 @@ function fetchUsers(query, options){
 
             if ( options?.limit && options?.offset ) query = query.skip(options.offset).limit(options.limit)
 
-            const users = await query.exec();
+            if (options?.fields) {
+                query = query.select(options.fields);
+            }
 
+            const users = await query.exec();
+            
             return resolve(users)
 
         } catch ( error ) {

@@ -113,6 +113,7 @@ router.route(routes.fetch)
 
         const id = req.params?.id;
         
+        let fields = req.query.hasOwnProperty('fields') ? req.query.fields.split(',') : undefined;
         let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
         let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
         let filters = req.query.hasOwnProperty('filters') ? req.query.filters : undefined; // {name: "staing"}
@@ -125,6 +126,7 @@ router.route(routes.fetch)
         try {
 
             let options = {
+                fields,
                 limit, 
                 offset,
             }
@@ -134,7 +136,7 @@ router.route(routes.fetch)
 
             if ( filters && utils.isPlainObject(filters) ) query = CommonServices.appendFiltersToQuery(query, filters);
             
-            data = await RealmService.fetchRealms(query, offset);
+            data = await RealmService.fetchRealms(query, options);
 
         } catch ( error ) {
             return next(error);

@@ -126,6 +126,7 @@ router.route(routes.fetch)
         const realmId = req.params?.realmId;
         const id = req.params?.id;
 
+        let fields = req.query.hasOwnProperty('fields') ? req.query.fields.split(',') : undefined;
         let populate = req.query.hasOwnProperty('populate') ? req.query.populate.split(',') : undefined;
         let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
         let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
@@ -139,6 +140,7 @@ router.route(routes.fetch)
         try {
   
             let options = {
+                fields,
                 populate,
                 limit,
                 offset, 

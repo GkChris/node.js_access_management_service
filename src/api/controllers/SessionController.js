@@ -140,6 +140,7 @@ router.route(routes.fetch)
         const id = req.params?.id;
 
         let populate = req.query.hasOwnProperty('populate') ? req.query.populate.split(',') : undefined;
+        let fields = req.query.hasOwnProperty('fields') ? req.query.fields.split(',') : undefined;
         let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
         let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
         let filters = req.query.hasOwnProperty('filters') ? req.query.filters : undefined; // {sub: "some_uuid4"}
@@ -153,9 +154,9 @@ router.route(routes.fetch)
             
             let options = {
                 populate,
+                fields,
                 limit,
                 offset,
-                // search
             }        
 
             if ( realmId && clientId && userId && id ) query = { _id: id, realmId, clientId, userId };

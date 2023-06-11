@@ -107,6 +107,10 @@ function fetchRealms(query, options){
 
             if ( options?.limit && options?.offset ) query = query.skip(options.offset).limit(options.limit)
 
+            if (options?.fields) {
+                query = query.select(options.fields);
+            }
+
             const realms = await query.exec();
 
             return resolve(realms)
