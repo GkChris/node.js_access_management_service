@@ -5,6 +5,7 @@ const config = require('../../config');
 const JSONdata= require('../data');
 const services = require('../services');
 const validations = require('../validations');
+const utils = require('../utils');
 
 const statusCodes = JSONdata.StatusCodes;
 
@@ -114,6 +115,9 @@ router.route(routes.fetch)
         
         let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
         let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
+        let filters = req.query.hasOwnProperty('filters') ? req.query.filters : undefined; // {name: "staing"}
+
+        if ( filters ) try { filters = JSON.parse(req.query.filters) } catch ( error ) { filters = undefined };
 
         let data;
         let query;
@@ -127,6 +131,8 @@ router.route(routes.fetch)
             
             if ( id ) data = query = { _id: id };
             else data = query = {};
+
+            if ( filters && utils.isPlainObject(filters) ) query = CommonServices.appendFiltersToQuery(query, filters);
             
             data = await RealmService.fetchRealms(query, offset);
 

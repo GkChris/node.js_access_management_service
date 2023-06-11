@@ -129,7 +129,10 @@ router.route(routes.fetch)
         let populate = req.query.hasOwnProperty('populate') ? req.query.populate.split(',') : undefined;
         let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
         let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
-        
+        let filters = req.query.hasOwnProperty('filters') ? req.query.filters : undefined; // {name: "app1"}
+
+        if ( filters ) try { filters = JSON.parse(req.query.filters) } catch ( error ) { filters = undefined };
+
         let data;
         let query;
 
@@ -144,6 +147,8 @@ router.route(routes.fetch)
             if ( realmId && !id ) query = { realmId }
             else if ( realmId && id ) query = { _id: id, realmId }
             else query = {}
+
+            if ( filters && utils.isPlainObject(filters) ) query = CommonServices.appendFiltersToQuery(query, filters);
             
             data = await ClientService.fetchClients(query, options);
 
