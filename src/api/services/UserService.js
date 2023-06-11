@@ -150,7 +150,7 @@ function fetchUsers(query, options){
 
         try {
             
-            const populateOptions = options.populate;
+            const populateOptions = options.expand;
 
             query = User.find(query);
 

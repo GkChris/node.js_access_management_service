@@ -104,7 +104,7 @@ function fetchClients(query, options){
 
         try {
             
-            const populateOptions = options.populate;
+            const populateOptions = options.expand;
 
             query = Client.find(query);
 

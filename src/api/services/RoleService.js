@@ -114,7 +114,7 @@ function fetchRoles(query, options){
 
         try {
             
-            const populateOptions = options.populate;
+            const populateOptions = options.expand;
 
             query = Role.find(query);
 

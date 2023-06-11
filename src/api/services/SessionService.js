@@ -114,7 +114,7 @@ function fetchSessions(query, options){
 
         try {
             
-            const populateOptions = options.populate;
+            const populateOptions = options.expand;
 
             query = Session.find(query);
 

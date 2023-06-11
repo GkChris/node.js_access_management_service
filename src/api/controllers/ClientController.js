@@ -127,7 +127,7 @@ router.route(routes.fetch)
         const id = req.params?.id;
 
         let fields = req.query.hasOwnProperty('fields') ? req.query.fields.split(',') : undefined;
-        let populate = req.query.hasOwnProperty('populate') ? req.query.populate.split(',') : undefined;
+        let expand = req.query.hasOwnProperty('expand') ? req.query.expand.split(',') : undefined;
         let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
         let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
         let filters = req.query.hasOwnProperty('filters') ? req.query.filters : undefined; // {name: "app1"}
@@ -141,7 +141,7 @@ router.route(routes.fetch)
   
             let options = {
                 fields,
-                populate,
+                expand,
                 limit,
                 offset, 
             }

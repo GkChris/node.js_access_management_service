@@ -168,7 +168,7 @@ router.route(routes.fetch)
         const clientId = req.params?.clientId;
         const id = req.params?.id;
 
-        let populate = req.query.hasOwnProperty('populate') ? req.query.populate.split(',') : undefined;
+        let expand = req.query.hasOwnProperty('expand') ? req.query.expand.split(',') : undefined;
         let fields = req.query.hasOwnProperty('fields') ? req.query.fields.split(',') : undefined;
         let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
         let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
@@ -182,7 +182,7 @@ router.route(routes.fetch)
         try {
             
             let options = {
-                populate,
+                expand,
                 fields,
                 limit,
                 offset,
