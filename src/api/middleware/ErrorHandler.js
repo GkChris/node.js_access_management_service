@@ -13,6 +13,19 @@ module.exports = (err, req, res, next) => {
     res.locals.statusCode = err.statusCode;
     res.locals.statusMessage = err.statusMessage;
 
+
+    if ( res.locals.errorCode === 'ERR_VERIFY_USER' ) {
+        return res.status(statusCodes.ok.code).json({ 
+            message: statusCodes.ok.msg,
+            code: statusCodes.ok.code,
+            error: attachErrorToResposne ? {
+                code: res.locals.errorCode,
+                message: res.locals.message
+            } : {}
+        });
+    }
+
+
     switch (true) {
         case err.statusCode === statusCodes.bad_request.code: {
             return res.status(statusCodes.bad_request.code).json({ 

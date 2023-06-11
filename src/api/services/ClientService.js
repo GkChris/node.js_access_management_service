@@ -138,10 +138,30 @@ function fetchClients(query, options){
 
 
 
+function findClientByNameOrReject(name){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            const client = await Client.findOne({name});
+
+            if ( !client ) return reject(new MatchDocumentError(`Failed to match client by name: ${name}`))
+
+            return resolve(client);
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
+
+
 module.exports = {
     createClient,
     updateClient,
     deleteClient,
     deleteClients,
     fetchClients,
+    findClientByNameOrReject,
 }

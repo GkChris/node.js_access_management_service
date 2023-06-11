@@ -4,6 +4,7 @@ const hashPassword = require('./HashPassword');
 const generateJwtToken = require('./GenerateJwtToken');
 const stringToBoolean = require('./StringToBoolean');
 const isPlainObject = require('./IsPlainObject');
+const validateJwtToken = require('./ValidateJwtToken');
 
 module.exports = {
     CodeGenerators,
@@ -12,4 +13,5 @@ module.exports = {
     generateJwtToken,
     stringToBoolean,
     isPlainObject,
+    validateJwtToken,
 }

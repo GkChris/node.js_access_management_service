@@ -14,6 +14,11 @@ const helpers = require('../helpers');
 const utils = require('../utils');
 const validations = require('../validations');
 
+const { validateActiveSessionOrReject } = require('./SessionService');
+const { findRealmByNameOrReject } = require('./RealmService');
+const { findClientByNameOrReject } = require('./ClientService');
+
+
 const models = config.DatabaseConfigurations;
 const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
@@ -54,12 +59,19 @@ function createUser(args){
 
 
 // All user informations except user's password
-function getUserById(userId){
+function getPopulatedUserById(userId){
     return new Promise((async(resolve, reject) => {
         
         try{
 
-            const user = await User.findOne({_id: userId}, {password: 0});
+            const user = await User.findOne({_id: userId}, {password: 0})
+                                .populate('realmId')
+                                .populate('clientId')
+                                .populate('roleId')
+                                .populate({
+                                    path: 'roleId',
+                                    populate: { path: 'permissions' }
+                                });
 
             if ( !user ) return reject(new MatchDocumentError(`Failed to match user ${userId} `));
             
@@ -183,12 +195,49 @@ function fetchUsers(query, options){
 }
 
 
+
+function validateVerifiyReferences(realm, client){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            if ( realm ) await findRealmByNameOrReject(realm);
+            if ( client ) await findClientByNameOrReject(client);
+       
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
+
+
+function validateUserSession(token){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+            
+            await validateActiveSessionOrReject(token);
+
+            return resolve();
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
+
 module.exports = {
     createUser,
-    getUserById,
+    getPopulatedUserById,
     updateUser,
     deleteUser,
     deleteUsers,
     fetchUsers,
+    validateVerifiyReferences,
+    validateUserSession,
 }
 

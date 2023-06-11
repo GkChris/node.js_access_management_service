@@ -147,6 +147,22 @@ function fetchSessions(query, options){
 }
 
 
+function validateActiveSessionOrReject(token){
+    return new Promise(async(resolve, reject)=> {
+
+        try {
+
+            const session = await Session.findOne({token, active: true});
+
+            return resolve(session);
+
+        } catch ( error ) {
+            return reject(new MatchDocumentError(`Failed to find an active session for the given token`));
+        }
+
+    })
+}
+
 
 module.exports = {
     createSession,
@@ -154,5 +170,6 @@ module.exports = {
     deleteSession,
     deleteSessions,
     fetchSessions,
+    validateActiveSessionOrReject,
 }
 

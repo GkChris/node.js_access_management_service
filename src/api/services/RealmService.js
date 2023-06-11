@@ -122,6 +122,23 @@ function fetchRealms(query, options){
 }
 
 
+function findRealmByNameOrReject(name){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+        
+            const realm = await Realm.findOne({name});
+
+            if ( !realm ) return reject(new MatchDocumentError(`Failed to match realm by name: ${name}`))
+
+            return resolve(realm);
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
 
 module.exports = {
     createRealm,
@@ -129,5 +146,6 @@ module.exports = {
     deleteRealm,
     deleteRealms,
     fetchRealms,
+    findRealmByNameOrReject,
 }
 

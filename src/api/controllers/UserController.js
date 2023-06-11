@@ -1,6 +1,8 @@
 const express = require('express');
 var router = express.Router();
 
+const VerifyValidationError = require('../errors/VerifyValidationError');
+
 const config = require('../../config');
 const JSONdata= require('../data');
 const services = require('../services');
@@ -24,6 +26,7 @@ const routes = {
     delete: '/delete/:id',
     deleteMultiple: '/deleteMultiple',
     fetch: '/fetch/:realmId?/:clientId?/:id?',
+    verify: '/verify/:realm?/:client?',
 }
 
 router.route(routes.create)
@@ -206,6 +209,36 @@ router.route(routes.fetch)
             code: statusCodes.ok.code, 
             message: statusCodes.ok.msg,
             data: data
+        });
+});
+
+
+router.route(routes.verify)
+    .get(async(req, res, next) => {
+
+        const realm = req.params?.realm;
+        const client = req.params?.client;
+
+        const token = req.headers.hasOwnProperty('token') ? req.headers.token : undefined;
+
+        try {
+            CommonValidations.is_content_missing({token});
+
+            var user = utils.validateJwtToken(token);
+
+            if ( realm || client ) await UserService.validateVerifiyReferences(realm, client); 
+
+            await UserService.validateUserSession(token);
+
+        } catch ( error ) {
+            return next(new VerifyValidationError(`${error}`));
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({
+            code: statusCodes.ok.code, 
+            message: statusCodes.ok.msg,
+            data: {user}
         });
 });
 

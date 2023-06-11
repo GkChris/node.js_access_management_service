@@ -21,7 +21,7 @@ const routes = {
     update: '/update/:id',
     delete: '/delete/:id',
     deleteMultiple: '/deleteMultiple',
-    fetch: '/fetch/:realmId?/:clientId?/:userId?/:id?'
+    fetch: '/fetch/:realmId?/:clientId?/:userId?/:id?',
 }
 
 router.route(routes.create)
@@ -43,7 +43,7 @@ router.route(routes.create)
                 {'Client': clientId}
             ])
 
-            const user = await UserService.getUserById(userId);     // Does not include user's password
+            const user = await UserService.getPopulatedUserById(userId);     // Does not include user's password
             const token = utils.generateJwtToken(user, {}); // payload, options
 
             var session = await SessionService.createSession({userId, realmId, clientId, token});
