@@ -119,7 +119,15 @@ function fetchSessions(query, options){
             query = Session.find(query);
 
             if ( populateOptions ) populateOptions.forEach((field) => {
-                query = query.populate(field);
+                if ( !field?.includes('.') ) query = query.populate(field);
+                else {
+                    query = query.populate({
+                        path: field.split('.')[0],
+                        populate: {
+                            path: field.split('.')[1]
+                        }
+                    });
+                }
             });
 
             if ( options?.limit && options?.offset ) query = query.skip(options.offset).limit(options.limit)
