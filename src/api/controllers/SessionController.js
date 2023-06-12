@@ -27,9 +27,11 @@ const routes = {
 router.route(routes.create)
     .post(async(req, res, next) => {
 
-        const userId = req.body?.data?.hasOwnProperty('userId') ? req.body.data.userId : null;
-        const realmId = req.body?.data?.hasOwnProperty('realmId') ? req.body.data.realmId : null;
-        const clientId = req.body?.data?.hasOwnProperty('clientId') ? req.body.data.clientId : null;
+        const payload = req.body?.data;
+
+        const userId = payload?.userId;
+        const realmId = payload?.realmId;
+        const clientId = payload?.clientId;
 
         try {
             CommonValidations.is_content_missing({userId, realmId, clientId});
@@ -65,7 +67,8 @@ router.route(routes.update)
     .post(async(req, res, next) => {
 
         const id = req.params?.id;
-        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : undefined;
+
+        const payload = req.body?.data;
 
         try {
             CommonValidations.is_content_missing({id, payload});
@@ -111,7 +114,7 @@ router.route(routes.delete)
 router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
-        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;
+        const ids = req.body?.data?.ids;
 
         try {
             CommonValidations.is_content_missing({ids});
@@ -139,11 +142,13 @@ router.route(routes.fetch)
         const userId = req.params?.userId;
         const id = req.params?.id;
 
-        let expand = req.query.hasOwnProperty('expand') ? req.query.expand.split(',') : undefined;
-        let fields = req.query.hasOwnProperty('fields') ? req.query.fields.split(',') : undefined;
-        let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
-        let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
-        let filters = req.query.hasOwnProperty('filters') ? req.query.filters : undefined; // {sub: "some_uuid4"}
+        const payload = req.query;
+
+        const expand = payload?.expand ? req.query.expand.split(',') : undefined;
+        const fields = payload?.fields ? req.query.fields.split(',') : undefined;
+        const limit = payload?.limit;
+        const offset = payload?.offset;
+        const filters = payload?.filters; // {sub: "some_uuid4"}
 
         if ( filters ) try { filters = JSON.parse(req.query.filters) } catch ( error ) { filters = undefined };
 
@@ -152,7 +157,7 @@ router.route(routes.fetch)
 
         try {
             
-            let options = {
+            const options = {
                 expand,
                 fields,
                 limit,

@@ -32,18 +32,18 @@ const routes = {
 router.route(routes.create)
     .post(async(req, res, next) => {
 
-        const payload = req.body?.data ? req.body.data : {};
+        const payload = req.body?.data;
 
-        const username = payload?.hasOwnProperty('username') ? payload.username : undefined;
-        const firstname = payload?.hasOwnProperty('firstname') ? payload.firstname : undefined;
-        const lastname = payload?.hasOwnProperty('lastname') ? payload.lastname : undefined;
-        const email = payload?.hasOwnProperty('email') ? payload.email : undefined;
-        const phone = payload?.hasOwnProperty('phone') ? payload.phone : undefined;
-        const phone_code = payload?.hasOwnProperty('phone_code') ? payload.phone_code : undefined;
-        const roleId = payload?.hasOwnProperty('roleId') ? payload.roleId : undefined;
-        const realmId = payload?.hasOwnProperty('realmId') ? payload.realmId : undefined;
-        const clientId = payload?.hasOwnProperty('clientId') ? payload.clientId : undefined;
-        let password = payload?.hasOwnProperty('password') ? payload.password : undefined;
+        const username = payload?.username;
+        const firstname = payload?.firstname;
+        const lastname = payload?.lastname;
+        const email = payload?.email;
+        const phone = payload?.phone;
+        const phone_code = payload?.phone_code;
+        const roleId = payload?.roleId;
+        const realmId = payload?.realmId;
+        const clientId = payload?.clientId;
+        let password = payload?.password;
 
         try {
             CommonValidations.is_content_missing({
@@ -93,7 +93,8 @@ router.route(routes.update)
     .post(async(req, res, next) => {
 
         const id = req.params?.id;
-        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : undefined;
+
+        const payload = req.body?.data;
 
         try {
             CommonValidations.is_content_missing({id, payload});
@@ -143,7 +144,7 @@ router.route(routes.delete)
 router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
-        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;
+        const ids = req.body?.data?.ids;
 
         try {
             CommonValidations.is_content_missing({ids});
@@ -171,11 +172,13 @@ router.route(routes.fetch)
         const clientId = req.params?.clientId;
         const id = req.params?.id;
 
-        let expand = req.query.hasOwnProperty('expand') ? req.query.expand.split(',') : undefined;
-        let fields = req.query.hasOwnProperty('fields') ? req.query.fields.split(',') : undefined;
-        let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
-        let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
-        let filters = req.query.hasOwnProperty('filters') ? req.query.filters : undefined; // {name: "Chris"}
+        const payload = req.query;
+
+        const expand = payload?.expand ? req.query.expand.split(',') : undefined;
+        const fields = payload?.fields ? req.query.fields.split(',') : undefined;
+        const limit = payload?.limit;
+        const offset = payload?.offset;
+        const filters = payload?.filters; // {name: "Chris"}
 
         if ( filters ) try { filters = JSON.parse(req.query.filters) } catch ( error ) { filters = undefined };
 
@@ -184,7 +187,7 @@ router.route(routes.fetch)
         
         try {
             
-            let options = {
+            const options = {
                 expand,
                 fields,
                 limit,
@@ -219,7 +222,7 @@ router.route(routes.verify)
         const realm = req.params?.realm;
         const client = req.params?.client;
 
-        const token = req.headers.hasOwnProperty('token') ? req.headers.token : undefined;
+        const token = req.headers?.token;
 
         try {
             CommonValidations.is_content_missing({token});
@@ -231,7 +234,7 @@ router.route(routes.verify)
             await UserService.validateUserSession(token);
 
         } catch ( error ) {
-            return next(new VerifyValidationError(`${error}`));
+            return next(error);
         }
 
         res.locals.message = statusCodes.ok.msg;

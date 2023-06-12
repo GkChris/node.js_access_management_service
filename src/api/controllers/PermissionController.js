@@ -27,9 +27,11 @@ const routes = {
 router.route(routes.create)
     .post(async(req, res, next) => {
 
-        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : undefined;
-        const code = req.body?.data?.hasOwnProperty('code') ? req.body.data.code : undefined;
-        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : undefined;
+        const payload = req.body?.data;
+
+        const name = payload?.name;
+        const code = payload?.code;
+        const description = payload?.description;
 
         try {
             CommonValidations.is_content_missing({name, code});
@@ -49,7 +51,7 @@ router.route(routes.update)
     .post(async(req, res, next) => {
 
         const id = req.params?.id;
-        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : undefined;
+        const payload = req.body?.data;
 
         try {
             CommonValidations.is_content_missing({id, payload});
@@ -89,7 +91,7 @@ router.route(routes.delete)
 router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
-        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;
+        const ids = req.body?.data?.ids;
 
         try {
             CommonValidations.is_content_missing({ids});
@@ -113,11 +115,13 @@ router.route(routes.fetch)
     .get(async(req, res, next) => {
 
         const id = req.params?.id;
+
+        const payload = req.query;
         
-        let fields = req.query.hasOwnProperty('fields') ? req.query.fields.split(',') : undefined;
-        let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
-        let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
-        let filters = req.query.hasOwnProperty('filters') ? req.query.filters : undefined; // {name: "read"}
+        const fields = payload?.fields ? req.query.fields.split(',') : undefined;
+        const limit = payload?.limit;
+        const offset = payload?.offset;
+        const filters = payload?.filters; // {name: "read"}
 
         if ( filters ) try { filters = JSON.parse(req.query.filters) } catch ( error ) { filters = undefined };
 
@@ -126,7 +130,7 @@ router.route(routes.fetch)
 
         try {
 
-            let options = {
+            const options = {
                 fields,
                 limit,
                 offset,

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../../config');
-const FunctionalityError = require("../errors/FunctionalityError");
+const VerifyValidationError = require('../errors/VerifyValidationError');
 
 const jwt_secret_key = config.Keys.jwt_secret_key;
 
@@ -11,7 +11,7 @@ function validateJwtToken(token){
         const payload = jwt.verify(token, secretKey);
         return payload;
     } catch (error) {
-        throw new FunctionalityError(`${error}`);
+        throw new VerifyValidationError(`${error}`);
     }
 }
 

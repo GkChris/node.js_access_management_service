@@ -27,9 +27,11 @@ const routes = {
 router.route(routes.create)
     .post(async(req, res, next) => {
 
-        const name = req.body?.data?.hasOwnProperty('name') ? req.body.data.name : undefined;
-        const description = req.body?.data?.hasOwnProperty('description') ? req.body.data.description : undefined;
-        const realmId = req.body?.data?.hasOwnProperty('realmId') ? req.body.data.realmId : undefined;
+        const payload = req.body?.data;
+
+        const name = payload?.name;
+        const description = payload?.description;
+        const realmId = payload?.realmId;
 
         try {
             CommonValidations.is_content_missing({name, realmId});
@@ -55,7 +57,7 @@ router.route(routes.update)
     .post(async(req, res, next) => {
 
         const id = req.params?.id;
-        const payload = req.body?.data?.hasOwnProperty('payload') ? req.body.data.payload : undefined;
+        const payload = req.body?.data;
 
         try {
             CommonValidations.is_content_missing({id, payload});
@@ -100,7 +102,7 @@ router.route(routes.delete)
 router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
-        const ids = req.body?.data?.hasOwnProperty('ids') ? req.body.data.ids : undefined;
+        const ids = req.body?.data?.ids;
 
         try {
             CommonValidations.is_content_missing({ids});
@@ -108,7 +110,7 @@ router.route(routes.deleteMultiple)
                 CommonValidations.mongoose_ObjectId_validation(id) 
             });
 
-            await ClientService.deleteClient(ids);
+            await ClientService.deleteClients(ids);
 
         } catch ( error ) {
             return next(error);
@@ -126,11 +128,13 @@ router.route(routes.fetch)
         const realmId = req.params?.realmId;
         const id = req.params?.id;
 
-        let fields = req.query.hasOwnProperty('fields') ? req.query.fields.split(',') : undefined;
-        let expand = req.query.hasOwnProperty('expand') ? req.query.expand.split(',') : undefined;
-        let limit = req.query.hasOwnProperty('limit') ? req.query.limit : undefined;
-        let offset = req.query.hasOwnProperty('offset') ? req.query.offset : undefined;
-        let filters = req.query.hasOwnProperty('filters') ? req.query.filters : undefined; // {name: "app1"}
+        const payload = req.query;
+
+        const fields = payload.hasOwnProperty('fields') ? payload.fields.split(',') : undefined;
+        const expand = payload.hasOwnProperty('expand') ? payload.expand.split(',') : undefined;
+        const limit = payload?.limit;
+        const offset = payload?.offset;
+        const filters = payload?.filters; // {name: "app1"}
 
         if ( filters ) try { filters = JSON.parse(req.query.filters) } catch ( error ) { filters = undefined };
 
@@ -139,7 +143,7 @@ router.route(routes.fetch)
 
         try {
   
-            let options = {
+            const options = {
                 fields,
                 expand,
                 limit,
