@@ -138,7 +138,7 @@ router.route(routes.fetch)
         const fields = payload?.fields ? req.query.fields.split(',') : undefined;
         const limit = payload?.limit;
         const offset = payload?.offset;
-        const filters = payload?.filters; // {name: "admin"}
+        let filters = payload?.filters; // {name: "admin"}
 
         if ( filters ) try { filters = JSON.parse(req.query.filters) } catch ( error ) { filters = undefined };
         

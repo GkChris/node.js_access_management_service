@@ -134,7 +134,7 @@ router.route(routes.fetch)
         const expand = payload.hasOwnProperty('expand') ? payload.expand.split(',') : undefined;
         const limit = payload?.limit;
         const offset = payload?.offset;
-        const filters = payload?.filters; // {name: "app1"}
+        let filters = payload?.filters; // {name: "app1"}
 
         if ( filters ) try { filters = JSON.parse(req.query.filters) } catch ( error ) { filters = undefined };
 
