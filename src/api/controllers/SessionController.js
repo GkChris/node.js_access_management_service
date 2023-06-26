@@ -22,6 +22,7 @@ const routes = {
     delete: '/delete/:id',
     deleteMultiple: '/deleteMultiple',
     fetch: '/fetch/:realmId?/:clientId?/:userId?/:id?',
+    refresh: '/refresh/:token/' 
 }
 
 router.route(routes.create)
@@ -46,9 +47,12 @@ router.route(routes.create)
             ])
 
             const user = await UserService.getPopulatedUserById(userId);     // Does not include user's password
-            const token = utils.generateJwtToken(user, {}); // payload, options
 
-            var session = await SessionService.createSession({userId, realmId, clientId, token});
+            const session = await SessionService.createSession({userId, realmId, clientId, token});
+            
+            const tokenPayload = {user, session}
+
+            var token = utils.generateJwtToken(tokenPayload, {}); // payload, options
 
         } catch ( error ) {
             return next(error);
@@ -58,7 +62,7 @@ router.route(routes.create)
         return res.status(statusCodes.created.code).json({
             code: statusCodes.created.code, 
             message: statusCodes.created.msg,
-            data: {token: session.token}
+            data: {token}
         });
 });
 
@@ -173,6 +177,29 @@ router.route(routes.fetch)
             if ( filters && utils.isPlainObject(filters) ) query = CommonServices.appendFiltersToQuery(query, filters);
 
             data = await SessionService.fetchSessions(query, options);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({
+            code: statusCodes.ok.code, 
+            message: statusCodes.ok.msg,
+            data: data
+        });
+});
+
+
+router.route(routes.refresh)
+    .post(async(req, res, next) => {
+
+        const token = req.params?.token;
+
+        try {
+        
+          // Extract sessionId from the token, modify the expireAt property of the session document, 
+          // Modify the token with the new expireAt property, send back the token
 
         } catch ( error ) {
             return next(error);

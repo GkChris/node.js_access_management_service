@@ -5,10 +5,10 @@ const FunctionalityError = require("../errors/FunctionalityError");
 const jwt_secret_key = config.Keys.jwt_secret_key;
 
 
-function generateJwtToken(user, options){
+function generateJwtToken(tokenPayload, options){
     try {
 
-        const payload = JSON.stringify(user);
+        const payload = JSON.stringify(tokenPayload);
         const secretKey = jwt_secret_key;
 
         const token = jwt.sign(payload, secretKey, options);

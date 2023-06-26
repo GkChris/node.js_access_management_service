@@ -36,7 +36,6 @@ function createSession(args){
             if ( args?.userId ) session.userId = args.userId;
             if ( args?.realmId ) session.realmId = args.realmId;
             if ( args?.clientId ) session.clientId = args.clientId;
-            if ( args?.token ) session.token = args.token; 
             session.expireAt = expireAt
 
             let newSession = await Session.create(session);
@@ -61,7 +60,7 @@ function updateSession(id, updatePayload){
             if ( updatePayload?.userId ) update.userId = updatePayload.userId;
             if ( updatePayload?.realmId ) update.realmId = updatePayload.realmId;
             if ( updatePayload?.clientId ) update.clientId = updatePayload.clientId;
-            if ( updatePayload?.token ) update.token = updatePayload.token;
+            if ( updatePayload?.expireAt ) update.expireAt = updatePayload.expireAt;
         
             let updateAction = await Session.updateOne({_id: id}, update);
        
