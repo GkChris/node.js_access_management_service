@@ -1,8 +1,6 @@
 const express = require('express');
 var router = express.Router();
 
-const VerifyValidationError = require('../errors/VerifyValidationError');
-
 const config = require('../../config');
 const JSONdata= require('../data');
 const services = require('../services');
@@ -17,6 +15,7 @@ const CommonValidations = validations.CommonValidations;
 
 
 const UserService = services.UserService;
+const SessionService = services.SessionService;
 
 
 // Module routes
@@ -227,11 +226,11 @@ router.route(routes.verify)
         try {
             CommonValidations.is_content_missing({token});
 
-            var user = utils.validateJwtToken(token);
+            var {user, session} = utils.validateJwtToken(token);
 
             if ( realm || client ) await UserService.validateVerifiyReferences(realm, client); 
 
-            await UserService.validateUserSession(token);
+            await SessionService.validateActiveSession(session);
 
         } catch ( error ) {
             return next(error);
@@ -241,7 +240,7 @@ router.route(routes.verify)
         return res.status(statusCodes.ok.code).json({
             code: statusCodes.ok.code, 
             message: statusCodes.ok.msg,
-            data: {user}
+            data: {user, session}
         });
 });
 

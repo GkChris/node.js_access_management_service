@@ -214,22 +214,6 @@ function validateVerifiyReferences(realm, client){
 
 
 
-function validateUserSession(token){
-    return new Promise(async(resolve, reject) => {
-
-        try {
-            
-            await validateActiveSessionOrReject(token);
-
-            return resolve();
-
-        } catch ( error ) {
-            return reject(new FetchDocumentError(`${error}`))
-        }
-    })
-}
-
-
 module.exports = {
     createUser,
     getPopulatedUserById,
@@ -238,6 +222,5 @@ module.exports = {
     deleteUsers,
     fetchUsers,
     validateVerifiyReferences,
-    validateUserSession,
 }
 

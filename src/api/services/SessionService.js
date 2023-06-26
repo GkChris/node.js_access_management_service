@@ -150,19 +150,16 @@ function fetchSessions(query, options){
 }
 
 
-function validateActiveSessionOrReject(token){
-    return new Promise(async(resolve, reject)=> {
+function validateActiveSession(session){
+    return new Promise(async(resolve, reject) => {
 
         try {
 
-            const session = await Session.findOne({token, active: true});
-
-            return resolve(session);
-
+            //Validate that the session is not expired.
+         
         } catch ( error ) {
-            return reject(new MatchDocumentError(`Failed to find an active session for the given token`));
+            return reject(new FunctionalityError(`${error}`))
         }
-
     })
 }
 
@@ -173,6 +170,6 @@ module.exports = {
     deleteSession,
     deleteSessions,
     fetchSessions,
-    validateActiveSessionOrReject,
+    validateActiveSession,
 }
 
