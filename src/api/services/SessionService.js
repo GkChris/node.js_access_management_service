@@ -164,6 +164,20 @@ function validateActiveSession(session){
 }
 
 
+function ExtendExpireAtTime(session){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+
+            // extend the expire at time
+         
+        } catch ( error ) {
+            return reject(new FunctionalityError(`${error}`))
+        }
+    })
+}
+
+
 module.exports = {
     createSession,
     updateSession,
@@ -171,5 +185,6 @@ module.exports = {
     deleteSessions,
     fetchSessions,
     validateActiveSession,
+    ExtendExpireAtTime,
 }
 

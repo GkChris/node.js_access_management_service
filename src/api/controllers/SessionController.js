@@ -197,9 +197,14 @@ router.route(routes.refresh)
         const token = req.params?.token;
 
         try {
-        
-          // Extract sessionId from the token, modify the expireAt property of the session document, 
-          // Modify the token with the new expireAt property, send back the token
+
+            const {user, session} = utils.validateJwtToken(token);
+
+            const updatedSession = await SessionService.ExtendExpireAtTime(session);
+
+            const tokenPayload = {user, session: updatedSession}
+
+            var newToken = utils.generateJwtToken(tokenPayload, {}); // payload, options
 
         } catch ( error ) {
             return next(error);
@@ -209,7 +214,7 @@ router.route(routes.refresh)
         return res.status(statusCodes.ok.code).json({
             code: statusCodes.ok.code, 
             message: statusCodes.ok.msg,
-            data: data
+            data: {token: newToken}
         });
 });
 

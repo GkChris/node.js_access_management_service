@@ -9,7 +9,7 @@ function validateJwtToken(token){
     try {
         const secretKey = jwt_secret_key;
         const payload = jwt.verify(token, secretKey);
-        return {user: payload.user, session: payload.session};
+        return payload;
     } catch (error) {
         throw new VerifyValidationError(`${error}`);
     }
