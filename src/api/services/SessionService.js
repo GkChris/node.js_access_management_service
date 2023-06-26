@@ -19,6 +19,7 @@ const models = config.DatabaseConfigurations;
 const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
 const customCodes = JSONdata.CustomCodes;
+const sessionConfig = config.SessionConfigurations;
 
 const Session = models.Session;
 
@@ -29,10 +30,14 @@ function createSession(args){
         try {
 
             let session = {};
+            const currentDate = new Date();
+            const expireAt = new Date(currentDate.getTime() + (sessionConfig.sessionAliveMinutes * 60 * 1000));
+
             if ( args?.userId ) session.userId = args.userId;
             if ( args?.realmId ) session.realmId = args.realmId;
             if ( args?.clientId ) session.clientId = args.clientId;
             if ( args?.token ) session.token = args.token; 
+            session.expireAt = expireAt
 
             let newSession = await Session.create(session);
        
@@ -57,7 +62,6 @@ function updateSession(id, updatePayload){
             if ( updatePayload?.realmId ) update.realmId = updatePayload.realmId;
             if ( updatePayload?.clientId ) update.clientId = updatePayload.clientId;
             if ( updatePayload?.token ) update.token = updatePayload.token;
-            if ( updatePayload?.hasOwnProperty('active') ) update.active = updatePayload.active;
         
             let updateAction = await Session.updateOne({_id: id}, update);
        

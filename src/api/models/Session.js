@@ -26,10 +26,9 @@ const SessionSchema = new Schema({
         type: String,
         required: true,
     },
-    active: {
-        type: Boolean,
+    expireAt: {
+        type: String,
         required: true,
-        default: true,
     }
 }, { strict: true, timestamps: true });
 
