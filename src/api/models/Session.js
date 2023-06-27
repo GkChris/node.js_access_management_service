@@ -23,7 +23,7 @@ const SessionSchema = new Schema({
         required: true,
     },
     expireAt: {
-        type: String,
+        type: Number,
         required: true,
     }
 }, { strict: true, timestamps: true });

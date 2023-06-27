@@ -4,8 +4,8 @@ class VerifyValidationError extends Error {
     constructor(message) {
         super(message);
         this.code = 'ERR_VERIFY_USER';
-        this.statusCode = statusCodes.internal_server_error.code,
-        this.statusMessage = statusCodes.internal_server_error.msg;
+        this.statusCode = statusCodes.forbidden.code,
+        this.statusMessage = statusCodes.forbidden.msg;
         this.message = message
     }
 }
