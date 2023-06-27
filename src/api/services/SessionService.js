@@ -187,7 +187,7 @@ function ExtendExpireAtTime(session){
                 { expireAt: extendedExpireAt }
             );
        
-            if ( !updatedSession ) return reject(new VerifyValidationError('Not able to refresh an expired session'))
+            if ( !updatedSession ) return reject(new VerifyValidationError('Unable to refresh an expired session'))
 
             return resolve(updatedSession);
          
