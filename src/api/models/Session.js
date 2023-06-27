@@ -22,6 +22,10 @@ const SessionSchema = new Schema({
         ref: 'Client',
         required: true,
     },
+    startAt: {
+        type: Number,
+        required: true,
+    },
     expireAt: {
         type: Number,
         required: true,

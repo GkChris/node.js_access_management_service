@@ -7,6 +7,8 @@ const services = require('../services');
 const utils = require('../utils');
 const validations = require('../validations');
 
+const sessionConfig = config.SessionConfigurations;
+
 const statusCodes = JSONdata.StatusCodes;
 
 const CommonServices = services.CommonServices;
@@ -47,6 +49,8 @@ router.route(routes.create)
             ])
 
             const user = await UserService.getPopulatedUserById(userId);     // Does not include user's password
+
+            if ( sessionConfig.deleteOldUserSessions ) await SessionService.deleteExpiredSessions(userId, realmId, clientId)
 
             const session = await SessionService.createSession({userId, realmId, clientId, token});
             

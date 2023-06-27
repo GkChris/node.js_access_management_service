@@ -1,3 +1,4 @@
 module.exports = {
-    sessionAliveMinutes: 15 
+    sessionAliveMinutes: 15,
+    deleteOldUserSessions: false,
 }

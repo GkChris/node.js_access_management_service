@@ -7,6 +7,7 @@ const FetchDocumentError = require('../errors/FetchDocumentError');
 const ReferenceDocumentError = require('../errors/ReferenceDocumentError');
 const FunctionalityError = require('../errors/FunctionalityError');
 const MatchDocumentError = require('../errors/MatchDocumentError');
+const VerifyValidationError = require('../errors/VerifyValidationError');
 
 
 const config = require('../../config');
@@ -14,7 +15,6 @@ const JSONdata = require('../data');
 const helpers = require('../helpers');
 const utils = require('../utils');
 const validations = require('../validations');
-const VerifyValidationError = require('../errors/VerifyValidationError');
 
 const models = config.DatabaseConfigurations;
 const requests = helpers.Requests;
@@ -37,6 +37,7 @@ function createSession(args){
             if ( args?.userId ) session.userId = args.userId;
             if ( args?.realmId ) session.realmId = args.realmId;
             if ( args?.clientId ) session.clientId = args.clientId;
+            session.startAt = currentDate;
             session.expireAt = expireAt
 
             let newSession = await Session.create(session);
@@ -198,6 +199,24 @@ function ExtendExpireAtTime(session){
 }
 
 
+function deleteExpiredSessions(userId, realmId, clientId){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+
+            const query = {userId, realmId, clientId};
+
+            await Session.deleteMany(query);
+
+            return resolve();
+         
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
 module.exports = {
     createSession,
     updateSession,
@@ -206,5 +225,6 @@ module.exports = {
     fetchSessions,
     validateActiveSession,
     ExtendExpireAtTime,
+    deleteExpiredSessions,
 }
 
