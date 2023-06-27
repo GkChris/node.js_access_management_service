@@ -63,7 +63,7 @@ router.route(routes.create)
             if ( password ) password = await utils.hashPassword(password);
             const sub = CodeGenerators.uuid4_id();
 
-            await UserService.createUser({
+            var user = await UserService.createUser({
                 sub,
                 password,
                 username,
@@ -82,7 +82,11 @@ router.route(routes.create)
         }
 
         res.locals.message = statusCodes.created.msg;
-        return res.status(statusCodes.created.code).json({code: statusCodes.created.code, message: statusCodes.created.msg});
+        return res.status(statusCodes.created.code).json({
+            code: statusCodes.created.code, 
+            message: statusCodes.created.msg,
+            data: {user},
+        });
 });
 
 
