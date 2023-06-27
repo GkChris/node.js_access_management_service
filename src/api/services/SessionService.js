@@ -14,6 +14,7 @@ const JSONdata = require('../data');
 const helpers = require('../helpers');
 const utils = require('../utils');
 const validations = require('../validations');
+const VerifyValidationError = require('../errors/VerifyValidationError');
 
 const models = config.DatabaseConfigurations;
 const requests = helpers.Requests;
@@ -155,8 +156,14 @@ function validateActiveSession(session){
 
         try {
 
-            //Validate that the session is not expired.
+            const currentDate = new Date();
+
+            const activeSession = await Session.findOne({_id: session._id, expireAt: { $gt: currentDate }})
          
+            if ( !activeSession ) return reject(new VerifyValidationError('Session has expired'));
+
+            return resolve(true);
+
         } catch ( error ) {
             return reject(new FunctionalityError(`${error}`))
         }
@@ -169,7 +176,20 @@ function ExtendExpireAtTime(session){
 
         try {
 
-            // extend the expire at time
+            const currentDate = new Date();
+            const extendedExpireAt = new Date(currentDate.getTime() + (sessionConfig.sessionAliveMinutes * 60 * 1000));
+           
+            let updatedSession = await Session.updateOne(
+                {
+                    _id: session._id, 
+                    expireAt: { $gt: currentDate }
+                }, 
+                { expireAt: extendedExpireAt }
+            );
+       
+            if ( !updatedSession ) return reject(new VerifyValidationError('Not able to refresh an expired session'))
+
+            return resolve(updatedSession);
          
         } catch ( error ) {
             return reject(new FunctionalityError(`${error}`))

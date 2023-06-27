@@ -22,7 +22,7 @@ const routes = {
     delete: '/delete/:id',
     deleteMultiple: '/deleteMultiple',
     fetch: '/fetch/:realmId?/:clientId?/:userId?/:id?',
-    refresh: '/refresh/:token/' 
+    refresh: '/refresh' 
 }
 
 router.route(routes.create)
@@ -194,7 +194,7 @@ router.route(routes.fetch)
 router.route(routes.refresh)
     .post(async(req, res, next) => {
 
-        const token = req.params?.token;
+        const token = req.headers?.token;
 
         try {
 

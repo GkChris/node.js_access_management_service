@@ -14,7 +14,6 @@ const helpers = require('../helpers');
 const utils = require('../utils');
 const validations = require('../validations');
 
-const { validateActiveSessionOrReject } = require('./SessionService');
 const { findRealmByNameOrReject } = require('./RealmService');
 const { findClientByNameOrReject } = require('./ClientService');
 
