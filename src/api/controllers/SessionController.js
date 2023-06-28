@@ -52,7 +52,7 @@ router.route(routes.create)
 
             if ( sessionConfig.deleteOldUserSessions ) await SessionService.deleteExpiredSessions(userId, realmId, clientId)
 
-            const session = await SessionService.createSession({userId, realmId, clientId, token});
+            const session = await SessionService.createSession({userId, realmId, clientId});
             
             const tokenPayload = {user, session: {_id: session._id}}
 

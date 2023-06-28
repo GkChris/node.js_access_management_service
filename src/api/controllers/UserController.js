@@ -65,7 +65,7 @@ router.route(routes.create)
             if ( password ) password = await utils.hashPassword(password);
             const sub = CodeGenerators.uuid4_id();
 
-            var user = await UserService.createUser({
+            const user = await UserService.createUser({
                 sub,
                 password,
                 username,
@@ -79,6 +79,17 @@ router.route(routes.create)
                 clientId
             });
 
+            var data = {user};
+
+            if ( sessionConfig.createSessionOnRegister ) {
+                const userId = user._id;
+                const session = await SessionService.createSession({userId, realmId, clientId});
+                const tokenPayload = {user, session: {_id: session._id}}
+                const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
+                data.session = {_id: session._id};
+                data.token = {token}
+            }
+
         } catch ( error ) {
             return next(error);
         }
@@ -87,7 +98,7 @@ router.route(routes.create)
         return res.status(statusCodes.created.code).json({
             code: statusCodes.created.code, 
             message: statusCodes.created.msg,
-            data: {user},
+            data: data,
         });
 });
 
