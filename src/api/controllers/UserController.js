@@ -84,7 +84,8 @@ router.route(routes.create)
             if ( sessionConfig.createSessionOnRegister ) {
                 const userId = user._id;
                 const session = await SessionService.createSession({userId, realmId, clientId});
-                const tokenPayload = {user, session: {_id: session._id}}
+                const populatedUser = await UserService.getPopulatedUserById(userId);
+                const tokenPayload = {user: populatedUser, session: {_id: session._id}}
                 const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
                 data.session = {_id: session._id};
                 data.token = token
