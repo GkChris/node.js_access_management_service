@@ -54,7 +54,7 @@ router.route(routes.create)
 
             const session = await SessionService.createSession({userId, realmId, clientId, token});
             
-            const tokenPayload = {user, session}
+            const tokenPayload = {user, session: {_id: session._id}}
 
             var token = utils.generateJwtToken(tokenPayload, {}); // payload, options
 
@@ -202,13 +202,9 @@ router.route(routes.refresh)
 
         try {
 
-            const {user, session} = utils.validateJwtToken(token);
+            const {session} = utils.validateJwtToken(token);
 
-            const updatedSession = await SessionService.ExtendExpireAtTime(session);
-
-            const tokenPayload = {user, session: updatedSession}
-
-            var newToken = utils.generateJwtToken(tokenPayload, {}); // payload, options
+            await SessionService.ExtendExpireAtTime(session);
 
         } catch ( error ) {
             return next(error);
@@ -218,7 +214,6 @@ router.route(routes.refresh)
         return res.status(statusCodes.ok.code).json({
             code: statusCodes.ok.code, 
             message: statusCodes.ok.msg,
-            data: {token: newToken}
         });
 });
 

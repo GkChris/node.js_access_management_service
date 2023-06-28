@@ -7,6 +7,8 @@ const services = require('../services');
 const validations = require('../validations');
 const utils = require('../utils');
 
+const sessionConfig = config.SessionConfigurations;
+
 const statusCodes = JSONdata.StatusCodes;
 
 const CodeGenerators = utils.CodeGenerators;
@@ -235,6 +237,8 @@ router.route(routes.verify)
             if ( realm || client ) await UserService.validateVerifiyReferences(realm, client); 
 
             await SessionService.validateActiveSession(session);
+
+            if ( sessionConfig.refreshSessionOnVerify ) await SessionService.ExtendExpireAtTime(session);
 
         } catch ( error ) {
             return next(error);
