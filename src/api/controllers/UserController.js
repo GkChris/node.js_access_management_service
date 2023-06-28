@@ -87,7 +87,7 @@ router.route(routes.create)
                 const tokenPayload = {user, session: {_id: session._id}}
                 const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
                 data.session = {_id: session._id};
-                data.token = {token}
+                data.token = token
             }
 
         } catch ( error ) {
