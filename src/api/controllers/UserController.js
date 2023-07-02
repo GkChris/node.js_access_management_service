@@ -335,6 +335,7 @@ router.route(routes.login)
 
             if ( sessionConfig.createSessionOnRegister && found && validated ) {
                 const userId = user._id;
+                await SessionService.deleteUserSessions(userId);
                 const session = await SessionService.createSession({userId, realmId, clientId});
                 const populatedUser = await UserService.getPopulatedUserById(userId);
                 const tokenOptions = { maxAge: sessionConfig.sessionAliveMinutes * 60 * 1000 } // Convert minutes to milliseconds
