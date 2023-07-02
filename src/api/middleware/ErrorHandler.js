@@ -105,7 +105,7 @@ module.exports = (err, req, res, next) => {
             });
         }
         case err.statusCode === statusCodes.bad_gateway.code: {
-            return res.status(statusCodes.bad_gateway.code).json({ 
+            return res.status(statusCodes.ok.code).json({ 
                 message: statusCodes.bad_gateway.msg,
                 code: statusCodes.bad_gateway.code,
                 error: attachErrorToResposne ? {

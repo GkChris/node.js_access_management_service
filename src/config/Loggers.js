@@ -9,7 +9,7 @@ module.exports = (tokens, req, res) => {
   let code = res.locals?.errorCode ? res.locals.errorCode : '';
 
   if (message == 'No message') status = chalk.yellowBright(`[ warning ] > ${path} | ` +  message);
-  else if (res.statusCode >= 400) status = chalk.redBright(`[ error ] > ${path} | ` + code + ' | ' + message);
+  else if (res.statusCode >= 400 || code) status = chalk.redBright(`[ error ] > ${path} | ` + code + ' | ' + message);
   else status = chalk.greenBright(`[success] > ${path} | ` + message);
 
   let time = new Date(new Date().getTime());
