@@ -53,10 +53,14 @@ router.route(routes.create)
             if ( sessionConfig.deleteOldUserSessions ) await SessionService.deleteExpiredSessions(userId, realmId, clientId)
 
             const session = await SessionService.createSession({userId, realmId, clientId});
-            
-            const tokenPayload = {user, session: {_id: session._id}}
+        
+            const tokenOptions = { maxAge: sessionConfig.sessionAliveMinutes * 60 * 1000 } // Convert minutes to milliseconds
+        
+            const tokenPayload = {user, session: {_id: session._id}, options: tokenOptions};
 
-            var token = utils.generateJwtToken(tokenPayload, {}); // payload, options
+            const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
+
+            var responseData = { user, session: {_id: session._id }, options: tokenOptions, token };
 
         } catch ( error ) {
             return next(error);
@@ -66,7 +70,7 @@ router.route(routes.create)
         return res.status(statusCodes.created.code).json({
             code: statusCodes.created.code, 
             message: statusCodes.created.msg,
-            data: {token}
+            data: responseData,
         });
 });
 
@@ -202,9 +206,11 @@ router.route(routes.refresh)
 
         try {
 
-            const {session} = utils.validateJwtToken(token);
+            const {user, session, options} = utils.validateJwtToken(token);
 
             await SessionService.ExtendExpireAtTime(session);
+
+            var responseData = { user, session, options, token };
 
         } catch ( error ) {
             return next(error);
@@ -214,6 +220,7 @@ router.route(routes.refresh)
         return res.status(statusCodes.ok.code).json({
             code: statusCodes.ok.code, 
             message: statusCodes.ok.msg,
+            data: responseData,
         });
 });
 

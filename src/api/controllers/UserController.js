@@ -79,16 +79,18 @@ router.route(routes.create)
                 clientId
             });
 
-            var data = {user};
+            var responseData = {user};
 
             if ( sessionConfig.createSessionOnRegister ) {
                 const userId = user._id;
                 const session = await SessionService.createSession({userId, realmId, clientId});
                 const populatedUser = await UserService.getPopulatedUserById(userId);
-                const tokenPayload = {user: populatedUser, session: {_id: session._id}}
+                const tokenOptions = { maxAge: sessionConfig.sessionAliveMinutes * 60 * 1000 } // Convert minutes to milliseconds
+                const tokenPayload = {user: populatedUser, session: {_id: session._id}, options: tokenOptions};
                 const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
-                data.session = {_id: session._id};
-                data.token = token
+                responseData.session = {_id: session._id};
+                responseData.options = tokenOptions
+                responseData.token = token
             }
 
         } catch ( error ) {
@@ -99,7 +101,7 @@ router.route(routes.create)
         return res.status(statusCodes.created.code).json({
             code: statusCodes.created.code, 
             message: statusCodes.created.msg,
-            data: data,
+            data: responseData,
         });
 });
 
@@ -244,13 +246,15 @@ router.route(routes.verify)
         try {
             CommonValidations.is_content_missing({token});
 
-            var {user, session} = utils.validateJwtToken(token);
+            const {user, session, options} = utils.validateJwtToken(token);
 
             if ( realm || client ) await UserService.validateVerifiyReferences(realm, client); 
 
             await SessionService.validateActiveSession(session);
-
+            
             if ( sessionConfig.refreshSessionOnVerify ) await SessionService.ExtendExpireAtTime(session);
+
+            var responseData = { user, session, options, token };
 
         } catch ( error ) {
             return next(error);
@@ -260,7 +264,7 @@ router.route(routes.verify)
         return res.status(statusCodes.ok.code).json({
             code: statusCodes.ok.code, 
             message: statusCodes.ok.msg,
-            data: {user, session}
+            data: responseData
         });
 });
 
