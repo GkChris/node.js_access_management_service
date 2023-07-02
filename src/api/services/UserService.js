@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const ModifyDocumentError = require('../errors/ModifyDocumentError');
 const ValidationFailureError = require('../errors/ValidationError');
@@ -213,6 +214,32 @@ function validateVerifiyReferences(realm, client){
 
 
 
+function validateUserCredentials(email, password, realmId, clientId){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+            
+            let response = { found: false, validated: false, user: null};
+
+            const user = await User.findOne({email, realmId, clientId});
+
+            if ( user ) response.found = true;
+
+            const isMatch = await bcrypt.compare(password, user?.password);
+       
+            if ( isMatch ) response.validated = true;
+
+            response.user = user;
+
+            return resolve(response);
+
+        } catch ( error ) {
+            return reject(new FetchDocumentError(`${error}`))
+        }
+    })
+}
+
+
 module.exports = {
     createUser,
     getPopulatedUserById,
@@ -221,5 +248,6 @@ module.exports = {
     deleteUsers,
     fetchUsers,
     validateVerifiyReferences,
+    validateUserCredentials,
 }
 

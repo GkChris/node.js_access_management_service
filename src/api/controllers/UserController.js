@@ -27,6 +27,9 @@ const routes = {
     delete: '/delete/:id',
     deleteMultiple: '/deleteMultiple',
     fetch: '/fetch/:realmId?/:clientId?/:id?',
+    register: '/register',
+    login: '/login',
+    logout: '/logout/:id',
     verify: '/verify/:realm?/:client?',
 }
 
@@ -80,18 +83,6 @@ router.route(routes.create)
             });
 
             var responseData = {user};
-
-            if ( sessionConfig.createSessionOnRegister ) {
-                const userId = user._id;
-                const session = await SessionService.createSession({userId, realmId, clientId});
-                const populatedUser = await UserService.getPopulatedUserById(userId);
-                const tokenOptions = { maxAge: sessionConfig.sessionAliveMinutes * 60 * 1000 } // Convert minutes to milliseconds
-                const tokenPayload = {user: populatedUser, session: {_id: session._id}, options: tokenOptions};
-                const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
-                responseData.session = {_id: session._id};
-                responseData.options = tokenOptions
-                responseData.token = token
-            }
 
         } catch ( error ) {
             return next(error);
@@ -233,6 +224,165 @@ router.route(routes.fetch)
             data: data
         });
 });
+
+
+
+router.route(routes.register)
+    .post(async(req, res, next) => {
+
+        const payload = req.body?.data;
+
+        const username = payload?.username;
+        const firstname = payload?.firstname;
+        const lastname = payload?.lastname;
+        const email = payload?.email;
+        const phone = payload?.phone;
+        const phone_code = payload?.phone_code;
+        const roleId = payload?.roleId;
+        const realmId = payload?.realmId;
+        const clientId = payload?.clientId;
+        let password = payload?.password;
+
+        try {
+            CommonValidations.is_content_missing({
+                roleId,
+                realmId,
+                clientId
+            });
+            CommonValidations.mongoose_ObjectId_validation(roleId);
+            CommonValidations.mongoose_ObjectId_validation(realmId);
+            CommonValidations.mongoose_ObjectId_validation(clientId);
+           
+            await CommonServices.find_required_references_byId_or_reject([  // {Model: _id}
+                {'Role': roleId},
+                {'Realm': realmId},
+                {'Client': clientId}
+            ])
+
+            if ( password ) password = await utils.hashPassword(password);
+            const sub = CodeGenerators.uuid4_id();
+
+            const user = await UserService.createUser({
+                sub,
+                password,
+                username,
+                firstname,
+                lastname,
+                email, 
+                phone,
+                phone_code,
+                roleId,
+                realmId,
+                clientId
+            });
+
+            var responseData = {user};
+
+            if ( sessionConfig.createSessionOnRegister ) {
+                const userId = user._id;
+                const session = await SessionService.createSession({userId, realmId, clientId});
+                const populatedUser = await UserService.getPopulatedUserById(userId);
+                const tokenOptions = { maxAge: sessionConfig.sessionAliveMinutes * 60 * 1000 } // Convert minutes to milliseconds
+                const tokenPayload = {user: populatedUser, session: {_id: session._id}, options: tokenOptions};
+                const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
+                responseData.session = {_id: session._id};
+                responseData.options = tokenOptions
+                responseData.token = token
+            }
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.created.msg;
+        return res.status(statusCodes.created.code).json({
+            code: statusCodes.created.code, 
+            message: statusCodes.created.msg,
+            data: responseData,
+        });
+});
+
+
+
+router.route(routes.login)
+    .post(async(req, res, next) => {
+
+        const payload = req.body?.data;
+
+        const email = payload?.email;
+        const password = payload?.password;
+        const realmId = payload?.realmId;
+        const clientId = payload?.clientId;
+
+        try {
+            CommonValidations.is_content_missing({
+                email,
+                password,
+                realmId,
+                clientId
+            });
+
+            await CommonServices.find_required_references_byId_or_reject([  // {Model: _id}
+                {'Realm': realmId},
+                {'Client': clientId}
+            ])
+           
+            const { found, validated, user } = await UserService.validateUserCredentials(email, password, realmId, clientId);
+
+            var responseData = {found, validated};
+
+            if ( found && validated ) responseData.user = user;
+
+            if ( sessionConfig.createSessionOnRegister && found && validated ) {
+                const userId = user._id;
+                const session = await SessionService.createSession({userId, realmId, clientId});
+                const populatedUser = await UserService.getPopulatedUserById(userId);
+                const tokenOptions = { maxAge: sessionConfig.sessionAliveMinutes * 60 * 1000 } // Convert minutes to milliseconds
+                const tokenPayload = {user: populatedUser, session: {_id: session._id}, options: tokenOptions};
+                const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
+                responseData.session = {_id: session._id};
+                responseData.options = tokenOptions
+                responseData.token = token
+            }
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.created.msg;
+        return res.status(statusCodes.created.code).json({
+            code: statusCodes.created.code, 
+            message: statusCodes.created.msg,
+            data: responseData,
+        });
+});
+
+
+router.route(routes.logout)
+    .post(async(req, res, next) => {
+
+        const id = req.params?.id;
+        const token = req.headers?.token;
+
+        try {
+            CommonValidations.is_content_missing({id, token});
+            CommonValidations.mongoose_ObjectId_validation(id);
+
+            utils.validateJwtToken(token);
+            
+            await SessionService.deleteUserSessions(id);
+
+        } catch ( error ) {
+            return next(error);
+        }
+
+        res.locals.message = statusCodes.ok.msg;
+        return res.status(statusCodes.ok.code).json({
+            code: statusCodes.ok.code, 
+            message: statusCodes.ok.msg,
+        });
+});
+
 
 
 router.route(routes.verify)

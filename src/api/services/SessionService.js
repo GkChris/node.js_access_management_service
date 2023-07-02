@@ -217,6 +217,24 @@ function deleteExpiredSessions(userId, realmId, clientId){
 }
 
 
+function deleteUserSessions(userId){
+    return new Promise(async(resolve, reject) => {
+
+        try {
+
+            const query = {userId};
+
+            await Session.deleteMany(query);
+
+            return resolve();
+         
+        } catch ( error ) {
+            return reject(new ModifyDocumentError(`${error}`))
+        }
+    })
+}
+
+
 module.exports = {
     createSession,
     updateSession,
@@ -226,5 +244,6 @@ module.exports = {
     validateActiveSession,
     ExtendExpireAtTime,
     deleteExpiredSessions,
+    deleteUserSessions,
 }
 
