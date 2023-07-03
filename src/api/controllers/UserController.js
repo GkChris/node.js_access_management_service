@@ -286,8 +286,10 @@ router.route(routes.register)
                 const tokenPayload = {user: populatedUser, session: {_id: session._id}, options: tokenOptions};
                 const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
                 responseData.session = {_id: session._id};
-                responseData.options = tokenOptions
-                responseData.token = token
+                responseData.options = tokenOptions;
+                responseData.token = token;
+                delete populatedUser.password;
+                responseData.user = populatedUser;
             }
 
         } catch ( error ) {
@@ -331,8 +333,6 @@ router.route(routes.login)
 
             var responseData = {found, validated};
 
-            if ( found && validated ) responseData.user = user;
-
             if ( sessionConfig.createSessionOnRegister && found && validated ) {
                 const userId = user._id;
                 await SessionService.deleteUserSessions(userId);
@@ -344,6 +344,8 @@ router.route(routes.login)
                 responseData.session = {_id: session._id};
                 responseData.options = tokenOptions
                 responseData.token = token
+                delete populatedUser.password;
+                responseData.user = populatedUser;
             }
 
         } catch ( error ) {
