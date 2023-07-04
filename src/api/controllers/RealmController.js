@@ -116,6 +116,8 @@ router.route(routes.fetch)
 
         const id = req.params?.id;
         
+        const payload = req.query;
+        
         const fields = payload?.fields ? req.query.fields.split(',') : undefined;
         const limit = payload?.limit;
         const offset = payload?.offset;
