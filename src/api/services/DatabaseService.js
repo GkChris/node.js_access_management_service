@@ -105,7 +105,14 @@ function createRoles(realm, client, permissions){
                 realmId: realm._id,
                 clientId: client._id,
                 permissions: permissions
-            }
+            },
+            {
+                name: "user",
+                description: "This role is used for authenticated users",
+                realmId: realm._id,
+                clientId: client._id,
+                permissions: [permissions[0]]
+            },
         ]
 
         try {
@@ -134,6 +141,7 @@ function createSuperadmin(realm, client, roles){
             var superadmin = {
                 sub: utils.CodeGenerators.uuid4_id(),
                 username: "Superadmin",
+                email: '-',
                 password: passwords.hashedPassword,
                 roleId: roles.find((role => role.name === 'superadmin'))._id,
                 realmId: realm._id,
