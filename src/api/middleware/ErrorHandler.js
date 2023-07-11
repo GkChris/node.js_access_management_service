@@ -117,7 +117,7 @@ module.exports = (err, req, res, next) => {
         
     }
 
-    return res.status(statusCodes.internal_server_error.code.json({message: 'Something went wrong', code: statusCodes.internal_server_error.code}))
+    return res.status(statusCodes.internal_server_error.code).json({message: 'Something went wrong', code: statusCodes.internal_server_error.code});
 
 
 }
