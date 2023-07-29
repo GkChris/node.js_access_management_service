@@ -1,12 +1,11 @@
-const statusCodes = require('../data').StatusCodes;
+const customCodes = require('../data').CustomCodes;
 
 class ValidationFailureError extends Error {
     constructor(message) {
         super(message);
-        this.code = 'ERR_VALIDATION_FAILURE';
-        this.statusCode = statusCodes.unprocessable_content.code,
-        this.statusMessage = statusCodes.unprocessable_content.msg;
-        this.message = message
+        this.errorMessage = customCodes.ValidationFailureError.message;
+        this.errorCode = customCodes.ValidationFailureError.code,
+        this.errorDetails = message
     }
 }
   

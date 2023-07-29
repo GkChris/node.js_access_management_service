@@ -1,12 +1,11 @@
-const statusCodes = require('../data').StatusCodes;
+const customCodes = require('../data').CustomCodes;
 
 class ReferenceDocumentError extends Error {
     constructor(message) {
         super(message);
-        this.code = 'ERR_REFERENCE_DOCUMENT';
-        this.statusCode = statusCodes.not_found.code,
-        this.statusMessage = statusCodes.not_found.msg;
-        this.message = message
+        this.errorMessage = customCodes.ReferenceDocumentError.message;
+        this.errorCode = customCodes.ReferenceDocumentError.code,
+        this.errorDetails = message
     }
 }
   

@@ -1,12 +1,11 @@
-const statusCodes = require('../data').StatusCodes;
+const customCodes = require('../data').CustomCodes;
 
 class VerifyValidationError extends Error {
     constructor(message) {
         super(message);
-        this.code = 'ERR_VERIFY_USER';
-        this.statusCode = statusCodes.forbidden.code,
-        this.statusMessage = statusCodes.forbidden.msg;
-        this.message = message
+        this.errorMessage = customCodes.VerifyValidationError.message;
+        this.errorCode = customCodes.VerifyValidationError.code,
+        this.errorDetails = message
     }
 }
   

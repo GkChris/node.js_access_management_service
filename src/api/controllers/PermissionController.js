@@ -125,7 +125,7 @@ router.route(routes.fetch)
 
         if ( filters ) try { filters = JSON.parse(req.query.filters) } catch ( error ) { filters = undefined };
 
-        let data;
+        let permissions;
         let query;
 
         try {
@@ -136,12 +136,12 @@ router.route(routes.fetch)
                 offset,
             }     
 
-            if ( id ) data = query = { _id: id };
-            else data = query = {};
+            if ( id ) query = { _id: id };
+            else query = {};
 
             if ( filters && utils.isPlainObject(filters) ) query = CommonServices.appendFiltersToQuery(query, filters);
             
-            data = await PermissionService.fetchPermissions(query, options);
+            permissions = await PermissionService.fetchPermissions(query, options);
 
         } catch ( error ) {
             return next(error);
@@ -151,7 +151,7 @@ router.route(routes.fetch)
         return res.status(statusCodes.ok.code).json({
             code: statusCodes.ok.code, 
             message: statusCodes.ok.msg,
-            data: data
+            data: {permissions}
         });
 });
 

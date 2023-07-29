@@ -28,6 +28,7 @@ if (process.env.USE_LOCAL_CACHE) app.use(require('./api/middleware/Cache'));
 app.use(require('./api/middleware/ValidateContent'));
 app.use(require('./api/routes'));
 app.use(require('./api/middleware/ErrorHandler'));
+app.use(require('./api/middleware/EndpointNotFound')); // Custom 404 middleware
 
 app.listen(appConfigurations.port, appConfigurations.ip, () => {
 

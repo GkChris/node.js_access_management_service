@@ -1,12 +1,11 @@
-const statusCodes = require('../data').StatusCodes;
+const customCodes = require('../data').CustomCodes;
 
 class ModifyDocumentError extends Error {
     constructor(message) {
         super(message);
-        this.code = 'ERR_MODIFY_DOCUMENT';
-        this.statusCode = statusCodes.internal_server_error.code,
-        this.statusMessage = statusCodes.internal_server_error.msg;
-        this.message = message
+        this.errorMessage = customCodes.ModifyDocumentError.message;
+        this.errorCode = customCodes.ModifyDocumentError.code,
+        this.errorDetails = message
     }
 }
   

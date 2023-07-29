@@ -1,3 +1,46 @@
 {
-    
+    "FetchDocumentError": {
+        "message": "ERR_FETCH_DOCUMENT",
+        "code": 6009
+    },
+    "ForbiddenError": {
+        "message": "ERR_FORBIDDEN",
+        "code": 6008
+    },
+    "FunctionalityError": {
+        "message": "ERR_FUCTIONALITY",
+        "code": 6007
+    },
+    "GatewayError": {
+        "message": "ERR_BAD_GATEWAY",
+        "code": 6006
+    },
+    "MatchDocumentError": {
+        "message": "ERR_MATCH_DOCUMENT",
+        "code": 6005
+    },
+    "ModifyDocumentError": {
+        "message": "ERR_MODIFY_DOCUMENT",
+        "code": 6004
+    },
+    "ReferenceDocumentError": {
+        "message": "ERR_REFERENCE_DOCUMENT",
+        "code": 6003
+    },
+    "TypeErrorCustom": {
+        "message": "ERR_TYPE_ERROR",
+        "code": 6002
+    },
+    "UnauthorizedError": {
+        "message": "ERR_UNAUTHORIZED",
+        "code": 6001
+    },
+    "ValidationFailureError": {
+        "message": "ERR_VALIDATION_FAILURE",
+        "code": 6000
+    },
+    "VerifyValidationError": {
+        "message": "ERR_VERIFY_USER",
+        "code": 6010
+    }
 }

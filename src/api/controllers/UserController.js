@@ -192,7 +192,7 @@ router.route(routes.fetch)
 
         if ( filters ) try { filters = JSON.parse(req.query.filters) } catch ( error ) { filters = undefined };
 
-        let data;
+        let users;
         let query;
         
         try {
@@ -211,7 +211,7 @@ router.route(routes.fetch)
 
             if ( filters && utils.isPlainObject(filters) ) query = CommonServices.appendFiltersToQuery(query, filters);
   
-            data = await UserService.fetchUsers(query, options);
+            users = await UserService.fetchUsers(query, options);
 
         } catch ( error ) {
             return next(error);
@@ -221,7 +221,7 @@ router.route(routes.fetch)
         return res.status(statusCodes.ok.code).json({
             code: statusCodes.ok.code, 
             message: statusCodes.ok.msg,
-            data: data
+            data: {users}
         });
 });
 
