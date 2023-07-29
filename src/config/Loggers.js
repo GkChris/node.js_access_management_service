@@ -9,7 +9,9 @@ module.exports = (tokens, req, res) => {
   const message = res.locals.message ? res.locals.message : 'No message' 
   const errorCode = res.locals.errorCode ? res.locals.errorCode : "No errorCode";
   const errorMessage = res.locals.errorMessage ? res.locals.errorMessage : "No errorMessage";
-  const errorDetails = res.locals.errorDetails ? res.locals.errorDetails : "No errorDetails";
+  const errorDetails = res.locals.errorDetails ? 
+                          typeof res.locals.errorDetails === 'object' ? JSON.stringify(res.locals.errorDetails) : 
+                          res.locals.errorDetails : "No errorDetails";
 
 
   if (message == 'No message' && !errorCode ) status = chalk.yellowBright(`[ Warning ] > ${path} | ${message}`);
