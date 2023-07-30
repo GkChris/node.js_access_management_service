@@ -44,7 +44,7 @@
         "code": 6010
     },
     "UncategorizedError": {
-        "message": "ERR_UNCATEGORIZED",
+        "message": "ERR_UNCATEGORIZED_ERROR",
         "code": 6011
     }
 }
