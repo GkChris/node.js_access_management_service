@@ -36,7 +36,6 @@ const UserSchema = new Schema({
     },
     phone: {
         type: String,
-        unique: true,
     },
     phone_code: {
         type: String,

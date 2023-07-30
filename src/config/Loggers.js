@@ -17,7 +17,7 @@ module.exports = (tokens, req, res) => {
   if (message == 'No message' && !errorCode ) status = chalk.yellowBright(`[ Warning ] > ${path} | ${message}`);
   else if ( errorCode && errorCode === statusCodes.not_found.code ) status = chalk.yellowBright(`[ Warning ] > ${errorDetails} | ${path}`) 
   else if ( errorCode && errorCode !== "No errorCode" ) status = chalk.redBright(`[ Error ] > ${path} | ${errorCode} | ${errorMessage} | ${errorDetails}`);
-  else status = chalk.greenBright(`[ Success ] > ${path} | ` + message);
+  else status = chalk.greenBright(`[ Success ] > ${path} | ${message}`);
 
   let time = new Date(new Date().getTime());
 
