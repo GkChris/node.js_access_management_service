@@ -42,5 +42,9 @@
     "VerifyValidationError": {
         "message": "ERR_VERIFY_USER",
         "code": 6010
+    },
+    "UncategorizedError": {
+        "message": "ERR_UNCATEGORIZED",
+        "code": 6011
     }
 }

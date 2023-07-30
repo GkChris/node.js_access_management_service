@@ -2,15 +2,16 @@ const config = require('../../config');
 const JSONdata = require('../data');
 
 const statusCodes = JSONdata.StatusCodes;
+const customCodes = JSONdata.CustomCodes;
 const ErrorHandlerConfigurations = config.ErrorHandlerConfigurations;
 
 module.exports = (err, req, res, next) => {
 
     const attachErrorDetailsToResposne = ErrorHandlerConfigurations.attach_error_details_to_response ? true : false
 
-    res.locals.errorCode = err.errorCode;
-    res.locals.errorMessage = err.errorMessage;
-    res.locals.errorDetails = err.errorDetails;
+    res.locals.errorCode = err.errorCode ? err.errorCode : customCodes.UncategorizedError.code;
+    res.locals.errorMessage = err.errorMessage ? err.errorMessage : customCodes.UncategorizedError.message;
+    res.locals.errorDetails = err.errorDetails ? err.errorDetails : err.message;
 
 
     return res.status(statusCodes.ok.code).json({ 
