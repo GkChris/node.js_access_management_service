@@ -11,7 +11,7 @@ module.exports = (err, req, res, next) => {
 
     res.locals.errorCode = err.errorCode ? err.errorCode : customCodes.UncategorizedError.code;
     res.locals.errorMessage = err.errorMessage ? err.errorMessage : customCodes.UncategorizedError.message;
-    res.locals.errorDetails = err.errorDetails ? err.errorDetails : err.message;
+    res.locals.errorDetails = err.errorDetails ? err.errorDetails : `${err.name}: ${err.message}`;
 
 
     return res.status(statusCodes.ok.code).json({ 
