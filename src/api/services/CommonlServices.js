@@ -17,7 +17,7 @@ const validations = require('../validations');
 const models = config.DatabaseConfigurations;
 const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
-const customCodes = JSONdata.CustomCodes;
+const errorCodes = JSONdata.ErrorCodes;
 
 // [{Model: _id}]
 function find_required_references_byId_or_reject(args){

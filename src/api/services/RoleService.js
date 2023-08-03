@@ -15,7 +15,7 @@ const validations = require('../validations');
 const models = config.DatabaseConfigurations;
 const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
-const customCodes = JSONdata.CustomCodes;
+const errorCodes = JSONdata.ErrorCodes;
 
 const Role = models.Role;
 

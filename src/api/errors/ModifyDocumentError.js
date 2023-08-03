@@ -1,10 +1,10 @@
-const customCodes = require('../data').CustomCodes;
+const errorCodes = require('../data').ErrorCodes;
 
 class ModifyDocumentError extends Error {
     constructor(message) {
         super(message);
-        this.errorMessage = customCodes.ModifyDocumentError.message;
-        this.errorCode = customCodes.ModifyDocumentError.code,
+        this.errorMessage = errorCodes.ModifyDocumentError.message;
+        this.errorCode = errorCodes.ModifyDocumentError.code,
         this.errorDetails = message
     }
 }

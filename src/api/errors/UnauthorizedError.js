@@ -1,10 +1,10 @@
-const customCodes = require('../data').CustomCodes;
+const errorCodes = require('../data').ErrorCodes;
 
 class UnauthorizedError extends Error {
     constructor(message) {
         super(message);
-        this.errorMessage = customCodes.UnauthorizedError.message;
-        this.errorCode = customCodes.UnauthorizedError.code,
+        this.errorMessage = errorCodes.UnauthorizedError.message;
+        this.errorCode = errorCodes.UnauthorizedError.code,
         this.errorDetails = message
     }
 }

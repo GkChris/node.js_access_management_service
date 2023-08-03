@@ -1,7 +1,7 @@
-const CustomCodes = require('./CustomCodes.json');
+const ErrorCodes = require('./ErrorCodes.json');
 const StatusCodes = require('./StatusCodes.json');
 
 module.exports = {
-    CustomCodes,
+    ErrorCodes,
     StatusCodes,
 }

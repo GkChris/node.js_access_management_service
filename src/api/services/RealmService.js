@@ -12,7 +12,7 @@ const utils = require('../utils');
 const models = config.DatabaseConfigurations;
 const requests = helpers.Requests;
 const statusCodes = JSONdata.StatusCodes
-const customCodes = JSONdata.CustomCodes;
+const errorCodes = JSONdata.ErrorCodes;
 
 const Realm = models.Realm;
 

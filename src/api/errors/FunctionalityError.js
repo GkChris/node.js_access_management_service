@@ -1,10 +1,10 @@
-const customCodes = require('../data').CustomCodes;
+const errorCodes = require('../data').ErrorCodes;
 
 class FunctionalityError extends Error {
     constructor(message) {
         super(message);
-        this.errorMessage = customCodes.FunctionalityError.message;
-        this.errorCode = customCodes.FunctionalityError.code,
+        this.errorMessage = errorCodes.FunctionalityError.message;
+        this.errorCode = errorCodes.FunctionalityError.code,
         this.errorDetails = message
     }
 }

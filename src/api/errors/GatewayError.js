@@ -1,10 +1,10 @@
-const customCodes = require('../data').CustomCodes;
+const errorCodes = require('../data').ErrorCodes;
 
 class GatewayError extends Error {
     constructor(message) {
         super(message);
-        this.errorMessage = customCodes.GatewayError.message;
-        this.errorCode = customCodes.GatewayError.code,
+        this.errorMessage = errorCodes.GatewayError.message;
+        this.errorCode = errorCodes.GatewayError.code,
         this.errorDetails = message
     }
 }
