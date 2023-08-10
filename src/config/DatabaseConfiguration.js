@@ -1,7 +1,7 @@
 'use strict';
 const mongoose = require('mongoose');
 
-const db = process.env.DB || 'mongodb://localhost:27017/jwt_authentication';
+const db = process.env.DB || 'mongodb://127.0.0.1:27017/jwt_authentication';
 
 const UserSchema = require('../api/models/User');
 const SessionSchema = require('../api/models/Session');
