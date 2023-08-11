@@ -14,13 +14,13 @@ const config = require('./config');
 const appConfigurations = config.AppConfigurations;
 const databaseConfigurations = config.DatabaseConfigurations;
 const loggers = config.Loggers;
-
+const Domains = config.ExternalUrls;
 
 // Express app initialization
 var app = express();
 
 // Middleware
-if (process.env.NODE_ENV == 'development') app.use(cors())
+app.use(cors({ credentials: true, origin: Domains.MAIN_CLIENT}))
 app.use(helmet());
 app.use(morgan(loggers));
 app.use(bodyParser.json())
