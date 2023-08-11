@@ -4,8 +4,8 @@
   "description": "Simple auth server build with node.js",
   "main": "src/app.js",
   "scripts": {
-    "start": "NODE_ENV=production pm2 start app.js -i 1 --max-memory-restart 200M --name Auth Server -- --color",
-    "dev": "NODE_ENV=development nodemon app.js --trace-warnings",
+    "start": "NODE_ENV=production pm2 src/start app.js -i 1 --max-memory-restart 200M --name Auth Server -- --color",
+    "dev": "NODE_ENV=development nodemon src/app.js --trace-warnings",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
