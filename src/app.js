@@ -20,7 +20,7 @@ const Domains = config.ExternalUrls;
 var app = express();
 
 // Middleware
-app.use(cors({ credentials: true, origin: Domains.MAIN_CLIENT.host}))
+app.use(cors({ credentials: true, origin: Domains.MAIN_CLIENT.url}))
 app.use(helmet());
 app.use(morgan(loggers));
 app.use(bodyParser.json())
