@@ -40,6 +40,7 @@ app.listen(appConfigurations.port, appConfigurations.ip, () => {
   console.log(chalk.cyanBright('> IP address: ' + appConfigurations.ip));
   console.log(chalk.cyanBright('> Port: ' + appConfigurations.port));
   console.log(chalk.cyanBright('> DB url: ' + databaseConfigurations.database));
+  console.log(chalk.cyanBright('> Environment: ' + process.env.NODE_ENV));
   console.log('\n');
 });
 
