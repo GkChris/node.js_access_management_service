@@ -1,6 +1,8 @@
 const express = require('express');
 var router = express.Router();
 
+const ForbiddenError = require('../errors/ForbiddenError');
+
 const config = require('../../config');
 const JSONdata= require('../data');
 const services = require('../services');
@@ -13,6 +15,7 @@ const CommonValidations = validations.CommonValidations;
 
 const DatabaseService = services.DatabaseService;
 
+const acceptedSecretKey = require('../../config').Keys.secret_server_key;
 
 // Module routes
 const routes = {
@@ -24,8 +27,11 @@ const routes = {
 router.route(routes.initializeDatabase)
     .post(async(req, res, next) => {
 
+        const secretReqKey = req.body.secret_server_key;
 
         try {
+
+            if ( !secretReqKey || secretReqKey !== acceptedSecretKey ) throw new ForbiddenError()
 
             let realms = await DatabaseService.createRealms();
             let clients = await DatabaseService.createClients(realms);
@@ -51,8 +57,11 @@ router.route(routes.initializeDatabase)
 router.route(routes.dropDatabase)
     .post(async(req, res, next) => {
 
+        const secretReqKey = req.body.secret_server_key;
 
         try {
+
+            if ( !secretReqKey || secretReqKey !== acceptedSecretKey ) throw new ForbiddenError()
 
             await DatabaseService.dropDatabase();
 
