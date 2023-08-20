@@ -278,11 +278,11 @@ router.route(routes.register)
 
             var responseData = {user};
 
-            if ( sessionConfig.createSessionOnRegister ) {
+            if ( sessionConfig.create_session_on_register ) {
                 const userId = user._id;
                 const session = await SessionService.createSession({userId, realmId, clientId});
                 const populatedUser = await UserService.getPopulatedUserById(userId);
-                const tokenOptions = { maxAge: sessionConfig.sessionAliveMinutes * 60 * 1000 } // Convert minutes to milliseconds
+                const tokenOptions = { maxAge: sessionConfig.session_alive_minutes * 60 * 1000 } // Convert minutes to milliseconds
                 const tokenPayload = {user: populatedUser, session: {_id: session._id}, options: tokenOptions};
                 const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
                 responseData.session = {_id: session._id};
@@ -333,12 +333,12 @@ router.route(routes.login)
 
             var responseData = {found, validated};
 
-            if ( sessionConfig.createSessionOnRegister && found && validated ) {
+            if ( sessionConfig.create_session_on_register && found && validated ) {
                 const userId = user._id;
                 await SessionService.deleteUserSessions(userId);
                 const session = await SessionService.createSession({userId, realmId, clientId});
                 const populatedUser = await UserService.getPopulatedUserById(userId);
-                const tokenOptions = { maxAge: sessionConfig.sessionAliveMinutes * 60 * 1000 } // Convert minutes to milliseconds
+                const tokenOptions = { maxAge: sessionConfig.session_alive_minutes * 60 * 1000 } // Convert minutes to milliseconds
                 const tokenPayload = {user: populatedUser, session: {_id: session._id}, options: tokenOptions};
                 const token = utils.generateJwtToken(tokenPayload, {}); // payload, options
                 responseData.session = {_id: session._id};
@@ -405,7 +405,7 @@ router.route(routes.verify)
 
             await SessionService.validateActiveSession(session);
             
-            if ( sessionConfig.refreshSessionOnVerify ) await SessionService.ExtendExpireAtTime(session);
+            if ( sessionConfig.refresh_session_on_verify ) await SessionService.ExtendExpireAtTime(session);
 
             var responseData = { user, session, options, token };
 

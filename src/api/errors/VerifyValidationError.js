@@ -4,8 +4,9 @@ class VerifyValidationError extends Error {
     constructor(message) {
         super(message);
         this.errorMessage = errorCodes.VerifyValidationError.message;
-        this.errorCode = errorCodes.VerifyValidationError.code,
-        this.errorDetails = message
+        this.errorCode = errorCodes.VerifyValidationError.code;
+        this.errorDescription = errorCodes.VerifyValidationError.description;
+        this.errorDetails = message;
     }
 }
   

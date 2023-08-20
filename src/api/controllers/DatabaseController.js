@@ -27,22 +27,23 @@ router.route(routes.initializeDatabase)
 
         try {
 
-            let realm = await DatabaseService.createRealm();
-            let client = await DatabaseService.createClient(realm);
+            let realms = await DatabaseService.createRealms();
+            let clients = await DatabaseService.createClients(realms);
             let permissions = await DatabaseService.createPermissions();
-            let roles = await DatabaseService.createRoles(realm, client, permissions);
-            var {username, password} = await DatabaseService.createSuperadmin(realm, client, roles) 
+            let roles = await DatabaseService.createRoles(realms, clients, permissions);
+            var {development, production} = await DatabaseService.createSuperadmins(realms, clients, roles) 
 
         } catch ( error ) {
             return next(error);
         }
 
-        console.log(`username: ${username}, password: ${password}`)
+        console.log(`[development] -> username: ${development.username}, password: ${development.password}`)
+        console.log(`[production] -> username: ${production.username}, password: ${production.password}`)
         res.locals.message = statusCodes.created.msg;
         return res.status(statusCodes.created.code).json({
             code: statusCodes.created.code, 
             message: statusCodes.created.msg,
-            data: {credentials: {username, password}}
+            data: {credentials: {development, production}}
         });
 });
 

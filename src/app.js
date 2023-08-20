@@ -12,35 +12,35 @@ const figlet = require('figlet');
 
 const config = require('./config');
 const appConfigurations = config.AppConfigurations;
+const middlewareConfig = config.MiddlewareConfigurations;
 const databaseConfigurations = config.DatabaseConfigurations;
-const loggers = config.Loggers;
-const Domains = config.ExternalUrls;
+const Domains = config.Domains;
+
 
 // Express app initialization
 var app = express();
 
 // Middleware
-app.use(cors({ credentials: true, origin: Domains.MAIN_CLIENT.url}))
-app.use(helmet());
-app.use(morgan(loggers));
-app.use(bodyParser.json())
-if (process.env.USE_LOCAL_CACHE) app.use(require('./api/middleware/Cache'));
-app.use(require('./api/middleware/ValidateContent'));
-app.use(require('./api/routes'));
-app.use(require('./api/middleware/ErrorHandler'));
-app.use(require('./api/middleware/EndpointNotFound')); // Custom 404 middleware
+if ( middlewareConfig.use_cors ) app.use(cors({ credentials: true, origin: Domains.MAIN_CLIENT.url}))
+if ( middlewareConfig.use_helmet ) app.use(helmet());
+if ( middlewareConfig.use_logger ) app.use(morgan(require('./api/middleware/Logger')));
+if ( middlewareConfig.use_body_parser ) app.use(bodyParser.json())
+if ( middlewareConfig.use_cache ) app.use(require('./api/middleware/Cache'));
+if ( middlewareConfig.use_content_validation ) app.use(require('./api/middleware/ValidateContent'));
+if ( middlewareConfig.use_router ) app.use(require('./api/routes'));
+if ( middlewareConfig.use_error_handler ) app.use(require('./api/middleware/ErrorHandler'));
+if ( middlewareConfig.use_not_found_response ) app.use(require('./api/middleware/EndpointNotFound')); // Custom 404 middleware
 
 app.listen(appConfigurations.port, appConfigurations.ip, () => {
 
   console.log(chalk.yellow(figlet.textSync(appConfigurations.backend_name, { font: 'Slant' })));
-  console.log(chalk.yellow(figlet.textSync(appConfigurations.version, { font: 'Slant' })));
+  console.log(chalk.yellow(figlet.textSync(`V.${appConfigurations.version}`, { font: 'Slant' })));
   
   console.log(chalk.cyanBright('  Server Info'));
   console.log(chalk.cyanBright('  -----------'));
   console.log(chalk.cyanBright('> IP address: ' + appConfigurations.ip));
   console.log(chalk.cyanBright('> Port: ' + appConfigurations.port));
   console.log(chalk.cyanBright('> DB url: ' + databaseConfigurations.database));
-  console.log(chalk.cyanBright('> Environment: ' + process.env.NODE_ENV));
+  console.log(chalk.cyanBright('> Environment: ' + appConfigurations.environment));
   console.log('\n');
 });
-

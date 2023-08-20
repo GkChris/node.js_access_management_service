@@ -4,17 +4,18 @@ function initialize(){
     return new Promise(async(resolve, reject) => {
         try {
 
-            let realm = await DatabaseService.createRealm();
-            let client = await DatabaseService.createClient(realm);
+            let realms = await DatabaseService.createRealms();
+            let clients = await DatabaseService.createClients(realms);
             let permissions = await DatabaseService.createPermissions();
-            let roles = await DatabaseService.createRoles(realm, client, permissions);
-            var {username, password} = await DatabaseService.createSuperadmin(realm, client, roles) 
+            let roles = await DatabaseService.createRoles(realms, clients, permissions);
+            var {development, production} = await DatabaseService.createSuperadmins(realms, clients, roles) 
 
         } catch ( error ) {
             console.log(error)
         }
 
-        console.log(`username: ${username}, password: ${password}`)
+        console.log(`[development] -> username: ${development.username}, password: ${development.password}`)
+        console.log(`[production] -> username: ${production.username}, password: ${production.password}`)
     })
 }
 

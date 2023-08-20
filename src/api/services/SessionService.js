@@ -32,7 +32,7 @@ function createSession(args){
 
             let session = {};
             const currentDate = new Date();
-            const expireAt = new Date(currentDate.getTime() + (sessionConfig.sessionAliveMinutes * 60 * 1000));
+            const expireAt = new Date(currentDate.getTime() + (sessionConfig.session_alive_minutes * 60 * 1000));
 
             if ( args?.userId ) session.userId = args.userId;
             if ( args?.realmId ) session.realmId = args.realmId;
@@ -178,7 +178,7 @@ function ExtendExpireAtTime(session){
         try {
 
             const currentDate = new Date();
-            const extendedExpireAt = new Date(currentDate.getTime() + (sessionConfig.sessionAliveMinutes * 60 * 1000));
+            const extendedExpireAt = new Date(currentDate.getTime() + (sessionConfig.session_alive_minutes * 60 * 1000));
            
             let updatedSession = await Session.updateOne(
                 {

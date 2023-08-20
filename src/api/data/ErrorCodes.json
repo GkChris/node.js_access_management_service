@@ -1,50 +1,72 @@
 {
     "FetchDocumentError": {
         "message": "ERR_FETCH_DOCUMENT",
-        "code": 6009
+        "code": 6000,
+        "description": ""
     },
     "ForbiddenError": {
         "message": "ERR_FORBIDDEN",
-        "code": 6008
+        "code": 6001,
+        "description": ""
     },
     "FunctionalityError": {
         "message": "ERR_FUCTIONALITY",
-        "code": 6007
+        "code": 6002,
+        "description": ""
     },
     "GatewayError": {
         "message": "ERR_BAD_GATEWAY",
-        "code": 6006
+        "code": 6003,
+        "description": ""
     },
     "MatchDocumentError": {
         "message": "ERR_MATCH_DOCUMENT",
-        "code": 6005
+        "code": 6004,
+        "description": ""
     },
     "ModifyDocumentError": {
         "message": "ERR_MODIFY_DOCUMENT",
-        "code": 6004
+        "code": 6005,
+        "description": ""
     },
     "ReferenceDocumentError": {
         "message": "ERR_REFERENCE_DOCUMENT",
-        "code": 6003
+        "code": 6006,
+        "description": ""
     },
     "TypeErrorCustom": {
         "message": "ERR_TYPE_ERROR",
-        "code": 6002
+        "code": 6007,
+        "description": ""
     },
     "UnauthorizedError": {
         "message": "ERR_UNAUTHORIZED",
-        "code": 6001
+        "code": 6008,
+        "description": ""
     },
     "ValidationFailureError": {
         "message": "ERR_VALIDATION_FAILURE",
-        "code": 6000
+        "code": 6009,
+        "description": ""
     },
-    "VerifyValidationError": {
-        "message": "ERR_VERIFY_USER",
-        "code": 6010
+    "AuthRequestError": {
+        "message": "ERR_AUTH_REQUEST",
+        "code": 6010,
+        "description": ""
+    },
+    "RequestError": {
+        "message": "ERR_REQUEST",
+        "code": 6011,
+        "description": ""
     },
     "UncategorizedError": {
         "message": "ERR_UNCATEGORIZED_ERROR",
-        "code": 6011
+        "code": 6012,
+        "description": ""
+    },
+    "VerifyValidationError": {
+        "message": "ERR_VERIFY_VALIDATION",
+        "code": 6013,
+        "description": ""
     }
 }

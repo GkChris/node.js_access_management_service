@@ -15,7 +15,6 @@ const UserSchema = new Schema({
     username: {
         type: String,
         required: true,
-        unique: true,
     },
     firstname: {
         type: String,
@@ -28,7 +27,6 @@ const UserSchema = new Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
     },
     email_verification: {
         type: Boolean,
@@ -67,5 +65,6 @@ const UserSchema = new Schema({
 
 
 UserSchema.index({ username: 1, realmId: 1, clientId: 1 }, { unique: true });
+UserSchema.index({ email: 1, realmId: 1, clientId: 1 }, { unique: true });
 
 module.exports = UserSchema;

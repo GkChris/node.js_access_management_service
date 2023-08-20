@@ -50,11 +50,11 @@ router.route(routes.create)
 
             const user = await UserService.getPopulatedUserById(userId);     // Does not include user's password
 
-            if ( sessionConfig.deleteOldUserSessions ) await SessionService.deleteExpiredSessions(userId, realmId, clientId)
+            if ( sessionConfig.delete_old_user_sessions ) await SessionService.deleteExpiredSessions(userId, realmId, clientId)
 
             const session = await SessionService.createSession({userId, realmId, clientId});
         
-            const tokenOptions = { maxAge: sessionConfig.sessionAliveMinutes * 60 * 1000 } // Convert minutes to milliseconds
+            const tokenOptions = { maxAge: sessionConfig.session_alive_minutes * 60 * 1000 } // Convert minutes to milliseconds
         
             const tokenPayload = {user, session: {_id: session._id}, options: tokenOptions};
 
