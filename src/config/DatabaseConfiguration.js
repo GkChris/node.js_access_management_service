@@ -34,7 +34,7 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise;
 
 /* Export Database URI */ 
-module.exports.database = db;
+module.exports.database = dbName;
 
 /* Export Models */
 module.exports.User = mongoose.model('User', UserSchema);
