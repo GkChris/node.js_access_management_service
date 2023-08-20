@@ -27,6 +27,7 @@ if ( middlewareConfig.use_logger ) app.use(morgan(require('./api/middleware/Logg
 if ( middlewareConfig.use_body_parser ) app.use(bodyParser.json())
 if ( middlewareConfig.use_cache ) app.use(require('./api/middleware/Cache'));
 if ( middlewareConfig.use_content_validation ) app.use(require('./api/middleware/ValidateContent'));
+if ( middlewareConfig.use_authentication ) app.use(require('./api/middleware/Authentication'));
 if ( middlewareConfig.use_router ) app.use(require('./api/routes'));
 if ( middlewareConfig.use_error_handler ) app.use(require('./api/middleware/ErrorHandler'));
 if ( middlewareConfig.use_not_found_response ) app.use(require('./api/middleware/EndpointNotFound')); // Custom 404 middleware
