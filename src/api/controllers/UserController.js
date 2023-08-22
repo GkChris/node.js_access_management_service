@@ -391,33 +391,13 @@ router.route(routes.logout)
 router.route(routes.verify)
     .get(async(req, res, next) => {
 
-        const realm = req.params?.realm;
-        const client = req.params?.client;
-
-        const token = req.headers?.token;
-
-        try {
-            CommonValidations.is_content_missing({token});
-
-            const {user, session, options} = utils.validateJwtToken(token);
-
-            if ( realm || client ) await UserService.validateVerifiyReferences(realm, client); 
-
-            await SessionService.validateActiveSession(session);
-            
-            if ( sessionConfig.refresh_session_on_verify ) await SessionService.ExtendExpireAtTime(session);
-
-            var responseData = { user, session, options, token };
-
-        } catch ( error ) {
-            return next(error);
-        }
+        const auth = req.auth
 
         res.locals.message = statusCodes.ok.msg;
         return res.status(statusCodes.ok.code).json({
             code: statusCodes.ok.code, 
             message: statusCodes.ok.msg,
-            data: responseData
+            data: auth
         });
 });
 

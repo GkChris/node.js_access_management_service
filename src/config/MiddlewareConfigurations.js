@@ -1,4 +1,5 @@
 module.exports = {
+    use_authentication: process.env.USE_AUTHENTICATION === 'true' ? true : false,
     use_cors: process.env.USE_CORS === 'true' ? true : false,
     use_cache: process.env.USE_LOCAL_CACHE === 'true' ? true : false,
     use_error_handler: process.env.USE_ERROR_HANDLER === 'true' ? true : false,
