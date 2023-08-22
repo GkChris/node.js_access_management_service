@@ -12,7 +12,10 @@ const statusCodes = JSONdata.StatusCodes;
 const CommonServices = services.CommonServices;
 const CommonValidations = validations.CommonValidations;
 
+const AuthService = services.AuthService;
 const RealmService = services.RealmService;
+
+const adminPanelPermissions = config.AuthConfigurations.adminPanelBasicPermissions;
 
 
 // Module routes
@@ -28,11 +31,13 @@ router.route(routes.create)
     .post(async(req, res, next) => {
 
         const payload = req.body?.data;
+        const auth = req.auth;
 
         const name = payload?.name;
         const description = payload?.description;
 
         try {
+            AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.is_content_missing({name});
 
             await RealmService.createRealm({name, description});
@@ -53,8 +58,10 @@ router.route(routes.update)
         const id = req.params?.id;
 
         const payload = req.body?.data;
+        const auth = req.auth;
 
         try {
+            AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.is_content_missing({id, payload});
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
 
@@ -73,8 +80,10 @@ router.route(routes.delete)
     .post(async(req, res, next) => {
 
         const id = req.params?.id;
+        const auth = req.auth;
 
         try {
+            AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
 
             await RealmService.deleteRealm(id);
@@ -93,8 +102,10 @@ router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
         const ids = req.body?.data?.ids;
+        const auth = req.auth;
 
         try {
+            AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.is_content_missing({ids});
             ids.forEach(id => {
                 CommonValidations.mongoose_ObjectId_validation(id) 
@@ -117,6 +128,7 @@ router.route(routes.fetch)
         const id = req.params?.id;
         
         const payload = req.query;
+        const auth = req.auth;
         
         const fields = payload?.fields ? req.query.fields.split(',') : undefined;
         const limit = payload?.limit;
@@ -129,6 +141,7 @@ router.route(routes.fetch)
         let query;
 
         try {
+            AuthService.hasPermissions(auth, adminPanelPermissions);
 
             const options = {
                 fields,

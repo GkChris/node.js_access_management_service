@@ -14,8 +14,12 @@ const statusCodes = JSONdata.StatusCodes;
 const CommonServices = services.CommonServices;
 const CommonValidations = validations.CommonValidations;
 
+const AuthService = services.AuthService;
 const SessionService = services.SessionService;
 const UserService = services.UserService;
+
+const adminPanelPermissions = config.AuthConfigurations.adminPanelBasicPermissions;
+
 
 // Module routes
 const routes = {
@@ -31,12 +35,14 @@ router.route(routes.create)
     .post(async(req, res, next) => {
 
         const payload = req.body?.data;
+        const auth = req.auth;
 
         const userId = payload?.userId;
         const realmId = payload?.realmId;
         const clientId = payload?.clientId;
 
         try {
+            AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.is_content_missing({userId, realmId, clientId});
             CommonValidations.mongoose_ObjectId_validation(userId);
             CommonValidations.mongoose_ObjectId_validation(realmId);
@@ -81,8 +87,10 @@ router.route(routes.update)
         const id = req.params?.id;
 
         const payload = req.body?.data;
+        const auth = req.auth;
 
         try {
+            AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.is_content_missing({id, payload});
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
 
@@ -107,8 +115,10 @@ router.route(routes.delete)
     .post(async(req, res, next) => {
 
         const id = req.params?.id;
+        const auth = req.auth;
 
         try {
+            AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
 
             await SessionService.deleteSession(id);
@@ -127,8 +137,10 @@ router.route(routes.deleteMultiple)
     .post(async(req, res, next) => {
 
         const ids = req.body?.data?.ids;
+        const auth = req.auth;
 
         try {
+            AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.is_content_missing({ids});
             ids.forEach(id => {
                 CommonValidations.mongoose_ObjectId_validation(id) 
@@ -155,6 +167,7 @@ router.route(routes.fetch)
         const id = req.params?.id;
 
         const payload = req.query;
+        const auth = req.auth;
 
         const expand = payload?.expand ? req.query.expand.split(',') : undefined;
         const fields = payload?.fields ? req.query.fields.split(',') : undefined;
@@ -168,6 +181,7 @@ router.route(routes.fetch)
         let query;
 
         try {
+            AuthService.hasPermissions(auth, adminPanelPermissions);
             
             const options = {
                 expand,

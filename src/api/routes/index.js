@@ -4,6 +4,10 @@ var router = express.Router();
 /*** Special route that contain endpoints to initialize and drop the database ***/
 router.use('/database', require('../controllers/DatabaseController'));      
 
+/* General endpoints for the api */
+router.use('/api', require('../controllers/ApiController'));      
+
+
 /* Routes */
 router.use('/users', require('../controllers/UserController'));      
 router.use('/sessions', require('../controllers/SessionController'));      
