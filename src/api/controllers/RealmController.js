@@ -32,12 +32,13 @@ router.route(routes.create)
 
         const payload = req.body?.data;
         const auth = req.auth;
+        const verifiedReceiver = req.verifiedReceiver;
 
         const name = payload?.name;
         const description = payload?.description;
 
         try {
-            AuthService.hasPermissions(auth, adminPanelPermissions);
+            if ( !verifiedReceiver ) AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.is_content_missing({name});
 
             await RealmService.createRealm({name, description});
@@ -59,9 +60,10 @@ router.route(routes.update)
 
         const payload = req.body?.data;
         const auth = req.auth;
+        const verifiedReceiver = req.verifiedReceiver;
 
         try {
-            AuthService.hasPermissions(auth, adminPanelPermissions);
+            if ( !verifiedReceiver ) AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.is_content_missing({id, payload});
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
 
@@ -81,9 +83,10 @@ router.route(routes.delete)
 
         const id = req.params?.id;
         const auth = req.auth;
+        const verifiedReceiver = req.verifiedReceiver;
 
         try {
-            AuthService.hasPermissions(auth, adminPanelPermissions);
+            if ( !verifiedReceiver ) AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.mongoose_ObjectId_validation(id); // Throws exception if the id is missing. 
 
             await RealmService.deleteRealm(id);
@@ -103,9 +106,10 @@ router.route(routes.deleteMultiple)
 
         const ids = req.body?.data?.ids;
         const auth = req.auth;
+        const verifiedReceiver = req.verifiedReceiver;
 
         try {
-            AuthService.hasPermissions(auth, adminPanelPermissions);
+            if ( !verifiedReceiver ) AuthService.hasPermissions(auth, adminPanelPermissions);
             CommonValidations.is_content_missing({ids});
             ids.forEach(id => {
                 CommonValidations.mongoose_ObjectId_validation(id) 
@@ -129,6 +133,7 @@ router.route(routes.fetch)
         
         const payload = req.query;
         const auth = req.auth;
+        const verifiedReceiver = req.verifiedReceiver;
         
         const fields = payload?.fields ? req.query.fields.split(',') : undefined;
         const limit = payload?.limit;
@@ -141,7 +146,7 @@ router.route(routes.fetch)
         let query;
 
         try {
-            AuthService.hasPermissions(auth, adminPanelPermissions);
+            if ( !verifiedReceiver ) AuthService.hasPermissions(auth, adminPanelPermissions);
 
             const options = {
                 fields,

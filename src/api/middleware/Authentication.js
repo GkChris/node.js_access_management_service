@@ -14,12 +14,12 @@ module.exports = async (req, res, next) => {
     
     try {
         const authorizationToken = req.headers?.authorization;
-        const isReceiverVerified = authorizationToken && authorizationToken === serverSecretKey ? true : false;
+        const verifiedReceiver = authorizationToken && authorizationToken === serverSecretKey ? true : false;
 
         if ( !authorizationToken ) return next()   
         
-        if ( isReceiverVerified ) {
-            req.isReceiverVerified = true;
+        if ( verifiedReceiver ) {
+            req.verifiedReceiver = true;
             return next();
         }
 
