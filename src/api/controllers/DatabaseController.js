@@ -15,7 +15,6 @@ const CommonValidations = validations.CommonValidations;
 
 const DatabaseService = services.DatabaseService;
 
-const acceptedSecretKey = require('../../config').Keys.secret_server_key;
 
 // Module routes
 const routes = {
@@ -27,11 +26,11 @@ const routes = {
 router.route(routes.initializeDatabase)
     .post(async(req, res, next) => {
 
-        const secretReqKey = req.body.secret_server_key;
+        const isReceiverVerified = req.isReceiverVerified;
 
         try {
 
-            if ( !secretReqKey || secretReqKey !== acceptedSecretKey ) throw new ForbiddenError()
+            if ( !isReceiverVerified ) throw new ForbiddenError()
 
             let realms = await DatabaseService.createRealms();
             let clients = await DatabaseService.createClients(realms);
@@ -57,11 +56,11 @@ router.route(routes.initializeDatabase)
 router.route(routes.dropDatabase)
     .post(async(req, res, next) => {
 
-        const secretReqKey = req.body.secret_server_key;
+        const isReceiverVerified = req.isReceiverVerified;
 
         try {
 
-            if ( !secretReqKey || secretReqKey !== acceptedSecretKey ) throw new ForbiddenError()
+            if ( !isReceiverVerified ) throw new ForbiddenError()
 
             await DatabaseService.dropDatabase();
 
