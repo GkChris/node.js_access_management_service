@@ -26,11 +26,11 @@ const routes = {
 router.route(routes.initializeDatabase)
     .post(async(req, res, next) => {
 
-        const isReceiverVerified = req.isReceiverVerified;
+        const verifiedReceiver = req.verifiedReceiver;
 
         try {
 
-            if ( !isReceiverVerified ) throw new ForbiddenError()
+            if ( !verifiedReceiver ) throw new ForbiddenError()
 
             let realms = await DatabaseService.createRealms();
             let clients = await DatabaseService.createClients(realms);
@@ -56,11 +56,11 @@ router.route(routes.initializeDatabase)
 router.route(routes.dropDatabase)
     .post(async(req, res, next) => {
 
-        const isReceiverVerified = req.isReceiverVerified;
+        const verifiedReceiver = req.verifiedReceiver;
 
         try {
 
-            if ( !isReceiverVerified ) throw new ForbiddenError()
+            if ( !verifiedReceiver ) throw new ForbiddenError()
 
             await DatabaseService.dropDatabase();
 
