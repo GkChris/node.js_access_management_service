@@ -40,7 +40,7 @@ module.exports = (tokens, req, res) => {
 		' | ',
 		`${chalk.bold(`${statusCode} ${statusMessage}`)}`,
 		`${logError ? ` ${chalk.redBright(errorDetails)}` : ''}`,
-		`${message ? ` ${chalk.yellowBright(errorDetails)}` : ''}`,
+		`${message ? ` ${chalk.yellowBright(message)}` : ''}`,
 		' | ',
 		`[${chalk.gray(time)}]`,
 		' | ',
