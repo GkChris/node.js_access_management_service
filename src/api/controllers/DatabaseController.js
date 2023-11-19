@@ -44,7 +44,6 @@ router.route(routes.initializeDatabase)
 
         console.log(`[development] -> username: ${development.username}, password: ${development.password}`)
         console.log(`[production] -> username: ${production.username}, password: ${production.password}`)
-        res.locals.message = statusCodes.created.msg;
         return res.status(statusCodes.created.code).json({
             code: statusCodes.created.code, 
             message: statusCodes.created.msg,
@@ -68,7 +67,6 @@ router.route(routes.dropDatabase)
             return next(error);
         }
 
-        res.locals.message = statusCodes.ok.msg;
         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
 });
 

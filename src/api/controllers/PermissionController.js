@@ -47,7 +47,6 @@ router.route(routes.create)
             return next(error);
         }
 
-        res.locals.message = statusCodes.created.msg;
         return res.status(statusCodes.created.code).json({code: statusCodes.created.code, message: statusCodes.created.msg});
 });
 
@@ -71,7 +70,6 @@ router.route(routes.update)
             return next(error);
         }
 
-        res.locals.message = statusCodes.ok.msg;
         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
 });
 
@@ -93,7 +91,6 @@ router.route(routes.delete)
             return next(error);
         }
 
-        res.locals.message = statusCodes.ok.msg;
         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
 });
 
@@ -119,7 +116,6 @@ router.route(routes.deleteMultiple)
             return next(error);
         }
 
-        res.locals.message = statusCodes.ok.msg;
         return res.status(statusCodes.ok.code).json({code: statusCodes.ok.code, message: statusCodes.ok.msg});
 });
 
@@ -164,7 +160,6 @@ router.route(routes.fetch)
             return next(error);
         }
 
-        res.locals.message = statusCodes.ok.msg;
         return res.status(statusCodes.ok.code).json({
             code: statusCodes.ok.code, 
             message: statusCodes.ok.msg,
