@@ -1,4 +1,5 @@
 'use strict';
+process.env.FORCE_COLOR = '1';
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');

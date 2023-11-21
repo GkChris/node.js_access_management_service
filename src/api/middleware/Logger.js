@@ -1,5 +1,4 @@
 'use strict';
-process.env.FORCE_COLOR = '1';
 const chalk = require('chalk');
 const statusCodes = require('../data').StatusCodes;
 
