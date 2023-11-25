@@ -64,12 +64,11 @@ function createCookie(res, auth){
     const options = auth.options;
 
     res.cookie('authorization', token, {
-        httpOnly: process.env.NODE_ENV === 'production' ? true : false,
         secure: process.env.NODE_ENV === 'production' ? true : false,
-        // sameSite: 'strict',
-        // other cookie options (e.g., maxAge, domain, path) if needed
         domain: Domains.MAIN_CLIENT.host,
         maxAge: options?.maxAge,
+        sameSite: 'strict',
+        // other cookie options (e.g., maxAge, domain, path) if needed
     });
     return;
     
