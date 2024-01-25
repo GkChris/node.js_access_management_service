@@ -42,8 +42,8 @@ router.route(routes.initializeDatabase)
             return next(error);
         }
 
-        console.log(`[development] -> username: ${development.username}, password: ${development.password}`)
-        console.log(`[production] -> username: ${production.username}, password: ${production.password}`)
+        console.log(`[development] -> email: ${development.email}, password: ${development.password}`)
+        console.log(`[production] -> email: ${production.email}, password: ${production.password}`)
         return res.status(statusCodes.created.code).json({
             code: statusCodes.created.code, 
             message: statusCodes.created.msg,

@@ -179,7 +179,7 @@ function createSuperadmins(realms, clients, roles){
             var devSuperadmin = {
                 sub: utils.CodeGenerators.uuid4_id(),
                 username: "Superadmin",
-                email: '-',
+                email: 'admin@admin.com',
                 password: devPasswords.hashedPassword,
                 roleId: roles.devRoles.find((role => role.name === 'superadmin'))._id,
                 realmId: realms.devRealm._id,
@@ -189,7 +189,7 @@ function createSuperadmins(realms, clients, roles){
             var prodSuperadmin = {
                 sub: utils.CodeGenerators.uuid4_id(),
                 username: "Superadmin",
-                email: '-',
+                email: 'admin@admin.com',
                 password: prodPasswords.hashedPassword,
                 roleId: roles.prodRoles.find((role => role.name === 'superadmin'))._id,
                 realmId: realms.prodRealm._id,
@@ -206,8 +206,8 @@ function createSuperadmins(realms, clients, roles){
             const newProdSuperuser = await User.create(prodSuperadmin);
 
             return resolve({
-                development: {username: newDevSuperuser.username, password: devPasswords.unhashedPassword},
-                production: {username: newProdSuperuser.username, password: prodPasswords.unhashedPassword},
+                development: {email: newDevSuperuser.email, password: devPasswords.unhashedPassword},
+                production: {email: newProdSuperuser.email, password: prodPasswords.unhashedPassword},
             });
                 
         } catch ( error ) {

@@ -12,14 +12,6 @@ Realms, clients, users, roles, permissions and sessions can be managed through t
 
 Install depedencies
 
-### `node initilization.js`
-
-The script creates the first documents in the database (Can be modified later from the admin panel).
-The first user (superadmin) will be also created during this process. The username and password credentials will be logged in the terminal when the execution is finished. Use these credential to log in into the panel.
-
-Note: The initilization process will not execute if there are existing documents in the database. 
-Note 2: You can also use the database/initializeDatabase endpoint instead of running the script.  
-
 ### `npm run dev`
 
 Runs the server in the development mode.
