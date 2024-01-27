@@ -402,6 +402,18 @@ router.route(routes.verify)
     .get(async(req, res, next) => {
 
         const auth = req.auth
+        const token = auth?.token;
+ 
+        try {
+            AuthService.isLogged(auth);
+
+            const {session} = utils.validateJwtToken(token);
+
+            await SessionService.ExtendExpireAtTime(session);
+
+        } catch ( error ) {
+            return next(error);
+        }
 
         return res.status(statusCodes.ok.code).json({
             code: statusCodes.ok.code, 
