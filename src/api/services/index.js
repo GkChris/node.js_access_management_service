@@ -1,4 +1,4 @@
-const CommonServices = require('./CommonlServices');
+const CommonServices = require('./CommonServices');
 const AuthService = require('./AuthService');
 const ApiService = require('./ApiService');
 const UserService = require('./UserService');
