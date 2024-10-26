@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 process.env.FORCE_COLOR = '1';
 const express = require('express');
 const helmet = require('helmet');
@@ -22,7 +23,7 @@ const Domains = config.Domains;
 var app = express();
 
 // Middleware
-if ( middlewareConfig.use_cors ) app.use(cors({ credentials: true, origin: Domains.MAIN_CLIENT.url}))
+if ( middlewareConfig.use_cors ) app.use(cors({credentials: true, origin: Domains.MAIN_CLIENT.url}))
 if ( middlewareConfig.use_helmet ) app.use(helmet());
 if ( middlewareConfig.use_logger ) app.use(morgan(require('./api/middleware/Logger')));
 if ( middlewareConfig.use_body_parser ) app.use(bodyParser.json())
